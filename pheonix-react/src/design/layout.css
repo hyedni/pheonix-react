@@ -1,0 +1,31 @@
+/* title head */
+.title.title-head {
+    border-top: 2px solid #2D3436;
+    border-bottom: 1px solid #2D3436;
+}
+/* title head 텍스트*/
+.title-head-text {
+    margin: 20px 0;
+    font-size: 46px;
+    font-weight: bold;
+    text-align: left;
+}
+
+/* 내용 헤드*/
+.content-head {
+    margin: 20px;
+    padding : 20px; 
+}
+.content-head-text {
+    font-size: 32px;
+    text-align: left;
+}
+
+.content-body {
+    margin: 20px 0px;
+    padding : 20px 0px; 
+}
+.content-body-text {
+	font-size: 20px;
+}
+
