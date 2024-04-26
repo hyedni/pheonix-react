@@ -4,6 +4,11 @@ import './index.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 
+import 'bootstrap/dist/css/bootstrap.min.css';
+import 'bootswatch/dist/simplex/bootstrap.min.css';
+import './index.css';
+import "bootstrap"; //js는 경로를 생략해도 기본 경로로 설정됨 
+
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <React.StrictMode>
