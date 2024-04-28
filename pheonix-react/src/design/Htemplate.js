@@ -1,5 +1,6 @@
 import { NavLink } from 'react-router-dom';
-import axios from "../components/CustomAxios";
+import axios from "../components/utils/CustomAxios";
+
 
 function Htemplate() {
     return (
@@ -11,17 +12,17 @@ function Htemplate() {
                         <img src={"/image/phoenixLogo.png"} style={{ width: '300px', maxWidth: '100%', height: 'auto' }}></img>
                     </div>
                     <div className='col-5'></div>
-                    <div className='col-3 d-flex justify-content-end align-items-end'>
-                        <div className="d-flex justify-content-end w-100">
+                    <div className='col-4 d-flex justify-content-end align-items-end'>
+                        <div className="d-flex justify-content-middle w-100 text-center">
                             로그인
                         </div>
-                        <div className="w-100 d-flex justify-content-end">
+                        <div className="w-100 d-flex justify-content-middle text-center">
                             회원가입
                         </div>
-                        <div className="w-100 d-flex justify-content-end">
+                        <div className="w-100 d-flex justify-content-middle text-center">
                             My PHOENIX
                         </div>
-                        <div className="w-100 d-flex justify-content-end me-4">
+                        <div className="w-100 d-flex justify-content-middle ms-4 text-center">
                             고객센터
                         </div>
                     </div>
@@ -67,7 +68,7 @@ function Htemplate() {
                                     </div>
                             </li>
                             <li className="nav-item dropdown">
-                                <NavLink className="nav-link dropdown-toggle fs-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">스토어</NavLink>
+                                <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">스토어</NavLink>
                                 <div className="dropdown-menu">
                                     <NavLink className="dropdown-item" href="#">Action</NavLink>
                                     <NavLink className="dropdown-item" href="#">Another action</NavLink>
@@ -75,6 +76,19 @@ function Htemplate() {
                                     {/* <div className="dropdown-divider"></div>
                                     <NavLink className="dropdown-item" href="#">Separated link</NavLink> */}
                                 </div>
+                            </li>
+                            <li className="nav-item dropdown">
+                                <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">관리자</NavLink>
+                                <div className="dropdown-menu">
+                                    <NavLink className="dropdown-item" to="/movieRegister">지점관리</NavLink>
+                                    <NavLink className="dropdown-item" to="/adminMovie">영화관리</NavLink>
+                                    <NavLink className="dropdown-item" to="/movieRegister">상영관관리</NavLink>
+                                    <NavLink className="dropdown-item" to="/movieRegister">스토어관리</NavLink>
+                                    <NavLink className="dropdown-item" to="/movieRegister">회원관리</NavLink>
+                                </div>
+                            </li>
+                            <li className='nav-item dropdown'>
+                                <NavLink className="nav-link fs-5" to="/movieRegister">통계</NavLink>
                             </li>
                         </ul>
                         {/* <form className="d-flex">
