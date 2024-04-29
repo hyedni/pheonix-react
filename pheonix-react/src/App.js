@@ -1,14 +1,23 @@
-import logo from './logo.svg';
-import './App.css';
-import Join from './components/Join';
-import Login from './components/Login';
-
+import { Route, Routes } from 'react-router';
+import AdminMovie from './components/admin/AdminMovie';
+import Footer from './design/Footer';
+import Htemplate from './design/Htemplate';
+import Login from './components/login';
 
 function App() {
   return (
+
     <>
-        <h1><Login/></h1>    
+    <Htemplate/>
+
+    <Routes>
+              <Route path='/adminMovie' element={<AdminMovie/>}/>
+              <Login/>
+    </Routes>
+
+    <Footer />
     </>
+
   );
 }
 

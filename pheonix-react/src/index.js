@@ -8,18 +8,19 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootswatch/dist/simplex/bootstrap.min.css';
 import './index.css';
 import "bootstrap"; //js는 경로를 생략해도 기본 경로로 설정됨 
-import { BrowserRouter, HashRouter } from 'react-router-dom';
 import { RecoilRoot } from 'recoil';
+import { HashRouter } from 'react-router-dom';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
   <>
-    <RecoilRoot>
-      {/*리액트 라우터를 사용하는 영역을 지정 */}
-      <HashRouter>
-        <App />
-      </HashRouter>
-    </RecoilRoot>
+  <RecoilRoot>
+  <HashRouter>
+  <React.StrictMode>
+    <App />
+  </React.StrictMode>
+  </HashRouter>
+  </RecoilRoot>
   </>
 );
 
