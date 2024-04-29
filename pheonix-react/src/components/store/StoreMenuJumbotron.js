@@ -24,23 +24,23 @@ const StoreMenuJumbotron = () =>{
                         <div className="collapse navbar-collapse" id="navbarColor03">
                             <ul className="navbar-nav me-auto">
                                 <li className="nav-item">
-                                    <NavLink className="nav-link active" to="/store/package">패키지</NavLink>
+                                    <NavLink className="nav-link active" to="/store">패키지</NavLink>
                                         {/* <span className="visually-hidden">(current)</span> */}
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link active" to="/store/point">포인트</NavLink>
+                                    <NavLink className="nav-link active" to="/store">포인트</NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link active" to="/store/combo">콤보</NavLink>
+                                    <NavLink className="nav-link active" to="/store">콤보</NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link active" to="/store/popcorn">팝콘</NavLink>
+                                    <NavLink className="nav-link active" to="/store">팝콘</NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link active" to="/store/drink">음료</NavLink>
+                                    <NavLink className="nav-link active" to="/store">음료</NavLink>
                                 </li>
                                 <li className="nav-item">
-                                    <NavLink className="nav-link active" to="/store/snack">스낵</NavLink>
+                                    <NavLink className="nav-link active" to="/store">스낵</NavLink>
                                 </li>
                             </ul>
 

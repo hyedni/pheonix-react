@@ -11,14 +11,14 @@ const StoreJumbotron = (props) => {
             <div className="row justify-content-center">
                 <div className="col-lg-8  content-head">
                     <div className="flex-cell">
-                        <div className="content-head-text w-25">
+                        <div className="content-head-text me-2">
                             {props.title}
                         </div>
-                        <div className="content-body-text w-50">
+                        <div className="content-body-text mt-2">
                             {props.subTitle}
                         </div>
-                        <div>
-                            <CiCirclePlus className="right w-25" />
+                        <div className="content-body-text ">
+                            <CiCirclePlus />
                         </div>
                     </div>
                     <hr />

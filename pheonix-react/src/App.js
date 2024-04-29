@@ -18,7 +18,7 @@ function App() {
               <Route path='/adminMovie' element={<AdminMovie/>}/>
               <Route path='/movieEdit/:movieNo' element={<MovieEdit/>}/>
               <Route path='/login' element={<Login/>}/>
-              <Route path='/store/*' element={<Store />}/>
+              <Route path='/store' element={<Store />}/>
     </Routes>
 
     <Footer />
