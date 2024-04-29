@@ -5,3 +5,24 @@
     margin-right: 100px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.1);
 }
+
+.admin-flex-box {
+    display: flex;
+    justify-content: space-between; /* 번호와 버튼이 양쪽 끝으로 정렬되도록 함 */
+    align-items: center; /* 세로 중앙 정렬 */
+    width: 100%; /* 전체 너비 사용 */
+}
+
+.img-preview {
+    width: 100%; /* 너비를 100%로 설정 */
+    height: 200px; /* 높이 설정 */
+    overflow: hidden; /* 넘치는 이미지는 숨김 */
+    display: flex; /* 이미지를 가운데 정렬하기 위해 flex 사용 */
+    justify-content: center;
+    align-items: center;
+}
+
+.img-preview img {
+    width: auto; /* 이미지의 원래 비율을 유지 */
+    height: 100%; /* 높이는 미리보기 영역에 맞춤 */
+}
