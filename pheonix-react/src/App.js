@@ -4,6 +4,8 @@ import Footer from './design/Footer';
 import Htemplate from './design/Htemplate';
 import Login from './components/Login';
 import Store from './components/store/Store';
+import StorePackage from './components/store/StorePackage';
+import StoreCombo from './components/store/StoreCombo';
 
 function App() {
   return (
@@ -14,7 +16,7 @@ function App() {
     <Routes>
               <Route path='/adminMovie' element={<AdminMovie/>}/>
               <Route path='/login' element={<Login/>}/>
-              <Route path='/store' element={<Store />}/>
+              <Route path='/store/*' element={<Store />}/>
     </Routes>
 
     <Footer />
