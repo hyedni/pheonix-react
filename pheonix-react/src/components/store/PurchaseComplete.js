@@ -1,6 +1,6 @@
 
 
-const Cart= ()=>{
+const PurchaseComplete= ()=>{
 
     return(
         <>
@@ -9,4 +9,4 @@ const Cart= ()=>{
     );
 };
 
-export default Cart;
+export default PurchaseComplete;

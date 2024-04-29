@@ -1,5 +1,4 @@
 //스토어의 메뉴바 점보트론
-import { CiCirclePlus } from "react-icons/ci";
 import '../../design/commons.css';
 import '../../design/layout.css';
 
@@ -17,9 +16,6 @@ const StoreJumbotron = (props) => {
                         <div className="content-body-text mt-2">
                             {props.subTitle}
                         </div>
-                    </div>
-                    <div className="content-body-text">
-                        <CiCirclePlus />
                     </div>
                 </div>
             </div>
