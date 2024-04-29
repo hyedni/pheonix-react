@@ -2,7 +2,8 @@ import { Route, Routes } from 'react-router';
 import AdminMovie from './components/admin/AdminMovie';
 import Footer from './design/Footer';
 import Htemplate from './design/Htemplate';
-import Login from './components/login';
+import Login from './components/Login';
+import MovieEdit from './components/admin/MovieEdit';
 
 function App() {
   return (
@@ -12,7 +13,8 @@ function App() {
 
     <Routes>
               <Route path='/adminMovie' element={<AdminMovie/>}/>
-              <Login/>
+              <Route path='/movieEdit/:movieNo' element={<MovieEdit/>}/>
+              {/* <Login/> */}
     </Routes>
 
     <Footer />
