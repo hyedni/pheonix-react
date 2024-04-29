@@ -5,8 +5,7 @@ import Htemplate from './design/Htemplate';
 import Login from './components/Login';
 import MovieEdit from './components/admin/MovieEdit';
 import Store from './components/store/Store';
-import StorePackage from './components/store/StorePackage';
-import StoreCombo from './components/store/StoreCombo';
+import Cart from './components/store/Cart';
 
 function App() {
   return (
@@ -19,6 +18,7 @@ function App() {
               <Route path='/movieEdit/:movieNo' element={<MovieEdit/>}/>
               <Route path='/login' element={<Login/>}/>
               <Route path='/store' element={<Store />}/>
+              <Route path='/cart' element={<Cart />}/>
     </Routes>
 
     <Footer />

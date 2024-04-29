@@ -9,19 +9,18 @@ const StoreJumbotron = (props) => {
         <>
             {/* 페이지 주요 내용 */}
             <div className="row justify-content-center">
-                <div className="col-lg-8  content-head">
-                    <div className="flex-cell">
+                <div className="col-lg-8  content-head d-flex justify-content-between align-items-center">
+                    <div>
                         <div className="content-head-text me-2">
                             {props.title}
                         </div>
                         <div className="content-body-text mt-2">
                             {props.subTitle}
                         </div>
-                        <div className="content-body-text ">
-                            <CiCirclePlus />
-                        </div>
                     </div>
-                    <hr />
+                    <div className="content-body-text">
+                        <CiCirclePlus />
+                    </div>
                 </div>
             </div>
         </>
