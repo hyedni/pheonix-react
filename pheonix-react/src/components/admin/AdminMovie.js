@@ -3,7 +3,8 @@ import layout from './../../design/layout';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from "../utils/CustomAxios";
 import { Modal } from 'bootstrap';
-import { Link } from 'react-router-dom';
+import { Link, useLinkClickHandler } from 'react-router-dom';
+import nullImg from '../image/attachNull.png';
 
 function AdminMovie() {
     const [movies, setMovies] = useState([]);
@@ -23,19 +24,58 @@ function AdminMovie() {
         movieDirector: '',
         movieActor: ''
     });
-
     //첨부파일관련
     const [file, setFile] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null); 
+    const [imagePreview, setImagePreview] = useState(null);
 
-    const loadList = useCallback(async () => {
-        const resp = await axios.get("/movie/");
-        setMovies(resp.data);
-    }, [movies]);
+    // 특정 movieNo를 사용하여 이미지 URL을 가져오는 함수
+    // const fetchImage = useCallback(async (movieNo) => {
+    //     try {
+    //         const response = await axios.get(`/movie/image/${movieNo}`);
+    //         return response.data; // 이미지 URL 반환
+    //     } catch (error) {
+    //         console.error('Failed to fetch image:', error);
+    //         return '/path/to/default-image.png'; // 오류 시 기본 이미지 URL 반환
+    //     }
+    // }, []);
+
+    // const loadList = useCallback(async () => {
+    //     const resp = await axios.get("/movie/");
+    //     setMovies(resp.data);
+    // }, [movies]);
+
+    // useEffect(() => {
+    //     loadList();
+    // }, []);
+
+    const fetchMoviesAndImages = async () => {
+        try {
+            const response = await axios.get("/movie/");
+            const moviesData = response.data;
+
+            const imageUrls = await Promise.all(moviesData.map(async (movie) => {
+                try {
+                    const imgResponse = await axios.get(`/movie/image/${movie.movieNo}`);
+                    return imgResponse.data; // 이미지 URL 반환
+                } catch (error) {
+                    return<img src={nullImg} />;; // 오류 시 기본 이미지 URL 반환
+                }
+            }));
+
+            const moviesWithImages = moviesData.map((movie, index) => ({
+                ...movie,
+                imageUrl: imageUrls[index]
+            }));
+
+            setMovies(moviesWithImages); // 영화 목록과 이미지 URL을 함께 설정
+        } catch (error) {
+            console.error("Failed to fetch movies", error);
+        }
+    };
 
     useEffect(() => {
-        loadList();
-    }, []);
+        fetchMoviesAndImages();
+    }, [])
 
     const cancelInput = useCallback(() => {
         setInput({
@@ -76,10 +116,10 @@ function AdminMovie() {
         if (file) {
             formData.append("attach", file);
         }
-    
+
         try {
             await axios.post("/movie/", formData);
-            loadList();  // 목록 새로고침
+            fetchMoviesAndImages();  // 목록 새로고침
             cancelInput();  // 입력 필드 초기화
             closeModal();  // 모달 닫기
         } catch (error) {
@@ -87,6 +127,22 @@ function AdminMovie() {
         }
     }, [input, file]);
 
+    //첨부파일관련
+    const clearImagePreview = () => {
+        setImagePreview(null);
+    };
+
+    const handleImageChange = e => {
+        const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImagePreview(reader.result);
+        };
+        if (file) {
+            setFile(file);
+            reader.readAsDataURL(file);
+        }
+    };
 
     //모달
     const bsModal = useRef();
@@ -100,30 +156,6 @@ function AdminMovie() {
         modal.hide();
     }, [bsModal]);
 
-    //첨부파일관련
-    const clearImagePreview = () => {
-        document.getElementById('imgArea').innerHTML = '';
-        document.getElementById('uploadFile').value = "";  // 입력 필드 초기화
-    };
-    
-    const handleFileChange = (e) => {
-        const file = e.target.files[0];
-        if (file) {
-            setFile(file);
-            const reader = new FileReader();
-            reader.onload = function (event) {
-                const imgElement = document.createElement("img");
-                imgElement.src = event.target.result;
-                // 기존 이미지 미리보기 삭제
-                document.getElementById('imgArea').innerHTML = '';
-                // 새 이미지 미리보기 추가
-                document.getElementById('imgArea').appendChild(imgElement);
-            };
-            reader.readAsDataURL(file);
-        }
-    };
-
-
     return (
         <>
             {/* 페이지 제목 */}
@@ -134,7 +166,6 @@ function AdminMovie() {
                         <button className="btn btn-info ms-5" onClick={e => openModal()}>신규 영화 등록</button>
                     </div>
                 </div>
-
             </div>
 
             <div className="row">
@@ -142,13 +173,14 @@ function AdminMovie() {
                     <br />
                     <div className="row">
                         {movies.map((movie) => (
-                            <div className="col-md-3 item-wrapper" key={movie.movieNo}>
+                            <div className="col-md-3 item-wrapper mb-5" key={movie.movieNo}>
                                 <div className='admin-flex-box mt-2'>
                                     <input type="hidden" value={movie.movieNo} />
                                     <span style={{ fontSize: '25px' }} className='ms-2'>{movie.movieTitle}</span>
-                                    <Link to={`/movieEdit/${movie.movieNo}`}  className='btn  btn-outline-primary'>수정하기</Link>
+                                    <Link to={`/movieEdit/${movie.movieNo}`} className='btn  btn-outline-primary'>수정하기</Link>
                                 </div>
                                 <hr />
+                                <img src={movie.imageUrl} />
                                 <span>{movie.movieOpenDate} 개봉</span><br />
                                 <span>{movie.movieOn}</span>
                             </div>
@@ -172,11 +204,12 @@ function AdminMovie() {
                             <div className="attach-file">
                                 <label>포스터</label>
                                 <div className="mt-3">
-                                    <input type="file" name="attach" id="uploadFile" className="image w-100" accept="image/gif, image/jpeg, image/png"
-                                        onChange={handleFileChange} />
-                                    {imagePreview && <div id="imgArea" className="img-preview mt-3">
-                                        <img src={imagePreview} alt="Preview" style={{ width: "100%" }} />
-                                    </div>}
+                                    <input type="file" onChange={handleImageChange} />
+                                    {imagePreview && (
+                                        <div className="img-preview mt-3">
+                                            <img src={imagePreview} alt="Preview" style={{ width: "100%" }} />
+                                        </div>
+                                    )}
                                     <div id="imgArea" className="img-preview mt-3"></div>
                                 </div>
                             </div>
