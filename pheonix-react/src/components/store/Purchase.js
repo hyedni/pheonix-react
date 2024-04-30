@@ -1,6 +1,6 @@
 
 
-const Cart= ()=>{
+const Purchase= ()=>{
 
     return(
         <>
@@ -9,4 +9,4 @@ const Cart= ()=>{
     );
 };
 
-export default Cart;
+export default Purchase;

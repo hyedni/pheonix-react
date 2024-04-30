@@ -1,0 +1,5 @@
+.ellipsis {
+    white-space: nowrap; /* 텍스트가 줄바꿈되지 않도록 합니다. */
+    overflow: hidden; /* 넘치는 내용을 감춥니다. */
+    text-overflow: ellipsis; /* 넘치는 내용을 생략 부호(...)로 표시합니다. */
+}
