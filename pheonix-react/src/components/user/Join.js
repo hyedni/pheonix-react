@@ -11,7 +11,8 @@ function Join() {
     "userName": "",
     "userContact": "",
     "userEmail": "",
-    "userBirth": ""
+    "userBirth": "",
+    "userCert": "" // 인증번호 필드 추가
   });
 
   const [isValid, setIsValid] = useState({
@@ -20,9 +21,10 @@ function Join() {
     userNick: true,
     userName: true,
     userContact: true,
-    userEmail: true
+    userEmail: true,
+    userCert: true // 인증번호 유효성 상태 추가
   });
-  
+
   const [isFormValid, setIsFormValid] = useState(false);
 
   // 값 입력 함수
@@ -45,6 +47,9 @@ function Join() {
         const response = await axios.post("/user/join", user);
         console.log("가입 성공:", response.data);
         // 추가 작업 수행 (예: 사용자에게 성공 메시지 표시)
+
+        // Now send verification email
+        await sendVerificationEmail(user.userEmail);
       } catch (error) {
         console.error("가입 실패:", error);
         // 추가 작업 수행 (예: 사용자에게 오류 메시지 표시)
@@ -53,6 +58,31 @@ function Join() {
       alert("' * '표시는 무조건 작성해야함");
     }
   };
+
+  // Send verification email
+  const sendVerificationEmail = async () => {
+    try {
+      const response = await axios.post("/user/sendCert", { certEmail: user.userEmail });
+      console.log("성공이야:", response.data);
+    } catch (error) {
+      console.error("실패:", error);
+    }
+  };
+
+  // 인증번호 확인 함수
+  const handleVerifyCert = async () => {
+    try {
+      const response = await axios.post("/user/checkCert", { certCode: user.userCert });
+      if (response.data) {
+        setIsValid(prevState => ({ ...prevState, userCert: true }));
+      } else {
+        setIsValid(prevState => ({ ...prevState, userCert: false }));
+      }
+    } catch (error) {
+      console.error("인증번호 확인 실패:", error);
+    }
+  };
+
 
   // 양식 유효성 확인 함수
   const validateForm = () => {
@@ -140,12 +170,17 @@ function Join() {
 
           <label htmlFor="userEmail">이메일 * :</label>
           <input type="email" id="userEmail" name="userEmail" onBlur={handleInputBlur} />
+          <button type="button" onClick={sendVerificationEmail}>전송</button>
           <span className={user.userEmail && !isValid.userEmail ? "invalid" : ""}>
             {user.userEmail && !isValid.userEmail && '이메일이 유효하지 않습니다.'}
           </span><br /><br />
 
+          {/* 인증번호 입력 필드 */}
           <label htmlFor="userCert">인증번호 * :</label>
-          <input type="text" id="userCert" name="userCert" placeholder='이건 아직 안함ㅎㅎ'/><br /><br />
+          <input type="text" id="userCert" name="userCert" value={user.userCert} onChange={handleInputBlur} onBlur={handleVerifyCert} />
+          <span className={!isValid.userCert ? "invalid" : ""}>
+            {!isValid.userCert && '인증번호가 유효하지 않습니다.'}
+          </span><br /><br />
 
           <button type="submit" className='btn btn-success'>가입하기</button>
         </form>
