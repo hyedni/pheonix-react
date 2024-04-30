@@ -6,7 +6,7 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loginIdState, loginLevelState, isLoginState } from "/utils/RecoilData";
+import { loginIdState, loginGradeState, isLoginState } from "../utils/RecoilData";
 
 
 const firebaseConfig = {

@@ -14,8 +14,8 @@ const loginIdState = atom({
     key : 'loginIdState',
     default : ''
 });
-const loginLevelState = atom({
-    key : 'loginLevelState',
+const loginGradeState = atom({
+    key : 'loginGradeState',
     default : ''
 });
 
@@ -25,11 +25,11 @@ const isLoginState = selector({
     get : (state)=>{//state를 불러와서 새로운 값을 계산해서 반환하는 함수
         //미리 만든 state 중에 loginIdState에 해당하는 값을 주세요
         const loginId = state.get(loginIdState);
-        //미리 만든 state 중에 loginLevelState에 해당하는 값을 주세요
-        const loginLevel = state.get(loginLevelState);
+        //미리 만든 state 중에 loginGradeState에 해당하는 값을 주세요
+        const loginGrade = state.get(loginGradeState);
 
         return loginId && loginId.length >0 
-                && loginLevel && loginLevel.length >0;
+                && loginGrade && loginGrade.length >0;
     }
 });
 
@@ -37,4 +37,4 @@ const isLoginState = selector({
 //export default countState;
 
 //naming export는 여러 개 할 수 있다.
-export {countState, loginIdState, loginLevelState, isLoginState};
+export {countState, loginIdState, loginGradeState, isLoginState};
