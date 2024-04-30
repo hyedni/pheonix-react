@@ -10,6 +10,7 @@ import Cart from './components/store/Cart';
 import Gift from './components/store/Gift';
 import Purchase from './components/store/Purchase';
 import PurchaseComplete from './components/store/PurchaseComplete';
+import NewMovie from './components/admin/NewMovie';
 import Personal from './components/service/Personal';
 import Lost from './components/service/Lost';
 import WritePost from './components/service/WritePost';
@@ -23,6 +24,7 @@ function App() {
     <Routes>
               <Route path='/adminMovie' element={<AdminMovie/>}/>
               <Route path='/movieEdit/:movieNo' element={<MovieEdit/>}/>
+              <Route path='/newMovie' element={<NewMovie/>}/>
               <Route path='/login' element={<Login/>}/>
               <Route path='/store/*' element={<Store />}/>
               <Route path='/join' element={<Join/>}/>
