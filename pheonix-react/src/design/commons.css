@@ -1,0 +1,25 @@
+/* flex layout 디자인 */        
+.flex-cell {
+    display: flex;
+}
+.flex-cell > .width-fill {
+    flex-grow: 1;
+}
+.flex-cell.auto-width > * {
+    flex-grow: 1;
+}
+.flex-cell.vertical {
+    flex-direction: column;
+}
+.flex-cell.middle {
+    justify-content: center;
+    align-items: center;
+}
+
+.w-100 {width: 100%;}
+.w-90 {width: 90%;}
+.w-75 {width: 75%;}
+.w-50 {width: 50%;}
+.w-33 {width: 33.3333%;}
+.w-25 {width: 25%;}
+.w-10 {width: 10%;}
