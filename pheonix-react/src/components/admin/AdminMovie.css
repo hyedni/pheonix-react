@@ -1,9 +1,31 @@
 .item-wrapper {
-    height:350px;
+    height:500px;
     border-radius: 10px;
     padding: 0.5em;
     margin-right: 100px;
     box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.1);
+    word-break: keep-all;
+    overflow: auto;
+}
+.image-wrapper {
+    padding: 0.5em;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.content-wrapper {
+    height: 70px;
+    max-width: 100%;  /* 너비를 부모 요소에 맞춤 */
+    max-height: 100%; /* 높이를 부모 요소에 맞춤 */
+
+}
+.item-wrapper img {
+    max-width: 100%;  /* 너비를 부모 요소에 맞춤 */
+    max-height: 100%; /* 높이를 부모 요소에 맞춤 */
+    height: auto;     /* 비율 유지 */
+    object-fit: cover;  /* 이미지가 비율을 유지하며 컨테이너를 채우도록 조정 */
 }
 
 .admin-flex-box {
