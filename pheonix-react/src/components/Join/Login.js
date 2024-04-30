@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
-import { useRecoilState } from "recoil";
-import { loginIdState } from "../utils/RecoilData";
-import { getAuth, signInWithPopup, GoogleAuthProvider} from "firebase/auth";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
 import axios from "axios";
 import { useNavigate } from "react-router";
+import { NavLink } from 'react-router-dom';
+import { useRecoilState, useRecoilValue } from "recoil";
+import { loginIdState, loginLevelState, isLoginState } from "/utils/RecoilData";
 
 
 const firebaseConfig = {
@@ -19,28 +20,29 @@ const firebaseConfig = {
 };
 
 function Login() {
+    const isLogin = useRecoilValue(isLoginState);
     //state
     const [users, setUsers] = useState({
-        userId:"", userPw:""
+        userId: "", userPw: ""
     });
-    
+
     //recoil
-    const[loginId, setLoginId] = useRecoilState(loginIdState);
-    
+    const [loginId, setLoginId] = useRecoilState(loginIdState);
+
     //callback
-    const changeUser = useCallback(e=>{
+    const changeUser = useCallback(e => {
         setUsers({
             ...users,
-            [e.target.name]:e.target.value
+            [e.target.name]: e.target.value
         });
-    },[users]);
+    }, [users]);
 
     //navigator
     const navigator = useNavigate();
 
-    const login = useCallback(async()=>{
-        if(users.userId.length === 0) return;
-        if(users.userPw.length === 0) return;
+    const login = useCallback(async () => {
+        if (users.userId.length === 0) return;
+        if (users.userPw.length === 0) return;
 
         const resp = await axios.post("/user/login", users);
         console.log(resp.data);
@@ -63,7 +65,7 @@ function Login() {
         const analytics = getAnalytics(app);
         const provider = new GoogleAuthProvider();
         const auth = getAuth(app);
-        auth.languageCode = "ko";
+        auth.languageCode = "ko"; 
 
         signInWithPopup(auth, provider)
             .then((result) => {
@@ -79,13 +81,50 @@ function Login() {
                 const credential = GoogleAuthProvider.credentialFromError(error);
                 console.error(error);
             });
-    }; 
+    };
 
 
     return (
-        <div>
-            <button onClick={handleGoogleLogin}>구글 아이디로 로그인</button>
-        </div>
+        <>
+            <h1>회원가입 화면입니다</h1>
+            <div className="d-flex">
+                {isLogin ? (//로그인
+                    <>
+                        로그인됨
+                    </>
+                ) : (//로그아웃
+                    <>
+                        로그아웃됨
+                    </>
+                )}
+            </div>
+
+            <div>
+                <button className="clicked">로그인</button>
+                <button>
+                    <NavLink to="/non-user">비회원예매</NavLink>
+                </button>
+                <button>
+                    <NavLink to="/non-user-check">비회원 예매확인</NavLink>
+                </button>
+            </div><br /><br />
+
+            <form>
+                <label>아이디:</label>
+                <input type="text" />
+                <label>비밀번호:</label>
+                <input type="password" /><br /><br />
+                <button type="submit">로그인</button>
+            </form><br /><br />
+
+            <div>
+                <button onClick={handleGoogleLogin}>구글 아이디로 로그인</button>
+            </div>
+
+
+
+        </>
+
     );
 }
 
