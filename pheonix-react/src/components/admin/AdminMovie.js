@@ -28,54 +28,48 @@ function AdminMovie() {
     const [file, setFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
 
-    // 특정 movieNo를 사용하여 이미지 URL을 가져오는 함수
-    // const fetchImage = useCallback(async (movieNo) => {
-    //     try {
-    //         const response = await axios.get(`/movie/image/${movieNo}`);
-    //         return response.data; // 이미지 URL 반환
-    //     } catch (error) {
-    //         console.error('Failed to fetch image:', error);
-    //         return '/path/to/default-image.png'; // 오류 시 기본 이미지 URL 반환
-    //     }
-    // }, []);
-
-    // const loadList = useCallback(async () => {
-    //     const resp = await axios.get("/movie/");
-    //     setMovies(resp.data);
-    // }, [movies]);
-
-    // useEffect(() => {
-    //     loadList();
-    // }, []);
-
-    const fetchMoviesAndImages = async () => {
-        try {
-            const response = await axios.get("/movie/");
-            const moviesData = response.data;
-
-            const imageUrls = await Promise.all(moviesData.map(async (movie) => {
-                try {
-                    const imgResponse = await axios.get(`/movie/image/${movie.movieNo}`);
-                    return imgResponse.data; // 이미지 URL 반환
-                } catch (error) {
-                    return<img src={nullImg} />;; // 오류 시 기본 이미지 URL 반환
-                }
-            }));
-
-            const moviesWithImages = moviesData.map((movie, index) => ({
-                ...movie,
-                imageUrl: imageUrls[index]
-            }));
-
-            setMovies(moviesWithImages); // 영화 목록과 이미지 URL을 함께 설정
-        } catch (error) {
-            console.error("Failed to fetch movies", error);
-        }
-    };
+    const loadList = useCallback(async() => {
+        const resp = await axios.get("/movie/");
+        setMovies(resp.data);
+        console.log(resp.data);
+    }, [movies]);
 
     useEffect(() => {
-        fetchMoviesAndImages();
-    }, [])
+        loadList();
+    }, []);
+
+
+    // const fetchMoviesAndImages = async () => {
+    //     try {
+    //         const response = await axios.get("/movie/");
+    //         const moviesData = response.data;
+
+    //         const imageUrls = await Promise.all(moviesData.map(async (movie) => {
+    //             try {
+    //                 // 파일 이름 또는 경로 부분을 encodeURIComponent로 인코딩
+    //                 // const encodedImageName = encodeURIComponent(movie.movieNo);
+    //                 const imgResponse = await axios.get(`/movie/image/${movie.movieNo}`);
+    //                 return imgResponse.url; // 이미지 URL 반환
+    //             } catch (error) {
+    //                 console.error("Failed to fetch image:", error);
+    //                 return nullImg; // 오류 시 기본 이미지 URL 반환
+    //             }
+    //         }));
+            
+    //         const moviesWithImages = moviesData.map((movie, index) => ({
+    //             ...movie,
+    //             imageUrl: imageUrls[index]
+    //         }));
+
+    //         setMovies(moviesWithImages); // 영화 목록과 이미지 URL을 함께 설정
+    //     } catch (error) {
+    //         console.error("Failed to fetch movies", error);
+    //     }
+    // };
+
+    // useEffect(() => {
+    //     fetchMoviesAndImages();
+    // }, [])
 
     const cancelInput = useCallback(() => {
         setInput({
@@ -119,7 +113,7 @@ function AdminMovie() {
 
         try {
             await axios.post("/movie/", formData);
-            fetchMoviesAndImages();  // 목록 새로고침
+            loadList();  // 목록 새로고침
             cancelInput();  // 입력 필드 초기화
             closeModal();  // 모달 닫기
         } catch (error) {
@@ -163,7 +157,7 @@ function AdminMovie() {
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
                         영화 관리
-                        <button className="btn btn-info ms-5" onClick={e => openModal()}>신규 영화 등록</button>
+                        <button className="btn btn-primary ms-5" onClick={e => openModal()}>신규 영화 등록</button>
                     </div>
                 </div>
             </div>
@@ -176,13 +170,19 @@ function AdminMovie() {
                             <div className="col-md-3 item-wrapper mb-5" key={movie.movieNo}>
                                 <div className='admin-flex-box mt-2'>
                                     <input type="hidden" value={movie.movieNo} />
-                                    <span style={{ fontSize: '25px' }} className='ms-2'>{movie.movieTitle}</span>
+                                    <span style={{ fontSize: '20px', fontWeight:'bold'}} className='ms-2'>{movie.movieTitle}</span>
                                     <Link to={`/movieEdit/${movie.movieNo}`} className='btn  btn-outline-primary'>수정하기</Link>
                                 </div>
                                 <hr />
-                                <img src={movie.imageUrl} />
-                                <span>{movie.movieOpenDate} 개봉</span><br />
-                                <span>{movie.movieOn}</span>
+                                <div className='image-wrapper'>
+                                    <img src={movie.movieImgLink} />
+                                </div>
+                                <hr />
+                                <div className='content-wrapper'>
+                                    <span>개봉일 {movie.movieOpenDate}</span> 
+                                    <br/>
+                                    <span>{movie.movieOn === 'Y' ? '상영중' : '미개봉'} </span>
+                                </div>
                             </div>
                         ))}
                     </div>
