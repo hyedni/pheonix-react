@@ -69,7 +69,15 @@ function Htemplate() {
                             </li>
                             
                             <li className="nav-item dropdown">
-                                <NavLink  className="nav-link fs-5 me-5" to="/store">스토어</NavLink>
+                                <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">스토어</NavLink>
+                                <div className="dropdown-menu">
+                                    <NavLink className="dropdown-item" to="/store/package">패키지</NavLink>
+                                    <NavLink className="dropdown-item" to="/store/point">포인트</NavLink>
+                                    <NavLink className="dropdown-item" to="/store/combo">콤보</NavLink>
+                                    <NavLink className="dropdown-item" to="/store/popcorn">팝콘</NavLink>
+                                    <NavLink className="dropdown-item" to="/store/drink">음료</NavLink>
+                                    <NavLink className="dropdown-item" to="/store/snack">스낵</NavLink>
+                                </div>
                             </li>
                             <li className="nav-item dropdown">
                                 <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">관리자</NavLink>

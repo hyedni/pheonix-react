@@ -1,7 +1,8 @@
 // productType 별 리스트를 위한 점보트론
-import { useState, useEffect, useCallback, useMemo } from "react";
+import { useState, useEffect, useMemo } from "react";
 import axios from "../../utils/CustomAxios";
 import { useLocation } from "react-router";
+import { Link } from 'react-router-dom';
 
 const StoreList = ()=>{
 
@@ -46,10 +47,7 @@ const StoreList = ()=>{
         };
 
         loadData();
-    }
-
-    //callback
-    ,[productType]);
+    } ,[productType]);
 
     return(
         <>
@@ -65,8 +63,10 @@ const StoreList = ()=>{
                                     <input type="hidden" value={product.productNo} />
                                     <span style={{ fontSize: '25px' }} className='ms-2'>{product.productName}</span>
                                 </div><br />
-                                <span>{product.productContent}</span><br />
-                                <span>{product.productPrice}원</span>
+                                <Link to={`/productDetail/${product.productNo}`} className="text-dark text-decoration-none">
+                                    <span>{product.productContent}</span><br />
+                                    <span>{product.productPrice}원</span>
+                                </Link>
                             </div>
                         ))}
                     </div>

@@ -1,4 +1,4 @@
-//스토어의 메뉴바 점보트론
+//스토어의 타이틀바 점보트론
 import '../../design/commons.css';
 import '../../design/layout.css';
 

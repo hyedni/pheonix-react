@@ -14,6 +14,7 @@ import NewMovie from './components/admin/NewMovie';
 import Personal from './components/service/Personal';
 import Lost from './components/service/Lost';
 import WritePost from './components/service/WritePost';
+import StoreDetailList from './components/store/list/StoreDetailList';
 
 function App() {
   return (
@@ -22,19 +23,28 @@ function App() {
     <Htemplate/>
 
     <Routes>
+              {/* 공용공간 에티켓을 만듭시다** 분리하여 route 작성해주세요 */}
+              {/* 영화 */}
               <Route path='/adminMovie' element={<AdminMovie/>}/>
               <Route path='/movieEdit/:movieNo' element={<MovieEdit/>}/>
+
               <Route path='/newMovie' element={<NewMovie/>}/>
+              {/* 회원 */}
               <Route path='/login' element={<Login/>}/>
-              <Route path='/store/*' element={<Store />}/>
               <Route path='/join' element={<Join/>}/>
+
+              {/* 스토어 */}
+              <Route path='/store/*' element={<Store />}/>
+              <Route path='/productDetail/:productNo' element={<StoreDetailList />}/>
               <Route path='/cart' element={<Cart />}/>
               <Route path='/gift' element={<Gift/>}/>
               <Route path='/purchase' element={<Purchase/>}/>
               <Route path='/purchase-complete' element={<PurchaseComplete/>}/>
-              <Route path='/personal' element={<Personal/>}/>
+              
+              {/* 게시판 */}
               <Route path='/lost' element={<Lost/>}/>
               <Route path='/writepost' element={<WritePost/>}/>
+              <Route path='/personal' element={<Personal/>}/>
     </Routes>
 
     <Footer />
