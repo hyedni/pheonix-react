@@ -23,7 +23,7 @@ function Htemplate() {
                             My PHOENIX
                         </div>
                         <div className="w-100 d-flex justify-content-middle ms-4 text-center">
-                            고객센터
+                        <NavLink className="dropdown-item" to="/personal">고객센터</NavLink>
                         </div>
                     </div>
                 </div>

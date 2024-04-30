@@ -9,6 +9,9 @@ import Cart from './components/store/Cart';
 import Gift from './components/store/Gift';
 import Purchase from './components/store/Purchase';
 import PurchaseComplete from './components/store/PurchaseComplete';
+import Personal from './components/service/Personal';
+import Lost from './components/service/Lost';
+import WritePost from './components/service/WritePost';
 
 function App() {
   return (
@@ -25,6 +28,9 @@ function App() {
               <Route path='/gift' element={<Gift/>}/>
               <Route path='/purchase' element={<Purchase/>}/>
               <Route path='/purchase-complete' element={<PurchaseComplete/>}/>
+              <Route path='/personal' element={<Personal/>}/>
+              <Route path='/lost' element={<Lost/>}/>
+              <Route path='/writepost' element={<WritePost/>}/>
     </Routes>
 
     <Footer />
