@@ -14,16 +14,16 @@ function Htemplate() {
                     <div className='col-5'></div>
                     <div className='col-4 d-flex justify-content-end align-items-end'>
                         <div className="d-flex justify-content-middle w-100 text-center">
-                            로그인
+                            <NavLink to="/login">로그인</NavLink>
                         </div>
-                        <div className="w-100 d-flex justify-content-middle text-center">
-                            회원가입
+                        <div className="w-100 d-flex justify-content-middle text-center">      
+                            <NavLink to="/join">회원가입</NavLink>
                         </div>
                         <div className="w-100 d-flex justify-content-middle text-center">
                             My PHOENIX
                         </div>
                         <div className="w-100 d-flex justify-content-middle ms-4 text-center">
-                            고객센터
+                        <NavLink className="dropdown-item" to="/personal">고객센터</NavLink>
                         </div>
                     </div>
                 </div>
