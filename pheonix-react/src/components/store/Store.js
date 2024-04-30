@@ -10,7 +10,6 @@ import StorePackage from './list/StorePackage';
 import StoreMenu from './StoreMenu';
 
 
-
 const Store= ()=>{
 
     return (
