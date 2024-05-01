@@ -5,6 +5,8 @@ import { format } from 'date-fns';
 import 'react-datepicker/dist/react-datepicker.css';
 import axios from "../utils/CustomAxios";
 import './AdminMovie.css';
+import moment from 'moment';
+
 
 function NewMovie() {
     //첨부파일관련
@@ -29,13 +31,23 @@ function NewMovie() {
         movieActor: ''
     });
 
+    const openDate = moment(input.movieOpenDate).format("YYYY-MM-DD");
+    const closeDate = moment(input.movieCloseDate).format("YYYY-MM-DD");
+
     //DatePicker관련
-    const [startDate, setStartDate] = useState(new Date());
-    const [endDate, setEndDate] = useState(new Date());
-    const cangeDate = (dates) => {
+    const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
+    const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
+    const changeDate = (dates) => {
         const [start, end] = dates;
+        const openDate = moment(start).format("YYYY-MM-DD");
+        const closeDate = moment(end).format("YYYY-MM-DD");
         setStartDate(start);
         setEndDate(end);
+        setInput({
+            ...input,
+            movieOpenDate: openDate,
+            movieCloseDate: closeDate
+        })
     };
 
     //등록
@@ -91,10 +103,6 @@ function NewMovie() {
         setImagePreview(null);
     };
 
-    // useEffect(() => {
-    //     clearImagePreview();
-    // }, []);
-
     const handleImageChange = e => {
         const file = e.target.files[0];
         const reader = new FileReader();
@@ -126,9 +134,11 @@ function NewMovie() {
                                 <span>포스터</span>
                                 <hr />
                                 <div className="mt-3">
-                                    <input type="file" onChange={handleImageChange} />
+                                    <div class="input-group">
+                                        <input type="file" onChange={handleImageChange} class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
+                                    </div>
                                     {imagePreview && (
-                                        <div className="img-preview mt-3">
+                                        <div className="img-preview img-thumbnail mt-3">
                                             <img src={imagePreview} alt="Preview" style={{ width: "100%" }} />
                                         </div>
                                     )}
@@ -185,7 +195,7 @@ function NewMovie() {
                                     <DatePicker className='datePicker'
                                         dateFormat='yyyy.MM.dd'
                                         selected={startDate}
-                                        onChange={cangeDate}
+                                        onChange={changeDate}
                                         startDate={startDate}
                                         endDate={endDate}
                                         minDate={new Date()}
@@ -197,17 +207,16 @@ function NewMovie() {
                             <div className="row mt-3">
                                 <div className="col-md-6">
                                     <label>개봉일</label>
-                                    <input type="text" name="movieOpenDate"
-                                        value={startDate ? format(new Date(startDate), "yyyy-MM-dd") : ''}
-                                        onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                    <input type="text" name="movieOpenDate" value={openDate} onChange={e => changeInput(e)} className="form-control" />
                                 </div>
                                 <div className="col-md-6">
                                     <label>상영종료일</label>
+                                    <input type="text" name="movieCloseDate" value={closeDate} onChange={e => changeInput(e)} className="form-control" />
+                                    {/* 
                                     <input type="text" name="movieCloseDate"
-                                        value={endDate ? format(new Date(endDate), "yyyy-MM-dd") : ''}
+                                        value={input.movieCloseDate ? format(new Date(input.movieCloseDate ), "yyyy-MM-dd") : ''}
                                         onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                        className="form-control" /> */}
                                 </div>
                             </div>
 
@@ -267,39 +276,48 @@ function NewMovie() {
                                     <textarea type="text" name="movieSummary"
                                         value={input.movieSummary}
                                         onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                        className="form-control"
+                                        style={{ whiteSpace: 'pre-wrap' }} />
                                 </div>
                             </div>
 
                             <div className="row mt-3">
                                 <div className="col">
-                                    <label>자막/더빙 여부</label>
-                                    <input type="text" name="movieTranslation"
+                                    <label>자막/더빙</label>
+                                    {/* <input type="text" name="movieTranslation"
                                         value={input.movieTranslation}
                                         onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                        className="form-control" /> */}
+                                    <select class="form-select" aria-label="Default select example" name="movieTranslation" value={input.movieTranslation} onChange={e => changeInput(e)}>
+                                        <option selected>선택하세요</option>
+                                        <option value="Y">자막</option>
+                                        <option value="N">더빙</option>
+                                        <option value="K">일반(한국영화)</option>
+                                    </select>
                                 </div>
                             </div>
 
                             <div className="row mt-3">
                                 <div className="col">
                                     <label>스크린 타입</label>
-                                    <input type="text" name="movieScreenType"
-                                        value={input.movieScreenType}
-                                        onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                    <select class="form-select" aria-label="Default select example" name="movieScreenType" value={input.movieScreenType} onChange={e => changeInput(e)}>
+                                        <option selected>선택하세요</option>
+                                        <option value="2D">2D</option>
+                                        <option value="3D">3D</option>
+                                        <option value="4D">4D</option>
+                                    </select>
                                 </div>
                             </div>
 
 
                             <div className="row mt-3 mb-4">
                                 <div className='col-md-6'>
-                                    <button className='btn btn-light' onClick={e => saveInput()} style={{width:'100%'}}>
+                                    <button className='btn btn-light' onClick={e => saveInput()} style={{ width: '100%' }}>
                                         등록
                                     </button>
                                 </div>
                                 <div className='col-md-6'>
-                                    <button className='btn btn-primary' onClick={e => cancelInput()} style={{width:'100%'}}>
+                                    <button className='btn btn-primary' onClick={e => cancelInput()} style={{ width: '100%' }}>
                                         취소
                                     </button>
                                 </div>
