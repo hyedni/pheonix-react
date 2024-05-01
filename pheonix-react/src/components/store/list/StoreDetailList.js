@@ -8,8 +8,6 @@ import { Link } from 'react-router-dom';
 //디자인 임포트
 import './Store.css';
 
-import { useRecoilState } from "recoil";
-import { itemQtyState } from "../../../recoil/StoreRecoil";
 //아이콘 임포트
 import { FaShoppingCart } from "react-icons/fa";
 import { GoPlus } from "react-icons/go";
@@ -19,7 +17,7 @@ import { Modal } from "bootstrap";
 //이미지 임포트
 import nutritionFacts from "../image/bg_nutritionFacts.png";
 
-import { loginIdState } from "../../utils/RecoilData";
+//import { loginIdState } from "../../utils/RecoilData";
 
 
 const StoreDetailList = () => {
@@ -28,11 +26,11 @@ const StoreDetailList = () => {
     const { productNo } = useParams(); //파라미터에서 번호 추출
     const [products, setProducts] = useState({});
     //회원 아이디
-    const { userId } = useRecoilState(loginIdState);
+    //const { userId } = useRecoilState(loginIdState);
     //상품 수량 정보
-    const [itemQty, setItemQty] = useRecoilState(itemQtyState);
+    const [itemQty, setItemQty] = useState(1);
     //장바구니 담기
-    const [addCart] = useState({
+    const [addCart, setAddCart] = useState({
         cartUserId :  "testuser4",//userId,
         cartProductNo : productNo,
         cartQty : itemQty
@@ -52,10 +50,11 @@ const StoreDetailList = () => {
         }
     }, [productNo]);
 
+    
 
     //장바구니 담기
-    const AddItemToCart = useCallback(()=>{
-        //console.log(addCart);
+    const AddItemToCart = useCallback((e)=>{
+        console.log(addCart);
         axios({
             url: "/cart/add/",
             method: "post",
@@ -63,6 +62,12 @@ const StoreDetailList = () => {
         })
     }, [addCart]);
 
+    const changeInput = useCallback((e)=>{
+        setAddCart({
+            ...addCart,
+            [e.target.name] : e.target.value
+        });
+    }, [addCart]);
 
     //ref
     //사용가능한 피닉스
@@ -71,10 +76,7 @@ const StoreDetailList = () => {
         const modal = new Modal(placeInfoModal.current);
         modal.show();
     }, [placeInfoModal]);
-    // const closePlaceInfoModal = useCallback(() => {
-    //     const modal = Modal.getInstance(placeInfoModal.current);
-    //     modal.hide();
-    // }, [placeInfoModal]);
+
     //영양성분 모달
     const nutritionModal = useRef();
     const openNutritionModal = useCallback(()=>{
@@ -144,7 +146,7 @@ const StoreDetailList = () => {
                                     <div className="col mb-4">
                                         <div className="quantity-container">
                                             <button className="quantity-button" onClick={(e) => itemQty > 1 && setItemQty(itemQty - 1)}><LuMinus size={28} /></button>
-                                            <span className="quantity-span">{itemQty}</span>
+                                            <input className="quantity-span form-control" name="cartQty" value={itemQty} onChange={e => changeInput(e)} readOnly></input>
                                             <button className="quantity-button" onClick={(e) => itemQty < 101 && setItemQty(itemQty + 1)}><GoPlus size={28} /></button>
                                         </div>
                                     </div>
