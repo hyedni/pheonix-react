@@ -64,7 +64,7 @@ function AdminMovie() {
             <hr/>
 
             <div className="row">
-                <div className="offset-2 col-lg-8">
+                <div className="offset-2 col-lg-9">
                     <br />
                     <div className="row">
                         {movies.map((movie) => (
