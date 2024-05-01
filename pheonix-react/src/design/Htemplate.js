@@ -7,12 +7,14 @@ function Htemplate() {
         <>
 
             <div className='container-fluid'>
-                <div className='row'>
+                <div className='row' style={{ display: 'flex'}}>
                     <div className='offset-1 col-2'>
                         <img src={"/image/phoenixLogo.png"} style={{ width: '300px', maxWidth: '100%', height: 'auto' }}></img>
                     </div>
-                    <div className='col-5'></div>
-                    <div className='col-4 d-flex justify-content-end align-items-end'>
+                    <div className='col-2 d-flex justify-content-start align-items-end'>
+                        <p style={{ writingMode: 'initial',  transform: 'none' }}>C U L T U R E P L E X</p>
+                    </div>
+                    <div className='offset-1 col-4 d-flex justify-content-end align-items-end'>
                         <div className="d-flex justify-content-middle w-100 text-center">
                             <NavLink to="/login">로그인</NavLink>
                         </div>
@@ -82,7 +84,7 @@ function Htemplate() {
                             <li className="nav-item dropdown">
                                 <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">관리자</NavLink>
                                 <div className="dropdown-menu">
-                                    <NavLink className="dropdown-item" to="/movieRegister">지점관리</NavLink>
+                                    <NavLink className="dropdown-item" to="/adminCinema">영화관관리</NavLink>
                                     <NavLink className="dropdown-item" to="/adminMovie">영화관리</NavLink>
                                     <NavLink className="dropdown-item" to="/movieRegister">상영관관리</NavLink>
                                     <NavLink className="dropdown-item" to="/movieRegister">스토어관리</NavLink>

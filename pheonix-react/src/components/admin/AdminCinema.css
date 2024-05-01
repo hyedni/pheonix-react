@@ -1,0 +1,13 @@
+/* 외부 UL에 대한 스타일 */
+.region-ul {
+    list-style: none; /* 기본 목록 스타일 제거 */
+    padding: 0; /* 기본 패딩 제거 */
+}
+
+/* 내부 UL에 대한 스타일 */
+.region-ul .inner-ul {
+    list-style: none; /* 기본 목록 스타일 제거 */
+    display: flex; /* Flexbox를 사용하여 항목을 가로로 배치 */
+    padding: 0; /* 기본 패딩 제거 */
+    gap: 20px; /* 각 항목 사이의 간격 */
+}
