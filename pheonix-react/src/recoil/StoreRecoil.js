@@ -8,4 +8,9 @@ const itemQtyState = atom({
     default : 1
 });
 
-export {itemQtyState};
+const CartItemAtom = atom({
+    key:'cartItemState',
+    default: [] //객체로 값을 채워넣을 예정
+});
+
+export {itemQtyState, CartItemAtom};
