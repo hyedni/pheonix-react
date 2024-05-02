@@ -17,6 +17,8 @@ import { Modal } from "bootstrap";
 //이미지 임포트
 import nutritionFacts from "../image/bg_nutritionFacts.png";
 
+ ///////////////////////////////////////////////////////////////////////////////////////
+//로그인 작동하면 주석 풀기
 //import { loginIdState } from "../../utils/RecoilData";
 
 
@@ -69,20 +71,30 @@ const StoreDetailList = () => {
 
     //장바구니 담기
     const AddItemToCart = useCallback((e)=>{
-        console.log(addCart);
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        //로그인 작동하면 주석 풀기
+        // if(loginIdState === null) {
+        //     const choice = window.confirm("로그인 상태가 아닙니다. \n로그인 페이지로 이동하시겠습니까?");
+        //     if (choice === true) {
+        //         return navigate('/login'); //로그인 페이지로 리다이렉트
+        //     }
+        // }
+        // if(loginIdState !== null) {
+        //     const choice = window.confirm("장바구니에 상품이 담겼습니다. \n장바구니로 이동하시겠습니까?");
+        //     if(choice === true) {
+        //         return navigate('/cart');
+        //     }
+        // }
+
+
+        // console.log(addCart);
         axios({
             url: "/cart/add/",
             method: "post",
             data: addCart
         })
     }, [addCart]);
-
-    // const changeInput = useCallback((e)=>{
-    //     setAddCart({
-    //         ...addCart,
-    //         [e.target.name] : e.target.value
-    //     });
-    // }, [addCart]);
 
     //ref
     //사용가능한 피닉스
