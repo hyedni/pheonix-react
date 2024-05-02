@@ -118,3 +118,41 @@
     text-align: center;
     padding-right: 10px;
 }
+
+
+.img-preview .edit-button,
+.img-preview .delete-button,
+.img-preview .btn {
+    position: absolute;
+    top: 50%; /* 이미지 상단으로부터 50% 위치 */
+    transform: translateY(-50%); /* 세로 중앙 정렬 */
+    width: 60px; /* 버튼 너비 설정 */
+    height: 60px; /* 버튼 높이 설정 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: opacity 0.5s ease; /* 투명도 변화를 부드럽게 처리 */
+    opacity: 0; /* 초기 투명도는 0 */
+}
+
+.img-preview:hover .btn-secondary {
+    opacity: 1; /* 마우스를 올리면 투명도 1로 변경 */
+}
+
+.img-preview .edit-button { /*구매하기 버튼*/
+    left: 39%; /* 첫 번째 버튼 왼쪽에서 15% 위치 */
+}
+
+.img-preview .btn:nth-child(2) {/*장바구니 버튼 */
+    left: 12%; /* 두 번째 버튼 왼쪽에서 50% 위치 */
+}
+
+.img-preview .btn:nth-child(3) { /*선물하기 버튼*/
+    left: 66%; /* 세 번째 버튼 왼쪽에서 85% 위치 */
+}
+
+
+.img-preview .btn svg {
+    width: 70%; /* 아이콘 크기 설정 */
+    height: auto; /* 비율 유지 */
+}
