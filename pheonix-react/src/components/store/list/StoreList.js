@@ -1,32 +1,44 @@
 // productType 별 리스트를 위한 점보트론
-import { useState, useEffect, useMemo } from "react";
+import { useCallback, useEffect, useState, useMemo  } from "react";
 import axios from "../../utils/CustomAxios";
 import { useLocation } from "react-router";
 import { Link } from 'react-router-dom';
+import { useParams } from "react-router";
 
-const StoreList = ()=>{
+//아이콘 임포트
+import { FaShoppingCart } from "react-icons/fa";
+import { FaGift } from "react-icons/fa";
+import { IoBagHandle } from "react-icons/io5";
+
+//디자인 임포트 
+import '../../admin/AdminMovie.css';
+
+const StoreList = () => {
 
     //state
     const [products, setProducts] = useState([]);
-
+    const [imagePreview] = useState(null);
+    //const { userId } = useRecoilState(loginIdState);
+    const [itemQty] = useState(1);
+    
     //location
     const location = useLocation();
-    //const productType = location.state.value;
 
-    const productType = useMemo(()=>{
-        if(location.pathname === "/store/popcorn") {
+    //useMemo
+    const productType = useMemo(() => {
+        if (location.pathname === "/store/popcorn") {
             return "팝콘";
         }
-        else  if(location.pathname === "/store/combo") {
+        else if (location.pathname === "/store/combo") {
             return "콤보";
         }
-        else  if(location.pathname === "/store/drink") {
+        else if (location.pathname === "/store/drink") {
             return "음료";
         }
-        else  if(location.pathname === "/store/snack") {
+        else if (location.pathname === "/store/snack") {
             return "간식";
         }
-        else  if(location.pathname === "/store/point") {
+        else if (location.pathname === "/store/point") {
             return "포인트";
         }
         else {
@@ -34,38 +46,88 @@ const StoreList = ()=>{
         }
     }, [location]);
 
+    // const addCart = useCallback((productNo)=>{
+    //     return {
+    //             cartUserId :  "testuser4",//userId,
+    //             cartProductNo : productNo,
+    //             cartQty : itemQty
+    //     }
+    // }, []);
+
     //effect
-    useEffect(()=> {
-       const loadData = async ()=>{
-        try {
-            const resp = await axios.get("/product/" + productType);
-            setProducts(resp.data);
-        }
-        catch (error) {
-            console.error("API 호출 중 오류 발생:", error);
-        }
+    useEffect(() => {
+        const loadData = async () => {
+            try {
+                const resp = await axios.get("/product/" + productType);
+                setProducts(resp.data);
+            }
+            catch (error) {
+                console.error("API 호출 중 오류 발생:", error);
+            }
         };
 
         loadData();
-    } ,[productType]);
+    }, [productType]);
 
-    return(
+    //callback
+    //장바구니 담기
+    const AddItemToCart = useCallback((productNo)=>{
+
+        ///////////////////////////////////////////////////////////////////////////////////////
+        //로그인 작동하면 주석 풀기
+        // if(loginIdState === null) {
+        //     const choice = window.confirm("로그인 상태가 아닙니다. \n로그인 페이지로 이동하시겠습니까?");
+        //     if (choice === true) {
+        //         return navigate('/login'); //로그인 페이지로 리다이렉트
+        //     }
+        // }
+        // else {
+        //     const choice = window.confirm("장바구니에 상품이 담겼습니다. \n장바구니로 이동하시겠습니까?");
+        //     if(choice === true) {
+        //         return navigate('/cart');
+        //     }
+        // }
+
+        // console.log(addCart);
+        axios({
+            url: "/cart/add/",
+            method: "post",
+            data: {
+                cartUserId :  "testuser4",//userId,
+                cartProductNo : productNo,
+                cartQty : itemQty
+            }
+        })
+    }, [products]);
+
+    return (
         <>
-        <div className="row justify-content-center">
+            <div className="row justify-content-center">
                 <div className="col-lg-8 content-body">
                     <div className="row">
                         {products.map(product => (
                             <div className="col-md-4 mb-4" key={product.productNo}>
                                 <div className='mt-2'>
-                                    <div>
-                                    이미지
+                                    <div className="img-preview img-thumbnail mt-3 image-wrapper">
+                                        {!imagePreview && (
+                                            <img src={product.productImgLink} lassName='img-preview img-thumbnail' alt="상품이미지" />
+                                        )}
+                                        {imagePreview && (
+                                            <img src={imagePreview} alt="Preview" style={{ width: "100%" }} />
+                                        )}
+
+                                        <Link to={`/cart`} className='edit-button btn btn-secondary' onClick={e => (AddItemToCart(product.productNo))}><FaShoppingCart /></Link>
+                                        <Link to={`/gift/${product.productNo}`} className='edit-button btn btn-secondary'><FaGift/></Link>
+                                        <Link to={`/purchase/${product.productNo}`} className='edit-button btn btn-secondary'><IoBagHandle /></Link>
+
                                     </div>
-                                    <input type="hidden" value={product.productNo} />
-                                    <span style={{ fontSize: '25px' }} className='ms-2'>{product.productName}</span>
+
                                 </div><br />
                                 <Link to={`/productDetail/${product.productNo}`} className="text-dark text-decoration-none">
-                                    <span>{product.productContent}</span><br />
-                                    <span>{product.productPrice}원</span>
+                                    <input type="hidden" value={product.productNo} />
+                                    <span style={{ fontSize: '25px' }} className='ms-2'>{product.productName}</span><br />
+                                    <span className="ms-2">{product.productContent}</span><br />
+                                    <span className="ms-2">{product.productPrice}원</span>
                                 </Link>
                             </div>
                         ))}
