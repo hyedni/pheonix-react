@@ -1,19 +1,19 @@
 import axios from "../utils/CustomAxios";
-import React, { useCallback, useEffect, useState, useRef } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import Modal from 'bootstrap/js/dist/modal';
 
 const Personal = () => {
     const [personals, setPersonals] = useState([]);
+    const [selectedPersonal, setSelectedPersonal] = useState(null);
     const [input, setInput] = useState({
-        personalNo:"",
         personalId:"",
         personalTitle:"",
         personalContent:"",
-        personalWrite:"",
-
     });
-    const bsModal = useRef();
+    const bsModal = useRef(null);
+    const writeModal = useRef(null);
+    const replyModal = useRef(null);
 
     const loadData = useCallback(() => {
         axios({
@@ -27,7 +27,7 @@ const Personal = () => {
 
     useEffect(() => {
         loadData();
-    }, []);
+    }, [loadData]);
 
     const changeInput = useCallback((e) => {
         const { name, value } = e.target;
@@ -43,122 +43,214 @@ const Personal = () => {
             method: "post",
             data: input
         })
-        .then(resp => {
+        .then(() => {
             loadData();
             setInput({
-                personalNo:"",
                 personalId:"",
                 personalTitle:"",
                 personalContent:"",
-                personalWrite:"",
-
             });
             closeModal();
         });
-    }, [input, loadData]);
+    }, [input]);
 
     const cancelInput = useCallback(() => {
         setInput({
-            personalNo:"",
             personalId:"",
             personalTitle:"",
             personalContent:"",
-            personalWrite:"",
-
         });
         closeModal();
     }, []);
 
+    const openWriteModal = useCallback(() => {
+        setInput({
+            personalId:"",
+            personalTitle:"",
+            personalContent:"",
+        });
+        const modal = new Modal(writeModal.current);
+        modal.show();
+    }, [personals]);
+
     const deletePersonal = useCallback((target) => {
         const choice = window.confirm("정말 삭제하시겠습니까?");
-        if(choice === false) return;
-
+        if (choice === false) return;
         axios({
-            url: "/personal/" + target.personalNo,
+            url: "/personal/"+target.personalNo,
             method: "delete"
         })
         .then(resp => {
             loadData();
         });
-    }, [loadData]);
+    }, [personals]);
 
-    const openModal = useCallback(() => {
+    const openContentModal = useCallback((selectedPersonal) => {
+        setSelectedPersonal(selectedPersonal);
         const modal = new Modal(bsModal.current);
         modal.show();
     }, []);
 
     const closeModal = useCallback(() => {
         const modal = Modal.getInstance(bsModal.current);
-        modal.hide();
+        if (modal) {
+            modal.hide();
+        }
+    }, [bsModal]);
+
+    const [replyContent, setReplyContent] = useState("");
+
+    const changeReplyContent = useCallback((e) => {
+        setReplyContent(e.target.value);
     }, []);
+
+    const saveReply = useCallback(() => {
+        axios({
+            url: `/personal/reply/${selectedPersonal.personalNo}`,
+            method: "post",
+            data: {
+                replyContent: replyContent
+            }
+        })
+        .then(() => {
+            loadData();
+            setReplyContent("");
+            closeReplyModal();
+        });
+    }, [selectedPersonal, replyContent, loadData]);
+
+    const openReplyModal = useCallback((selectedPersonal) => {
+        setSelectedPersonal(selectedPersonal);
+        const modal = new Modal(replyModal.current);
+        modal.show();
+    }, []);
+
+    const closeReplyModal = useCallback(() => {
+        const modal = Modal.getInstance(replyModal.current);
+        if (modal) {
+            modal.hide();
+        }
+    }, [replyModal]);
 
     return (
         <div className="container">
-        <div className="text-center mb-3">
-            <img src="/image/personal.png" alt="Personal" />
-        </div>
-        <div className="text-end mb-3">
-            <NavLink to="/lost">분실물</NavLink>
-        </div>
-        <div className="row justify-content-center">
-            <div className="col-lg-8">
-                <table className="table">
-                    <thead>
-                        <tr>
-                            <th scope="col" style={{ fontSize: '18px' }}>이름</th>
-                            <th scope="col" style={{ fontSize: '18px', textAlign: 'center' }}>제목</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        {/* 여기서 personals 배열을 매핑하여 각 row를 생성할 수 있습니다. */}
-                        {personals.map((item, index) => (
-                            <tr key={index}>
-                                <td>{item.personalId}</td>
-                                <td>{item.personalTitle}</td>
+            <div className="text-center mb-3">
+                <img src="/image/personal.png" alt="Personal" />
+            </div>
+            <div className="text-end mb-3">
+                <NavLink to="/lost">분실물</NavLink>
+            </div>
+            <div className="row justify-content-center">
+                <div className="col-lg-8">
+                    <table className="table text-center">
+                        <thead>
+                            <tr>
+                                <th scope="col" style={{ fontSize: '18px' }}>번호</th>
+                                <th scope="col" style={{ fontSize: '18px'}}>제목</th>
+                                <th scope="col" style={{ fontSize: '18px'}}>글쓴이</th>
+                                <th scope="col" style={{ fontSize: '18px'}}>삭제</th>
                             </tr>
-                        ))}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                            {personals.map((item, index) => (
+                               <tr key={index} onClick={() => openContentModal(item)} style={{ cursor: 'pointer' }}>
+                                    <td>{item.personalNo}</td>
+                                    <td><strong><a href="#" onClick={() => openContentModal(item)}>{item.personalTitle}</a></strong></td>
+                                    <td>{item.personalId}</td>
+                                    <td>
+                                        <button className="btn btn-danger" onClick={(e) => deletePersonal(item)}>삭제</button>
+                                    </td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
             </div>
-        </div>
-        <div className="row justify-content-end">
-            <div className="col-lg-8 text-end">
-                <button className="btn btn-positive" onClick={openModal}>글쓰기</button>
+            <div className="row justify-content-end">
+                <div className="col-lg-8 text-end">
+                    <button className="btn btn-positive" onClick={openWriteModal}>글쓰기</button>
+                </div>
             </div>
-        </div>
-        <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={bsModal}>
-            <div className="modal-dialog">
-                <div className="modal-content">
-                    <div className="modal-header">
-                        <h5 className="modal-title" id="exampleModalLabel">1:1 문의게시판</h5>
-                        <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={cancelInput}></button>
+            <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={bsModal}>
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="exampleModalLabel">{selectedPersonal && selectedPersonal.personalTitle}</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={cancelInput}></button>
+                        </div>
+                        <div className="modal-body">
+                            {selectedPersonal && (
+                                <>
+                                    <p><strong>글쓴이:</strong> {selectedPersonal.personalId}</p>
+                                    <p><strong>내용:</strong> {selectedPersonal.personalContent}</p>
+                                    <button type="button" className="btn btn-primary" onClick={() => openReplyModal(selectedPersonal)}>답글 작성</button>
+                                </>
+                            )}
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={cancelInput}>닫기</button>
+                        </div>
                     </div>
-                    <div className="modal-body">
-                        <form>
-                            <div className="mb-3">
-                                <label htmlFor="personalId" className="form-label">이름</label>
-                                <input type="text" className="form-control" id="personalId" name="personalId" value={input.personalId} onChange={changeInput} />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="personalTitle" className="form-label">제목</label>
-                                <input type="text" className="form-control" id="personalTitle" name="personalTitle" value={input.personalTitle} onChange={changeInput} />
-                            </div>
-                            <div className="mb-3">
-                                <label htmlFor="personalContent" className="form-label">내용</label>
-                                <textarea className="form-control" id="personalContent" name="personalContent" value={input.personalContent} onChange={changeInput}></textarea>
-                            </div>
-                        </form>
+                </div>
+            </div>
+            <div className="modal fade" id="writeModal" tabIndex="-1" aria-labelledby="writeModalLabel" aria-hidden="true" ref={writeModal}>
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="writeModalLabel">글쓰기</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={cancelInput}></button>
+                        </div>
+                        <div className="modal-body">
+                            <form>
+                                <div className="mb-3">
+                                    <label htmlFor="personalId" className="form-label">이름</label>
+                                    <input type="text" className="form-control" id="personalId" name="personalId" value={input.personalId} onChange={changeInput} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="personalTitle" className="form-label">제목</label>
+                                    <input type="text" className="form-control" id="personalTitle" name="personalTitle" value={input.personalTitle} onChange={changeInput} />
+                                </div>
+                                <div className="mb-3">
+                                    <label htmlFor="personalContent" className="form-label">내용</label>
+                                    <textarea className="form-control" id="personalContent" name="personalContent" value={input.personalContent} onChange={changeInput}></textarea>
+                                </div>
+                            </form>
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={cancelInput}>취소</button>
+                            <button type="button" className="btn btn-primary" onClick={saveInput}>저장</button>
+                        </div>
                     </div>
-                    <div className="modal-footer">
-                        <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={cancelInput}>Close</button>
-                        <button type="button" className="btn btn-primary" onClick={saveInput}>Save changes</button>
+                </div>
+            </div>
+            <div className="modal fade" id="replyModal" tabIndex="-1" aria-labelledby="replyModalLabel" aria-hidden="true" ref={replyModal}>
+                <div className="modal-dialog">
+                    <div className="modal-content">
+                        <div className="modal-header">
+                            <h5 className="modal-title" id="replyModalLabel">답글 작성</h5>
+                            <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={closeReplyModal}></button>
+                        </div>
+                        <div className="modal-body">
+                            {selectedPersonal && (
+                                <>
+                                    <p><strong>글쓴이:</strong> {selectedPersonal.personalId}</p>
+                                    <p><strong>내용:</strong> {selectedPersonal.personalContent}</p>
+                                    <div className="mb-3">
+                                        <label htmlFor="replyContent" className="form-label">답글 내용</label>
+                                        <textarea className="form-control" id="replyContent" name="replyContent" value={replyContent} onChange={changeReplyContent}></textarea>
+                                    </div>
+                                </>
+                            )}
+                        </div>
+                        <div className="modal-footer">
+                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={closeReplyModal}>취소</button>
+                            <button type="button" className="btn btn-primary" onClick={saveReply}>저장</button>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
-);
-
+    );
 };
 
 export default Personal;
