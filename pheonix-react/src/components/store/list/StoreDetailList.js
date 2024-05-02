@@ -80,7 +80,7 @@ const StoreDetailList = () => {
         //         return navigate('/login'); //로그인 페이지로 리다이렉트
         //     }
         // }
-        // if(loginIdState !== null) {
+        // else {
         //     const choice = window.confirm("장바구니에 상품이 담겼습니다. \n장바구니로 이동하시겠습니까?");
         //     if(choice === true) {
         //         return navigate('/cart');
