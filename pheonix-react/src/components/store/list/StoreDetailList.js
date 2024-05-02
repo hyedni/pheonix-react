@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from "react";
+import { useCallback, useEffect, useState, useRef, useMemo } from "react";
 import axios from "../../utils/CustomAxios";
 import StoreMenu from "../StoreMenu";
 import Notification from "./Notification";
@@ -30,11 +30,28 @@ const StoreDetailList = () => {
     //상품 수량 정보
     const [itemQty, setItemQty] = useState(1);
     //장바구니 담기
-    const [addCart, setAddCart] = useState({
-        cartUserId :  "testuser4",//userId,
-        cartProductNo : productNo,
-        cartQty : itemQty
-    });
+
+    // 방법1 - useEffect
+    // const [addCart, setAddCart] = useState({
+    //     cartUserId :  "testuser4",//userId,
+    //     cartProductNo : productNo,
+    //     cartQty : itemQty
+    // });
+    // useEffect(()=>{
+    //     setAddCart({
+    //         ...addCart, cartQty:itemQty
+    //     });
+    // }, [itemQty]);
+
+    // 방법2 - useMemo
+    const addCart = useMemo(()=>{
+        return {
+                cartUserId :  "testuser4",//userId,
+                cartProductNo : productNo,
+                cartQty : itemQty
+        }
+    }, [itemQty]);
+
 
     useEffect(() => {
         loadData();
@@ -50,8 +67,6 @@ const StoreDetailList = () => {
         }
     }, [productNo]);
 
-    
-
     //장바구니 담기
     const AddItemToCart = useCallback((e)=>{
         console.log(addCart);
@@ -62,12 +77,12 @@ const StoreDetailList = () => {
         })
     }, [addCart]);
 
-    const changeInput = useCallback((e)=>{
-        setAddCart({
-            ...addCart,
-            [e.target.name] : e.target.value
-        });
-    }, [addCart]);
+    // const changeInput = useCallback((e)=>{
+    //     setAddCart({
+    //         ...addCart,
+    //         [e.target.name] : e.target.value
+    //     });
+    // }, [addCart]);
 
     //ref
     //사용가능한 피닉스
@@ -146,7 +161,7 @@ const StoreDetailList = () => {
                                     <div className="col mb-4">
                                         <div className="quantity-container">
                                             <button className="quantity-button" onClick={(e) => itemQty > 1 && setItemQty(itemQty - 1)}><LuMinus size={28} /></button>
-                                            <input className="quantity-span form-control" name="cartQty" value={itemQty} onChange={e => changeInput(e)} readOnly></input>
+                                            <span className="quantity-span">{itemQty}</span>
                                             <button className="quantity-button" onClick={(e) => itemQty < 101 && setItemQty(itemQty + 1)}><GoPlus size={28} /></button>
                                         </div>
                                     </div>
