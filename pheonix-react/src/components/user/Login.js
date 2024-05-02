@@ -22,33 +22,36 @@ const firebaseConfig = {
 function Login() {
     const isLogin = useRecoilValue(isLoginState);
     //state
-    const [users, setUsers] = useState({
+    const [user, setUser] = useState({
         userId: "", userPw: ""
     });
 
     //recoil
     const [loginId, setLoginId] = useRecoilState(loginIdState);
+    const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
 
     //callback
-    const changeUser = useCallback(e => {
-        setUsers({
-            ...users,
-            [e.target.name]: e.target.value
+    const changeUser = useCallback((e)=>{
+        const { name, value } = e.target;
+
+        setUser({
+            ...user,
+            [name]: value
         });
-    }, [users]);
+    }, [user]);
 
     //navigator
     const navigator = useNavigate();
 
-    const login = useCallback(async () => {
-        if (users.userId.length === 0) return;
-        if (users.userPw.length === 0) return;
+    const login = async () =>{
+        if (user.userId.length === 0) return;
+        if (user.userPw.length === 0) return;
 
-        const resp = await axios.post("/user/login", users);
+        const resp = await axios.post('/user/login', user);
         console.log(resp.data);
-
         setLoginId(resp.data.userId);
-
+        setLoginGrade(resp.data.userGrade);
+        
         //accessToken은 이후의 axios 요청에 포함시켜서 서버로 가져가야 한다
         //-> 이 순간 이후로 모든 요청의 header에 Authorization이라는 이름으로 토큰을 첨부하겠다
         axios.defaults.headers.common['Authorization'] = resp.data.accessToken;
@@ -58,14 +61,14 @@ function Login() {
 
         //강제 페이지 이동 - useNavigate()
         //navigator("/");
-    }, [users]);
+    };
 
     const handleGoogleLogin = () => {
         const app = initializeApp(firebaseConfig);
         const analytics = getAnalytics(app);
         const provider = new GoogleAuthProvider();
         const auth = getAuth(app);
-        auth.languageCode = "ko"; 
+        auth.languageCode = "ko";
 
         signInWithPopup(auth, provider)
             .then((result) => {
@@ -107,21 +110,39 @@ function Login() {
                 <button>
                     <NavLink to="/non-user-check">비회원 예매확인</NavLink>
                 </button>
-            </div><br /><br />
-
-            <form>
-                <label>아이디:</label>
-                <input type="text" />
-                <label>비밀번호:</label>
-                <input type="password" /><br /><br />
-                <button type="submit">로그인</button>
-            </form><br /><br />
-
-            <div>
-                <button onClick={handleGoogleLogin}>구글 아이디로 로그인</button>
             </div>
 
 
+            <div className="container mt-4" style={{ maxWidth: "400px" }}>
+                <div className="row">
+                    <div className="col">
+                        <label>아이디:</label>
+                        <input type="text" name="userId" className="form-control"
+                            value={user.userId} onChange={changeUser} />
+                    </div>
+                </div>
+
+                <div className="row mt-4">
+                    <div className="col">
+                        <label>비밀번호:</label>
+                        <input type="password" name="userPw" className="form-control"
+                            value={user.userPw} onChange={changeUser} />
+                    </div>
+                </div>
+
+                <div className="row mt-4">
+                    <div className="col">
+                        <button className="btn btn-success w-100" onClick={login}>로그인</button>
+                    </div>
+                </div>
+
+                <div className="row mt-4">
+                    <div className="col">
+                        <button onClick={handleGoogleLogin}>구글 아이디로 로그인</button>
+                    </div>
+                </div>
+
+            </div>
 
         </>
 

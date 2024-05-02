@@ -11,7 +11,8 @@ function Join() {
     "userName": "",
     "userContact": "",
     "userEmail": "",
-    "userBirth": ""
+    "userBirth": "",
+    "userCert":""
   });
   
   const [isValid, setIsValid] = useState({
@@ -22,6 +23,7 @@ function Join() {
     userContact: true,
     userEmail: true
   });
+
 
   const [isFormValid, setIsFormValid] = useState(false);
   const [isCertified, setIsCertified] = useState(false); // 추가: 인증번호 확인 상태
@@ -37,6 +39,7 @@ function Join() {
     });
   }, [user]);
 
+
   // 폼 제출 함수
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -49,37 +52,13 @@ function Join() {
         // 추가 작업 수행 (예: 사용자에게 성공 메시지 표시)
 
         // Now send verification email
-        await sendVerificationEmail(user.userEmail);
+        await handleSendCert(user.userEmail);
       } catch (error) {
         console.error("가입 실패:", error);
         // 추가 작업 수행 (예: 사용자에게 오류 메시지 표시)
       }
     } else {
       alert("' * '표시는 무조건 작성해야함");
-    }
-  };
-
-  // Send verification email
-  const sendVerificationEmail = async () => {
-    try {
-      const response = await axios.post("/user/sendCert", { certEmail: user.userEmail });
-      console.log("성공이야:", response.data);
-    } catch (error) {
-      console.error("실패:", error);
-    }
-  };
-
-  // 인증번호 확인 함수
-  const handleVerifyCert = async () => {
-    try {
-      const response = await axios.post("/user/checkCert", { certCode: user.userCert });
-      if (response.data) {
-        setIsValid(prevState => ({ ...prevState, userCert: true }));
-      } else {
-        setIsValid(prevState => ({ ...prevState, userCert: false }));
-      }
-    } catch (error) {
-      console.error("인증번호 확인 실패:", error);
     }
   };
 
@@ -126,6 +105,7 @@ function Join() {
     return isValid;
   };
 
+
   const handleSendCert = async () => {
     try {
       if (isValid.userEmail) {
@@ -135,10 +115,6 @@ function Join() {
           }
         });
         console.log('이메일이 성공적으로 전송되었습니다.');
-        setUser({
-          ...user,
-          certEmail: response.data.certEmail
-        });
       } else {
         console.error('유효하지 않은 이메일입니다.');
       }
@@ -153,21 +129,17 @@ function Join() {
         // 오류를 발생시킨 요청을 설정하는 데 문제가 있는 경우
         console.error('이메일 전송 요청에 오류가 있습니다:', error.message);
       }
-      // 이메일 전송 중 오류가 발생했을 때 할 작업을 여기에 추가하세요.
     }
   };
 
   const handleCheckCert = async () => {
+    console.log(user);
     try {
-      const response = await axios.post('/user/checkCert', { userEmail: user.userEmail, certCode : user.userCert} );
-      //저장
-      setUser({
-        ...user,
-        certCode: response.data.certCode
-      });
+      const response = await axios.post('/user/checkCert', { certEmail : user.userEmail, certCode:user.userCert});
+      
       console.log('응답 데이터:', response.data);
 
-      // 여기서 인증에 성공했을 때 isValid.userCert 상태를 true로 설정합니다.
+      // 여기서 인증에 성공했을 때 setIsCertified 상태를 true로 설정합니다.
       setIsCertified(true);
     } catch (error) {
       console.error('요청 실패:', error);
@@ -218,18 +190,16 @@ function Join() {
 
           <label htmlFor="userEmail">이메일 * :</label>
           <input type="email" id="userEmail" name="userEmail" onBlur={handleInputBlur} />
-          <button onClick={handleSendCert} disabled={isSending}>전송{isSending && <span>전송 중...</span>}</button>
+          <button type="button" onClick={handleSendCert}>전송</button>
           <span className={user.userEmail && !isValid.userEmail ? "invalid" : ""}>
             {user.userEmail && !isValid.userEmail && '이메일이 유효하지 않습니다.'}
           </span><br /><br />
 
           {/* 인증번호 입력 필드 */}
           <label htmlFor="userCert">인증번호 * :</label>
-          <input type="text" id="userCert" name="userCert" onBlur={handleInputBlur} />
-          <button onClick={handleCheckCert}>인증확인</button>
-          <span className={user.userCert && !isValid.userCert ? "invalid" : ""}>
-            {user.userCert && !isValid.userCert && '인증번호가 유효하지 않습니다.'}
-          </span><br /><br />
+          <input type="text" id="userCert" name="userCert" onChange={handleInputBlur} />
+          <button type="button" onClick={handleCheckCert}>인증확인</button>
+          <br /><br />
 
           <button type="submit" className='btn btn-success'>가입하기</button>
         </form>
