@@ -11,21 +11,21 @@ function Join() {
     "userName": "",
     "userContact": "",
     "userEmail": "",
-    "userBirth": "",
-    "userCert": "" // 인증번호 필드 추가
+    "userBirth": ""
   });
-
+  
   const [isValid, setIsValid] = useState({
     userId: true,
     userPw: true,
     userNick: true,
     userName: true,
     userContact: true,
-    userEmail: true,
-    userCert: true // 인증번호 유효성 상태 추가
+    userEmail: true
   });
 
   const [isFormValid, setIsFormValid] = useState(false);
+  const [isCertified, setIsCertified] = useState(false); // 추가: 인증번호 확인 상태
+  const [isSending, setIsSending] = useState(false); // 전송 중 상태 추가
 
   // 값 입력 함수
   const handleInputBlur = useCallback((e) => {
@@ -41,7 +41,7 @@ function Join() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     // 양식 유효성 확인
-    if (isFormValid) {
+    if (isFormValid && isCertified) {
       try {
         // 서버로 데이터 전송
         const response = await axios.post("/user/join", user);
@@ -126,6 +126,54 @@ function Join() {
     return isValid;
   };
 
+  const handleSendCert = async () => {
+    try {
+      if (isValid.userEmail) {
+        const response = await axios.post('/user/sendCert', null, {
+          params: {
+            certEmail: user.userEmail
+          }
+        });
+        console.log('이메일이 성공적으로 전송되었습니다.');
+        setUser({
+          ...user,
+          certEmail: response.data.certEmail
+        });
+      } else {
+        console.error('유효하지 않은 이메일입니다.');
+      }
+    } catch (error) {
+      if (error.response) {
+        // 서버에서 상태 코드가 제공된 경우
+        console.error('이메일 전송 중 오류가 발생했습니다:', error.response.data);
+      } else if (error.request) {
+        // 요청이 발생하지 않은 경우
+        console.error('이메일 전송 요청에 문제가 발생했습니다:', error.request);
+      } else {
+        // 오류를 발생시킨 요청을 설정하는 데 문제가 있는 경우
+        console.error('이메일 전송 요청에 오류가 있습니다:', error.message);
+      }
+      // 이메일 전송 중 오류가 발생했을 때 할 작업을 여기에 추가하세요.
+    }
+  };
+
+  const handleCheckCert = async () => {
+    try {
+      const response = await axios.post('/user/checkCert', { userEmail: user.userEmail, certCode : user.userCert} );
+      //저장
+      setUser({
+        ...user,
+        certCode: response.data.certCode
+      });
+      console.log('응답 데이터:', response.data);
+
+      // 여기서 인증에 성공했을 때 isValid.userCert 상태를 true로 설정합니다.
+      setIsCertified(true);
+    } catch (error) {
+      console.error('요청 실패:', error);
+    }
+  };
+
   // 사용자 입력 변경 시 양식 유효성 다시 확인
   useEffect(() => {
     setIsFormValid(validateForm());
@@ -170,16 +218,17 @@ function Join() {
 
           <label htmlFor="userEmail">이메일 * :</label>
           <input type="email" id="userEmail" name="userEmail" onBlur={handleInputBlur} />
-          <button type="button" onClick={sendVerificationEmail}>전송</button>
+          <button onClick={handleSendCert} disabled={isSending}>전송{isSending && <span>전송 중...</span>}</button>
           <span className={user.userEmail && !isValid.userEmail ? "invalid" : ""}>
             {user.userEmail && !isValid.userEmail && '이메일이 유효하지 않습니다.'}
           </span><br /><br />
 
           {/* 인증번호 입력 필드 */}
           <label htmlFor="userCert">인증번호 * :</label>
-          <input type="text" id="userCert" name="userCert" value={user.userCert} onChange={handleInputBlur} onBlur={handleVerifyCert} />
-          <span className={!isValid.userCert ? "invalid" : ""}>
-            {!isValid.userCert && '인증번호가 유효하지 않습니다.'}
+          <input type="text" id="userCert" name="userCert" onBlur={handleInputBlur} />
+          <button onClick={handleCheckCert}>인증확인</button>
+          <span className={user.userCert && !isValid.userCert ? "invalid" : ""}>
+            {user.userCert && !isValid.userCert && '인증번호가 유효하지 않습니다.'}
           </span><br /><br />
 
           <button type="submit" className='btn btn-success'>가입하기</button>
