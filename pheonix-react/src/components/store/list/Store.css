@@ -1,0 +1,35 @@
+.quantity-container {
+    display: flex;
+    align-items: center;
+  }
+  
+  .quantity-button {
+    border: none;
+    background-color: transparent;
+    cursor: pointer;
+    width: 60px; /* 원하는 너비로 설정 */
+    font-size: 1.2em;
+  }
+  
+  .quantity-span {
+    width: 50%;
+    text-align: center;
+    font-weight: bold; /* 굵은 글꼴 */
+    font-size: 1.2em; /* 원하는 폰트 크기로 설정 */
+  }
+  
+  .total-design-right {
+    margin : 4px;
+    text-align: right;
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+  .total-design-left {
+    margin : 4px;
+    font-weight: bold;
+    font-size: 1.5em;
+  }
+
+  li {
+    margin-top : 6px;
+  }

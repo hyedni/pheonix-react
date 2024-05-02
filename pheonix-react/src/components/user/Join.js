@@ -11,8 +11,7 @@ function Join() {
     "userName": "",
     "userContact": "",
     "userEmail": "",
-    "userBirth": "",
-    "userCert":""
+    "userBirth": ""
   });
   
   const [isValid, setIsValid] = useState({
@@ -24,7 +23,6 @@ function Join() {
     userEmail: true
   });
 
-  
   const [isFormValid, setIsFormValid] = useState(false);
   const [isCertified, setIsCertified] = useState(false); // 추가: 인증번호 확인 상태
   const [isSending, setIsSending] = useState(false); // 전송 중 상태 추가
@@ -49,6 +47,9 @@ function Join() {
         const response = await axios.post("/user/join", user);
         console.log("가입 성공:", response.data);
         // 추가 작업 수행 (예: 사용자에게 성공 메시지 표시)
+
+        // Now send verification email
+        await sendVerificationEmail(user.userEmail);
       } catch (error) {
         console.error("가입 실패:", error);
         // 추가 작업 수행 (예: 사용자에게 오류 메시지 표시)
@@ -57,6 +58,31 @@ function Join() {
       alert("' * '표시는 무조건 작성해야함");
     }
   };
+
+  // Send verification email
+  const sendVerificationEmail = async () => {
+    try {
+      const response = await axios.post("/user/sendCert", { certEmail: user.userEmail });
+      console.log("성공이야:", response.data);
+    } catch (error) {
+      console.error("실패:", error);
+    }
+  };
+
+  // 인증번호 확인 함수
+  const handleVerifyCert = async () => {
+    try {
+      const response = await axios.post("/user/checkCert", { certCode: user.userCert });
+      if (response.data) {
+        setIsValid(prevState => ({ ...prevState, userCert: true }));
+      } else {
+        setIsValid(prevState => ({ ...prevState, userCert: false }));
+      }
+    } catch (error) {
+      console.error("인증번호 확인 실패:", error);
+    }
+  };
+
 
   // 양식 유효성 확인 함수
   const validateForm = () => {
@@ -197,6 +223,7 @@ function Join() {
             {user.userEmail && !isValid.userEmail && '이메일이 유효하지 않습니다.'}
           </span><br /><br />
 
+          {/* 인증번호 입력 필드 */}
           <label htmlFor="userCert">인증번호 * :</label>
           <input type="text" id="userCert" name="userCert" onBlur={handleInputBlur} />
           <button onClick={handleCheckCert}>인증확인</button>
