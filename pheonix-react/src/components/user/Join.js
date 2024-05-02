@@ -133,7 +133,7 @@ function Join() {
 
   const handleCheckCert = async () => {
     try {
-      const response = await axios.post('/user/checkCert', {certCode : user.userCert} );
+      const response = await axios.post('/user/checkCert', { userEmail: user.userEmail, certCode : user.userCert} );
       //저장
       setUser({
         ...user,
