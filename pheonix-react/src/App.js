@@ -16,6 +16,9 @@ import Lost from './components/service/Lost';
 import WritePost from './components/service/WritePost';
 import StoreDetailList from './components/store/list/StoreDetailList';
 import AdminCinema from './components/admin/AdminCinema';
+import AdminStore from './components/admin/Store/AdminStore';
+import NewProduct from './components/admin/Store/NewProduct';
+import ProductEdit from './components/admin/Store/productEdit';
 
 function App() {
   return (
@@ -27,10 +30,15 @@ function App() {
               {/* 공용공간 에티켓을 만듭시다** 분리하여 route 작성해주세요 */}
               {/* 관리자 */}
               <Route path='/adminMovie' element={<AdminMovie/>}/>
-              <Route path='/movieEdit/:movieNo' element={<MovieEdit/>}/>
               <Route path='/adminCinema' element={<AdminCinema/>}/>
+              <Route path='/adminStore' element={<AdminStore />}/>
+
+               <Route path='/movieEdit/:movieNo' element={<MovieEdit/>}/>
+               <Route path='/productEdit/:productNo' element={<ProductEdit />}/>
 
               <Route path='/newMovie' element={<NewMovie/>}/>
+              <Route path='/newProduct' element={<NewProduct />}/>
+
               {/* 회원 */}
               <Route path='/login' element={<Login/>}/>
               <Route path='/join' element={<Join/>}/>
