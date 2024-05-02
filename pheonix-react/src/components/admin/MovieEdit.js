@@ -112,7 +112,7 @@ function MovieEdit() {
                     ) : (
                         <>
                             <div className="title-head-text">
-                                영화 정보 수정
+                                영화 정보 <span style={{color : 'rgb(237, 79, 78)'}}>수정</span>
                             </div>
                         </>
                     )}
@@ -151,7 +151,7 @@ function MovieEdit() {
                                         </button>
                                     </div>
                                     <div className="row me-2 mb-3">
-                                        <button onClick={e => saveEditMovie()} className='delete-button btn btn-dark'>
+                                        <button onClick={e => saveEditMovie(movie)} className='delete-button btn btn-dark'>
                                             정보 수정 완료
                                         </button>
                                     </div>
@@ -239,7 +239,7 @@ function MovieEdit() {
                                             <hr></hr>
                                             <div className="row mb-4">
                                                 <div className="col-3">줄거리</div>
-                                                <div className="col-9 input-content ">{movie.movieSummary}</div>
+                                                <div className="col-9 input-content " style={{whiteSpace: 'pre-wrap'}}>{movie.movieSummary}</div>
                                             </div>
                                         </>
                                     ) : (
@@ -361,7 +361,7 @@ function MovieEdit() {
                                             <div className="row mb-4">
                                                 <div className="col-3">줄거리</div>
                                                 <div className='col-9'>
-                                                    <textarea className="form-control" type="text" name='movieSummary' style={{width: '100%', height:'300px'}} 
+                                                    <textarea className="form-control" type="text" name='movieSummary' style={{width: '100%', height:'300px', whiteSpace: 'pre-wrap'}} 
                                                         value={movie.movieSummary} onChange={e => changeMovie(e)}></textarea>
                                                 </div>
                                             </div>
