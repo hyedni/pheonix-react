@@ -63,22 +63,22 @@ th {
 
 
 
-.custom-quantity-container {
+.custom-qty-container {
     display: flex;
     align-items: center;
     width: 100px; /* 필요에 따라 너비 조절 */
 }
 
-.quantity-value {
+.qty-value {
     margin-right: 10px; /* 왼쪽 여백 추가 */
 }
 
-.quantity-buttons {
+.qty-buttons {
     display: flex;
     flex-direction: column; /* 버튼들을 세로로 배치 */
 }
 
-.quantity-button {
+.qty-button {
     background-color: transparent;
     border: none;
     padding: 0;
