@@ -108,12 +108,12 @@ const StoreList = () => {
                         {products.map(product => (
                             <div className="col-md-4 mb-4" key={product.productNo}>
                                 <div className='mt-2'>
-                                    <div className="img-preview img-thumbnail mt-3 image-wrapper">
+                                    <div className="img-thumbnail mt-3 image-wrapper list-img" style={{ height: "400px" }}>
                                         {!imagePreview && (
-                                            <img src={product.productImgLink} lassName='img-preview img-thumbnail' alt="상품이미지" />
+                                            <img src={product.productImgLink} alt="상품이미지" />
                                         )}
                                         {imagePreview && (
-                                            <img src={imagePreview} alt="Preview" style={{ width: "100%" }} />
+                                            <img src={imagePreview} alt="Preview" />
                                         )}
 
                                         <Link to={`/cart`} className='edit-button btn btn-secondary' onClick={e => (AddItemToCart(product.productNo))}><FaShoppingCart /></Link>

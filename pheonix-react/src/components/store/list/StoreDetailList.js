@@ -128,12 +128,12 @@ const StoreDetailList = () => {
                 <div className="col-lg-8 content-body">
                     <div className="row">
                         <div className="col-4">   
-                        <div className="img-preview img-thumbnail mt-3 image-wrapper">
+                        <div className="img-thumbnail mt-3 image-wrapper list-img" style={{ height: "400px" }}>
                             {!imagePreview && (
-                                <img src={products.productImgLink} lassName='img-preview img-thumbnail' alt="상품이미지" />
+                                <img src={products.productImgLink}  alt="상품이미지" />
                             )}
                             {imagePreview && (
-                                <img src={imagePreview} alt="Preview" style={{ width: "100%" }} />
+                                <img src={imagePreview} alt="Preview"  />
                             )}
                         </div>
                         </div>
