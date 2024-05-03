@@ -85,6 +85,29 @@ th {
     margin: 2px 0; /* 버튼 사이의 간격 설정 */
 }
 
+.outline-design {
+    background-color: #fff; /* 전체 배경색 */
+    border: 2px solid #ccc; /* 테이블 외곽선 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    overflow: hidden; /* 둥근 모서리에 맞춰 내용물을 자름 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 그림자 효과 */
+}
+
+.header-line {
+    font-weight: bold; /* 글자 굵게 */
+    background-color: #f8f9fa; /* 약간 다른 배경색 */
+}
+
+.section-design {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    border-right: 1px solid #ccc; /* 각 칼럼 사이의 구분선 */
+}
+
+.bottom-line {
+    border-bottom: 1px solid #ccc;
+}
+
 
 
 
