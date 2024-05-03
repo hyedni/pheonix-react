@@ -4,7 +4,6 @@ import axios from "../utils/CustomAxios";
 import { FaPhoneFlip } from "react-icons/fa6";
 import { Modal } from 'bootstrap';
 import React from 'react';
-import DaumPostcodeEmbed from 'react-daum-postcode';
 import PostApi from './PostApi';
 
 function AdminCinema() {
@@ -49,16 +48,17 @@ function AdminCinema() {
         setIsClicked(!isClicked); // isClicked 상태를 반전시키는 함수
     };
 
-    //모달
+
     const bsModal = useRef();
     const openModal = useCallback(() => {
-        const modal = new Modal(bsModal.current);
-        modal.show();
+          const modal = new Modal(bsModal.current);
+          modal.show();
     }, [bsModal]);
     const closeModal = useCallback(() => {
-        const modal = Modal.getInstance(bsModal.current);
-        modal.hide();
+          const modal = Modal.getInstance(bsModal.current);   
+          modal.hide();
     }, [bsModal]);
+
 
     const [input, setInput] = useState({
         cinemaName: "",
@@ -71,6 +71,15 @@ function AdminCinema() {
         cinemaManagerCall: "",
         cinemaCall: ""
     });
+
+    //주소api용 
+    const handleAddressChange = (post, address) => {
+        setInput(prev => ({
+            ...prev,
+            cinemaPost: post,
+            cinemaAddress1: address
+        }));
+        };
 
     //입력값취소
     const cancelInput = useCallback(() => {
@@ -93,7 +102,6 @@ function AdminCinema() {
         await axios.post("/cinema/", input);
         loadList();
         cancelInput();
-        closeModal();
     }, [input]);
 
     //등록하기(입력값 input state에 저장)
@@ -132,7 +140,7 @@ function AdminCinema() {
                                 <div>
                                     <ul className="inner-ul">
                                         {cinemas.map((cinema) => (
-                                            <li key={cinema.no} onClick={e => selectedRegion(cinema)}
+                                            <li key={cinema.cinemaNo} onClick={e => selectedRegion(cinema)}
                                                 style={{ borderRight: '1px solid gray', paddingRight: '0.5em' }}>
                                                 {cinema.cinemaName}
                                             </li>
@@ -210,7 +218,7 @@ function AdminCinema() {
             <div className='row'>
                 <div className='offset-2 col-lg-8 d-flex justify-content-end' style={{ marginBottom: '30px' }}>
                     <button className='btn btn-dark' style={{ marginRight: '10px' }}>수정하기</button>
-                    <button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={e => openModal()}>new 영화관 등록</button>
+                    <button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={e=>openModal()}>new 영화관 등록</button>
                     <button className='btn btn-primary' style={{ marginRight: '10px' }}>삭제하기</button>
                 </div>
             </div>
@@ -259,7 +267,7 @@ function AdminCinema() {
                             <div className="row">
                                 <div className="col">
                                     <label>주소</label>
-                                    <PostApi setInput={setInput} />
+                                    <div><PostApi onAddressChange={handleAddressChange}/></div>
                                     <input type="text" name="cinemaPost"
                                         value={input.cinemaPost}
                                         onChange={e => changeInput(e)}
