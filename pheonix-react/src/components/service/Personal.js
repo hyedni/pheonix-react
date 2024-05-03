@@ -3,6 +3,8 @@ import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import Modal from 'bootstrap/js/dist/modal';
 
+
+
 const Personal = () => {
     const [personals, setPersonals] = useState([]);
     const [selectedPersonal, setSelectedPersonal] = useState(null);
@@ -52,7 +54,7 @@ const Personal = () => {
             });
             closeModal();
         });
-    }, [input]);
+    }, [input, loadData]);
 
     const cancelInput = useCallback(() => {
         setInput({
@@ -71,7 +73,7 @@ const Personal = () => {
         });
         const modal = new Modal(writeModal.current);
         modal.show();
-    }, [personals]);
+    }, []);
 
     const deletePersonal = useCallback((target) => {
         const choice = window.confirm("정말 삭제하시겠습니까?");
@@ -83,20 +85,13 @@ const Personal = () => {
         .then(resp => {
             loadData();
         });
-    }, [personals]);
+    }, [loadData]);
 
     const openContentModal = useCallback((selectedPersonal) => {
         setSelectedPersonal(selectedPersonal);
         const modal = new Modal(bsModal.current);
         modal.show();
     }, []);
-
-    const closeModal = useCallback(() => {
-        const modal = Modal.getInstance(bsModal.current);
-        if (modal) {
-            modal.hide();
-        }
-    }, [bsModal]);
 
     const [replyContent, setReplyContent] = useState("");
 
@@ -116,13 +111,29 @@ const Personal = () => {
             loadData();
             setReplyContent("");
             closeReplyModal();
+            // 답글이 저장된 후에 글 내용 모달에 해당 답글을 동적으로 추가
+            const newReply = {
+                replyContent: replyContent,
+                // 여기에 필요한 다른 속성들 추가
+            };
+            setSelectedPersonal(prevPersonal => ({
+                ...prevPersonal,
+                replies: [...(prevPersonal.replies || []), newReply] // 기존 답글 배열과 새로운 답글을 합침
+            }));
         });
     }, [selectedPersonal, replyContent, loadData]);
+    
 
     const openReplyModal = useCallback((selectedPersonal) => {
         setSelectedPersonal(selectedPersonal);
-        const modal = new Modal(replyModal.current);
-        modal.show();
+
+        // 모달 창이 이미 열려 있는지 확인
+        const modal = Modal.getInstance(replyModal.current);
+        if (!modal) {
+            // 모달 창이 열려 있지 않으면 새로 열기
+            const newModal = new Modal(replyModal.current);
+            newModal.show();
+        }
     }, []);
 
     const closeReplyModal = useCallback(() => {
@@ -130,7 +141,16 @@ const Personal = () => {
         if (modal) {
             modal.hide();
         }
-    }, [replyModal]);
+    }, []);
+
+    const closeModal = useCallback(() => {
+        const modal = Modal.getInstance(bsModal.current);
+        if (modal) {
+            modal.hide();
+        }
+
+      
+    }, []);
 
     return (
         <div className="container">
@@ -178,18 +198,23 @@ const Personal = () => {
                             <h5 className="modal-title" id="exampleModalLabel">{selectedPersonal && selectedPersonal.personalTitle}</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={cancelInput}></button>
                         </div>
-                        <div className="modal-body">
-                            {selectedPersonal && (
-                                <>
-                                    <p><strong>글쓴이:</strong> {selectedPersonal.personalId}</p>
-                                    <p><strong>내용:</strong> {selectedPersonal.personalContent}</p>
-                                    <button type="button" className="btn btn-primary" onClick={() => openReplyModal(selectedPersonal)}>답글 작성</button>
-                                </>
-                            )}
+                       
+        <div className="modal-body">
+            {selectedPersonal && (
+                <>
+                    <p><strong>글쓴이:</strong> {selectedPersonal.personalId}</p>
+                    <p><strong>내용:</strong> {selectedPersonal.personalContent}</p>
+                    {/* 답글 내용 추가 */}
+                    {selectedPersonal.replies && selectedPersonal.replies.map((reply, index) => (
+                        <div key={index}>
+                            <p><strong>답글 {index + 1}:</strong> {reply.replyContent}</p>
                         </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-secondary" data-bs-dismiss="modal" onClick={cancelInput}>닫기</button>
-                        </div>
+                    ))}
+                    <button type="button" className="btn btn-primary" onClick={() => openReplyModal(selectedPersonal)}>답글 작성</button>
+                </>
+            )}
+        </div>
+    
                     </div>
                 </div>
             </div>
@@ -250,7 +275,7 @@ const Personal = () => {
                 </div>
             </div>
         </div>
-    );
-};
-
-export default Personal;
+       );
+    };
+    
+    export default Personal;

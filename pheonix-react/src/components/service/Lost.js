@@ -12,6 +12,7 @@ const Lost = () => {
 
     const [file, setFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
+    const [errorMessage, setErrorMessage] = useState(null); // 오류 메시지 상태 추가
     
     const loadList = useCallback(async () => {
         try {
@@ -63,35 +64,36 @@ const Lost = () => {
         }
     };
 
-    const saveInput = async () => {
+    const saveInput = useCallback(async () => {
         const formData = new FormData();
-        formData.append("lostTitle", input.lostTitle);
-        formData.append("lostContent", input.lostContent);
+        for (const key in input) {
+            formData.append(key, input[key]);
+        }
+    
         if (file) {
             formData.append("attach", file);
+            try {
+                const response = await axios.post("/lost/", formData);
+                const newLost = response.data; // 새로 생성된 게시글 정보를 받아옴
+                setLosts(prevLosts => [newLost, ...prevLosts]); // 새로운 게시글을 리스트에 추가
+                cancelInput();
+                setErrorMessage(null); // 성공적으로 업로드되면 오류 메시지 초기화
+            } catch (error) {
+                console.error("Failed to submit the form!", error);
+                setErrorMessage("Failed to submit the form!"); // 오류 메시지 설정
+            }
         }
-        try {
-            await axios.post("/lost/", formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data'
-                }
-            });
-            loadList();
-            clearInput();
-            closeModal();
-        } catch(error) {
-            console.error("Failed to submit the form!", error);
-        }
-    };
+    }, [input, file]);
+    
 
-    const handleImageChange = (e) => {
+    const handleImageChange = e => {
         const file = e.target.files[0];
+        const reader = new FileReader();
+        reader.onloadend = () => {
+            setImagePreview(reader.result);
+        };
         if (file) {
             setFile(file);
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setImagePreview(reader.result);
-            };
             reader.readAsDataURL(file);
         }
     };
@@ -110,30 +112,45 @@ const Lost = () => {
     };
     
     const cancelInput = () => {
-        const choice = window.confirm("작성을 취소하시겠습니까?");
-        if (choice === false) return;
+        if (!file && errorMessage) { // 이미지가 업로드되지 않은 경우에만 작성 취소 메시지 표시
+            const choice = window.confirm("작성을 취소하시겠습니까?");
+            if (choice === false) return;
+        }
         clearInput();
         closeModal();
     };
 
+    const clearImagePreview = () => {
+        setImagePreview(null);
+    };
+    
+
     return (
-        <div className="container">
-            <div className="row justify-content-center">
-                <div className="col-lg-8 text-center">
-                    <img src="/image/lost.png" alt="Lost"/>
-                    <ul className="list-group">
-                        {losts.map((lost) => (
-                            <li key={lost.lostNo} className="list-group-item">
-                                <h2>{lost.lostTitle}</h2>
-                                <p>{lost.lostContent}</p>
+        <div className="container text-center">
+            <img src="/image/lost.png" alt="Lost"/>
+            <div className="row">
+                {losts.map((lost, index) => (
+                    <div key={lost.lostNo} className="col-lg-4 mb-3">
+                        <div className="card">
+                            <div className="card-body">
+                                <h5 className="card-title">{lost.lostTitle}</h5>
+                                <p className="card-text">{lost.lostContent}</p>
+                                {lost.lostImgLink && ( // 이미지 정보가 있는 경우에만 이미지 표시
+                                    <div className="card-image">
+                                        <img src={lost.lostImgLink} alt="Lost Image" />
+                                    </div>
+                                )}
                                 <div className="d-grid gap-2 d-md-flex justify-content-md-end">
                                     <button className="btn btn-outline-primary me-md-2" onClick={() => console.log("Edit button clicked")}>수정</button>
                                     <button className="btn btn-outline-danger" onClick={() => deleteLost(lost)}>삭제</button>
                                 </div>
-                            </li>
-                        ))}
-                    </ul>
-        
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+            <div className="row justify-content-center">
+                <div className="col-lg-8">
                     <div className="mb-3">
                         <label htmlFor="lost_title" className="form-label">제목</label>
                         <input type="text" id="lost_title" name="lostTitle" value={input.lostTitle} onChange={changeInput} className="form-control" placeholder="제목을 입력하세요" />
@@ -145,21 +162,20 @@ const Lost = () => {
                     <div className="mb-3">
                         <label htmlFor="image" className="form-label">이미지 업로드</label>
                         <input type="file" id="image" name="lostAttach" onChange={handleImageChange} className="form-control" />
-                        {imagePreview && (
+                        {imagePreview && !file && ( // 이미지 미리보기가 있고, 파일이 선택되지 않은 경우에만 보여줌
                             <div className="img-preview mt-3">
                                 <img src={imagePreview} alt="Preview" style={{ width: "100%" }} />
                             </div>
                         )}
+                      
                     </div>
                     <div className="d-grid">
                         <button type="button" className="btn btn-primary" onClick={saveInput}>작성</button>
                         <button type="button" className="btn btn-secondary" onClick={cancelInput}>취소</button>
                     </div>
-                    
                     <NavLink to="/personal" className="mt-3">이전</NavLink>
                 </div>
             </div>
-            
             {/* Modal */}
             <div ref={bsModal} className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div className="modal-dialog">
@@ -183,3 +199,4 @@ const Lost = () => {
 };    
 
 export default Lost;
+
