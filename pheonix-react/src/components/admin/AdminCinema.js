@@ -39,6 +39,7 @@ function AdminCinema() {
         });
         const resp = await axios.get("/cinema/" + target.cinemaNo);
         setDetailCinema(resp.data);
+        setIsEdit({ edit: false });
     }, [region]);
 
     const loadList = useCallback(async () => {
@@ -63,7 +64,7 @@ function AdminCinema() {
     const closeModal = useCallback(() => {
         const modal = Modal.getInstance(bsModal.current);
         modal.hide();
-        
+
     }, [bsModal]);
 
     const [input, setInput] = useState({
@@ -126,7 +127,7 @@ function AdminCinema() {
             [e.target.name]: e.target.value
         });
     }, [input]);
-
+   
     //수정화면
     const editCinema = useCallback(() => {
         setBackup({ ...detailCinema });
@@ -143,10 +144,18 @@ function AdminCinema() {
 
     //수정처리
     const saveEditCinema = useCallback(async (detailCinema) => {
+        console.log(detailCinema);
         const resp = await axios.patch("/cinema/", detailCinema);
         setIsEdit({ edit: false });
         loadList();
     }, [detailCinema]);
+
+    //수정취소
+    const cancelEditCinema = useCallback(() => {
+        setDetailCinema({ ...backup});
+        setIsEdit({ edit: false });
+        loadList();
+    }, [backup]);
 
     //삭제
     const deleteCinema = useCallback(async (target) => {
@@ -273,7 +282,7 @@ function AdminCinema() {
                                     </tr>
                                     <tr>
                                         <td style={{ fontWeight: 'bold' }}>총 상영관 수</td>
-                                        <td><input type="text" name="cinemaName" value={detailCinema.cinemaTotalTheater}
+                                        <td><input type="text" name="cinemaTotalTheater" value={detailCinema.cinemaTotalTheater}
                                             className="form-control" onChange={e => changeCinemaInput(e)}>
                                         </input></td>
                                     </tr>
@@ -296,12 +305,22 @@ function AdminCinema() {
                                         </td>
                                     </tr>
                                     <tr>
-                                        <td style={{ fontWeight: 'bold' }}>책임자</td>
-                                        <td>{detailCinema.cinemaManager} &nbsp; &nbsp; <FaPhoneFlip onClick={showNum} /> click!</td>
+                                        <td style={{ fontWeight: 'bold' }}>매니저</td>
+                                        <td><input type="text" name="cinemaManager" value={detailCinema.cinemaManager}
+                                            className="form-control" onChange={e => changeCinemaInput(e)}>
+                                        </input></td>
+                                    </tr>
+                                    <tr>
+                                        <td style={{ fontWeight: 'bold' }}>매니저 연락처</td>
+                                        <td><input type="text" name="cinemaManagerCall" value={detailCinema.cinemaManagerCall}
+                                            className="form-control" onChange={e => changeCinemaInput(e)}>
+                                        </input></td>
                                     </tr>
                                     <tr>
                                         <td style={{ fontWeight: 'bold' }}>영화관 연락처</td>
-                                        <td>{detailCinema.cinemaCall}</td>
+                                        <td><input type="text" name="cinemaCall" value={detailCinema.cinemaCall}
+                                            className="form-control" onChange={e => changeCinemaInput(e)}>
+                                        </input></td>
                                     </tr>
                                 </tbody>
                             </>
@@ -318,7 +337,8 @@ function AdminCinema() {
                         </>
                     ) : (
                         <>
-                            <button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={e => saveEditCinema(region)}>저장하기</button>
+                            <button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={e => saveEditCinema(detailCinema)}>저장하기</button>
+                            <button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={e => cancelEditCinema()}>돌아가기</button>
                         </>
                     )}
                     <button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={e => openModal()}>new 영화관 등록</button>
@@ -388,7 +408,7 @@ function AdminCinema() {
 
                             <div className="row">
                                 <div className="col">
-                                    <label>관리자</label>
+                                    <label>매니저</label>
                                     <input type="text" name="cinemaManager"
                                         value={input.cinemaManager}
                                         onChange={e => changeInput(e)}
@@ -398,7 +418,7 @@ function AdminCinema() {
 
                             <div className="row">
                                 <div className="col">
-                                    <label>관리자 연락처</label>
+                                    <label>매니저 연락처</label>
                                     <input type="text" name="cinemaManagerCall"
                                         value={input.cinemaManagerCall}
                                         onChange={e => changeInput(e)}
