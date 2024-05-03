@@ -80,11 +80,11 @@ const Cart = () => {
                             <thead>
                                 <tr>
                                     <th scope="col"><input type="checkbox" className="large-checkbox" /></th>
-                                    <th scope="col" style={{width : '32%'}}>상품명</th>
-                                    <th scope="col" style={{width : '15%'}}>판매금액</th>
-                                    <th scope="col" style={{width : '10%'}}>수량</th>
-                                    <th scope="col" style={{width : '15%'}}>구매금액</th>
-                                    <th scope="col" style={{width : '20%'}}>선택</th>
+                                    <th scope="col" style={{ width: '32%' }}>상품명</th>
+                                    <th scope="col" style={{ width: '15%' }}>판매금액</th>
+                                    <th scope="col" style={{ width: '10%' }}>수량</th>
+                                    <th scope="col" style={{ width: '15%' }}>구매금액</th>
+                                    <th scope="col" style={{ width: '20%' }}>선택</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -111,8 +111,8 @@ const Cart = () => {
                                             <div class="custom-qty-container">
                                                 <span class="qty-value">{cartItem.cartQty}</span>
                                                 <div class="qty-buttons">
-                                                    <button class="qty-button"><GoPlus  /></button>
-                                                    <button class="qty-button"><LuMinus  /></button>
+                                                    <button class="qty-button"><GoPlus /></button>
+                                                    <button class="qty-button"><LuMinus /></button>
                                                 </div>
                                             </div>
 
@@ -135,15 +135,60 @@ const Cart = () => {
                         </table>
 
 
+                    </div>
+                </div>
 
+                <div className="row justify-content-center">
+                    <div className="col-lg-8 content-body">
+                        <div className="delete-button-container">
+                            <button className="delete-button btn btn-light">선택상품 삭제()</button>
+                        </div>
+                        <div>
+                            <p className='text-right'>장바구니에 담긴 상품은 최대 30일까지 보관됩니다.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div className="row justify-content-center">
+                    <div className="col-lg-8 content-body outline-design">
+                        <div className='row  botton-line header-line'>
+                            <div className='col-4 section-design'>
+                                총 상품 금액
+                            </div>
+                            <div className='col-4 section-design'>
+                                할인금액
+                            </div>
+                            <div className='col-4 section-design'>
+                                총 결제 예정금액
+                            </div>
+                        </div>
+                        <div className='row'>
+                            <div className='col-4 section-design'>
+                                총 상품 금액
+                            </div>
+                            <div className='col-4 section-design'>
+                                할인금액
+                            </div>
+                            <div className='col-4 section-design'>
+                                총 결제 예정금액
+                            </div>
+                        </div>
                     </div>
                 </div>
 
 
-
-
-
-
+                <div className="row justify-content-center">
+                    <div className="col-lg-8 content-body">
+                        <div className='row'>
+                            <div className="col-6">
+                                        <Link to={`/gift/`} className='btn btn-dark w-100'>선물하기</Link>
+                                    </div>
+                                    <div className="col-6">
+                                        <Link to={`/purchase/`} className='btn btn-dark w-100'>구매하기</Link>
+                                    </div>       
+                        </div>
+                    </div>
+                </div>
 
 
 
