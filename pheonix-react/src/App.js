@@ -19,6 +19,7 @@ import AdminCinema from './components/admin/AdminCinema';
 import AdminStore from './components/admin/Store/AdminStore';
 import NewProduct from './components/admin/Store/NewProduct';
 import ProductEdit from './components/admin/Store/productEdit';
+import SeatStatus from './components/admin/SeatsTypes/SeatStatus';
 
 function App() {
   return (
@@ -38,6 +39,9 @@ function App() {
 
               <Route path='/newMovie' element={<NewMovie/>}/>
               <Route path='/newProduct' element={<NewProduct />}/>
+
+              {/* 좌석 */}
+              <Route path='/seatStatus' element={<SeatStatus/>}/>
 
               {/* 회원 */}
               <Route path='/login' element={<Login/>}/>
