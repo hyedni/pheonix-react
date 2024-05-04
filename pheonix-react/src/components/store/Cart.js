@@ -17,16 +17,25 @@ const Cart = () => {
 
     //state
     //const { userId } = useRecoilState({});
-    const [cartItems, setCartItems] = useState([]);
+    const [cartItems, setCartItems] = useState([]); //카트+상품 정보
     const [userId] = useState('testuser4');
     const [imagePreview] = useState(null);
     const [itemQty, setItemQty] = useState();
-    const [cartChangeItem, setCartChangeItem] = useState([]);
+
+    const [cartInfo, setCartInfo] = useState(()=>{
+        return {
+            cartUserId : "",
+            cartProductNo : "",
+            cartQty : "",
+            cartDate : ""
+        }
+    });
 
     //effect
     useEffect(() => {
         loadCartData();
     }, []);
+
 
 
     //callback
@@ -57,19 +66,7 @@ const Cart = () => {
 
 
     const [selectedItems, setSelectedItems] = useState([]);
-
-    //체크박스
-    // const handleCheckboxChange = (event) => {
-    //     const value = event.target.value;
-    //     const isChecked = event.target.checked;
-
-    //     if (isChecked) {
-    //         setSelectedItems([...selectedItems, value]);
-    //     } else {
-    //         setSelectedItems(selectedItems.filter(item => item !== value));
-    //     }
-    // };
-
+    
     const changeQty = useCallback((e, target)=>{
         const copy = [...cartItems];
         const copy2 = copy.map(cartItem=>{
@@ -85,17 +82,46 @@ const Cart = () => {
         });
         setCartItems(copy2);
     }, [cartItems]);
+    
+    //체크박스
+    // const handleCheckboxChange = (event) => {
+    //     const value = event.target.value;
+    //     const isChecked = event.target.checked;
 
-    // 수량 증가 및 감소 함수
-    const handleQtyChange = (productNo, change) => {
-        const updatedItems = cartItems.map(item => {
-            if (item.cartProductNo === productNo) {
-                return { ...item, cartQty: Math.max(1, item.cartQty + change) }; // 수량은 최소 1로 제한
+    //     if (isChecked) {
+    //         setSelectedItems([...selectedItems, value]);
+    //     } else {
+    //         setSelectedItems(selectedItems.filter(item => item !== value));
+    //     }
+    // };
+
+
+    //삭제
+    const deleteProduct = useCallback(async (target) => {
+        const choice = window.confirm("정말 삭제하시겠습니까?");
+        if(choice === false) return;
+
+        // console.log(target);
+
+        // setCartInfo({
+        //     cartUserId : target.cartUserId,
+        //     cartProductNo : target.cartProductNo,
+        //     cartQty : target.cartQty,
+        //     cartDate : target.cartDate
+        // }, [target, cartInfo]);
+
+        // console.log(target);
+        // console.log(cartInfo);
+
+        await axios.delete("/cart/", {
+            params: {
+                productNo : target.cartProductNo,
+                userId : target.cartUserId
             }
-            return item;
         });
-        setCartItems(updatedItems); // 변경된 장바구니 상태 업데이트
-    };
+        loadCartData();
+    }, [cartItems]);
+
 
     return (
         <>
@@ -151,10 +177,10 @@ const Cart = () => {
                                                             <button onClick={() => handleQtyChange(cartItem.cartProductNo, -1)}>-</button>
                                                         </div> */}
 
-                                                        <div>
+                                                        {/* <div>
                                                             <button onClick={()=> saveEditQty(cartItem)}>변경</button>
 
-                                                        </div>
+                                                        </div> */}
                                                 
 
                                                     </div>
@@ -168,7 +194,7 @@ const Cart = () => {
                                                             <Link to={`/purchase/${cartItem.productNo}`} className='edit-button btn btn-outline-dark mt-2'><IoBagHandle />구매하기</Link>
                                                         </div>
                                                         <div className="delete-button-container">
-                                                            <button className="delete-button btn btn-light">삭제</button>
+                                                            <button className="delete-button btn btn-light" onClick={e=>deleteProduct(cartItem)}>삭제</button>
                                                         </div>
                                                     </div>
                                                 </td>
