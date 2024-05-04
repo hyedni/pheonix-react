@@ -22,15 +22,6 @@ const Cart = () => {
     const [imagePreview] = useState(null);
     const [itemQty, setItemQty] = useState();
 
-    const [cartInfo, setCartInfo] = useState(()=>{
-        return {
-            cartUserId : "",
-            cartProductNo : "",
-            cartQty : "",
-            cartDate : ""
-        }
-    });
-
     //effect
     useEffect(() => {
         loadCartData();
@@ -63,9 +54,6 @@ const Cart = () => {
         }
 
     }, [cartItems]);
-
-
-    const [selectedItems, setSelectedItems] = useState([]);
     
     const changeQty = useCallback((e, target)=>{
         const copy = [...cartItems];
@@ -83,36 +71,39 @@ const Cart = () => {
         setCartItems(copy2);
     }, [cartItems]);
     
+    
     //체크박스
-    // const handleCheckboxChange = (event) => {
-    //     const value = event.target.value;
-    //     const isChecked = event.target.checked;
+    //const CheckBox = ()=>{
+        const [checkedList, setCheckedLists] = useState([]);
 
-    //     if (isChecked) {
-    //         setSelectedItems([...selectedItems, value]);
-    //     } else {
-    //         setSelectedItems(selectedItems.filter(item => item !== value));
-    //     }
-    // };
+        const onCheckedAll = useCallback((checked)=>{
+            if(checked) {
+                const checkedListArray = [];
 
+                cartItems.forEach((list) => checkedListArray.push(list.productNo));
 
+                setCheckedLists(checkedListArray);
+            }
+            else {
+                setCheckedLists([]);
+            }
+        },[cartItems]);
+
+        const onCheckedElement = useCallback((checked, list)=>{
+            if(checked) {
+                setCheckedLists([...checkedList, list.productNo]);
+            }
+            else {
+                setCheckedLists(checkedList.filter((el) => el !== list.productNo));
+            }
+        }, [checkedList]);
+    //};
+
+   
     //삭제
     const deleteProduct = useCallback(async (target) => {
         const choice = window.confirm("정말 삭제하시겠습니까?");
         if(choice === false) return;
-
-        // console.log(target);
-
-        // setCartInfo({
-        //     cartUserId : target.cartUserId,
-        //     cartProductNo : target.cartProductNo,
-        //     cartQty : target.cartQty,
-        //     cartDate : target.cartDate
-        // }, [target, cartInfo]);
-
-        // console.log(target);
-        // console.log(cartInfo);
-
         await axios.delete("/cart/", {
             params: {
                 productNo : target.cartProductNo,
@@ -141,7 +132,15 @@ const Cart = () => {
                                 <table className="table">
                                     <thead>
                                         <tr>
-                                            <th scope="col"><input type="checkbox" className="large-checkbox" /></th>
+                                            <th scope="col"><input
+                                                    type="checkbox"
+                                                    className="large-checkbox"
+                                                    onClick={(e)=> onCheckedAll(e.target.checked)}
+                                                    checked={
+                                                        checkedList.length === 0 ? false : 
+                                                            checkedList.length === cartItems.length ? true : false
+                                                    }
+                                                /></th>
                                             <th scope="col" style={{ width: '32%' }}>상품명</th>
                                             <th scope="col" style={{ width: '15%' }}>판매금액</th>
                                             <th scope="col" style={{ width: '10%' }}>수량</th>
@@ -151,8 +150,13 @@ const Cart = () => {
                                     </thead>
                                     <tbody>
                                         {cartItems.map((cartItem) => (
-                                            <tr key={cartItems.cartProductNo}>
-                                                <td scope="row"><input type="checkbox" className="large-checkbox" /></td>
+                                            <tr key={cartItem.cartProductNo}>
+                                                <td scope="row">
+                                                    <input type="checkbox" className="large-checkbox" 
+                                                        key={cartItem.productNo} onChange={(e)=>onCheckedElement(e.target.checked, cartItem)}
+                                                        checked={checkedList.includes(cartItem.productNo) ? true : false}
+                                                    />
+                                                </td>
                                                 <td>
                                                     <div className="product-info">
                                                         <div className="img-preview img-thumbnail">
@@ -170,7 +174,7 @@ const Cart = () => {
                                                 <td>
 
                                                     <div class="custom-qty-container">
-                                                        <input type='number' class="qty-value" name='cartQty' value={cartItem.cartQty} onChange={e=>{changeQty(e, cartItem)}}></input>
+                                                        <input type='number' class="qty-value form-control" name='cartQty' value={cartItem.cartQty} onChange={e=>{changeQty(e, cartItem)}}></input>
 
                                                         {/* <div className="qty-buttons">
                                                             <button onClick={() => handleQtyChange(cartItem.cartProductNo, 1)}>+</button>
