@@ -103,6 +103,10 @@ th {
     text-align: center; /* 텍스트 중앙 정렬 */
     border-right: 1px solid #ccc; /* 각 칼럼 사이의 구분선 */
 }
+.section-design-last {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
 
 .bottom-line {
     border-bottom: 1px solid #ccc;
