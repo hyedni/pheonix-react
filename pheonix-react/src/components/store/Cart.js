@@ -28,17 +28,6 @@ const Cart = () => {
         loadCartData();
     }, []);
 
-    //useMemo 
-    // const changeQty = useMemo(()=>{
-    //     // setCartItem({
-    //     //     ...cartItem, //원래 있던 값 유지
-    //     //     [e.target.name] : [e.target.value] //여기선 수량 값만 바꾸기. 
-    //     // });
-    //     return {
-    //         ...cartItems, 
-    //         cartQty : itemQtys //변경된 값만 보여주기
-    //     }
-    // }, [itemQtys]);//수량이 바뀔 때 탁! 타ㅏ닥
 
     //callback
     const loadCartData = useCallback(() => {
@@ -46,6 +35,7 @@ const Cart = () => {
         try {
             axios.get(`/cart/combine/${userId}`).then(resp => {
                 setCartItems(resp.data);
+                setItemQty(resp.data);
             });
         }
         catch (error) {
@@ -57,11 +47,6 @@ const Cart = () => {
     //수량 변경 버튼을 눌렀을 때, 수정
     const saveEditQty = useCallback(async (target) => {
         try {
-            // setCartChangeItem({
-            //     ...cartItem,
-            //     addCart
-            // });
-
             await axios.patch("/cart/", target);
             loadCartData();
         } catch (error) {
@@ -84,6 +69,33 @@ const Cart = () => {
     //         setSelectedItems(selectedItems.filter(item => item !== value));
     //     }
     // };
+
+    const changeQty = useCallback((e, target)=>{
+        const copy = [...cartItems];
+        const copy2 = copy.map(cartItem=>{
+            if(target.cartProductNo === cartItem.cartProductNo) { //이벤트 발생한 상품이라면
+                return {
+                    ...cartItem,//나머지 정보는 유지
+                    [e.target.name] : e.target.value//단, 입력항목만 교체
+                };
+            }
+            else {//다른 학생이라면
+                return {...cartItem};//현상유지
+            }
+        });
+        setCartItems(copy2);
+    }, [cartItems]);
+
+    // 수량 증가 및 감소 함수
+    const handleQtyChange = (productNo, change) => {
+        const updatedItems = cartItems.map(item => {
+            if (item.cartProductNo === productNo) {
+                return { ...item, cartQty: Math.max(1, item.cartQty + change) }; // 수량은 최소 1로 제한
+            }
+            return item;
+        });
+        setCartItems(updatedItems); // 변경된 장바구니 상태 업데이트
+    };
 
     return (
         <>
@@ -132,12 +144,18 @@ const Cart = () => {
                                                 <td>
 
                                                     <div class="custom-qty-container">
-                                                        <span class="qty-value">{cartItem.cartQty}</span>
+                                                        <input type='number' class="qty-value" name='cartQty' value={cartItem.cartQty} onChange={e=>{changeQty(e, cartItem)}}></input>
 
-                                                        <div className="qty-buttons">
-                                                            <button className="qty-button" onClick={() => saveEditQty({ ...cartItem, cartQty: (cartItem.cartQty + 1) })}><GoPlus /></button>
-                                                            <button className="qty-button" onClick={() => saveEditQty({ ...cartItem, cartQty: (cartItem.cartQty - 1) })}><LuMinus /></button>
+                                                        {/* <div className="qty-buttons">
+                                                            <button onClick={() => handleQtyChange(cartItem.cartProductNo, 1)}>+</button>
+                                                            <button onClick={() => handleQtyChange(cartItem.cartProductNo, -1)}>-</button>
+                                                        </div> */}
+
+                                                        <div>
+                                                            <button onClick={()=> saveEditQty(cartItem)}>변경</button>
+
                                                         </div>
+                                                
 
                                                     </div>
 
