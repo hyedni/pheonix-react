@@ -20,13 +20,15 @@ import AdminStore from './components/admin/Store/AdminStore';
 import NewProduct from './components/admin/Store/NewProduct';
 import ProductEdit from './components/admin/Store/productEdit';
 import SeatStatus from './components/admin/SeatsTypes/SeatStatus';
+import BookingButton from './design/BookingButton';
 
 function App() {
   return (
 
     <>
     <Htemplate/>
-
+    <BookingButton/>
+    
     <Routes>
               {/* 공용공간 에티켓을 만듭시다** 분리하여 route 작성해주세요 */}
               {/* 관리자 */}

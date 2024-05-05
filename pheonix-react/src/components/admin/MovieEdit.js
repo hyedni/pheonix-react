@@ -138,11 +138,11 @@ function MovieEdit() {
                                         <img src={movie.movieImgLink} className='img-preview img-thumbnail' alt="Default Preview" />
                                     )}
                                     {imagePreview && (
-                                        <div className="img-preview img-thumbnail mt-3">
+                                        <div className="img-preview-admin img-thumbnail mt-3">
                                             <img src={imagePreview} alt="Preview" style={{ width: "100%" }} />
                                         </div>
                                     )}
-                                    <div id="imgArea" className="img-preview mt-3"></div>
+                                    <div id="imgArea" className="img-preview-admin mt-3"></div>
                                 </div>
                                 <div className='mt-5'>
                                     <div className="row me-2 mb-3">
