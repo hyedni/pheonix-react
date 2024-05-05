@@ -14,20 +14,44 @@ import countState from './../utils/RecoilData';
 import { FaCheck } from "react-icons/fa";
 
 const Cart = () => {
-
+    
     //state
     //const { userId } = useRecoilState({});
     const [cartItems, setCartItems] = useState([]); //카트+상품 정보
     const [userId] = useState('testuser4');
     const [imagePreview] = useState(null);
     const [itemQty, setItemQty] = useState();
+    const [checkedList, setCheckedLists] = useState([]);
+    
+    const [totalPrice, setTotalPrice] = useState(0);
+    
+    //체크박스
+    const onCheckedAll = useCallback((checked) => {
+        if (checked) {
+            const checkedListArray = [];
+    
+            cartItems.forEach((list) => checkedListArray.push(list));
+    
+            setCheckedLists(checkedListArray);
+        }
+        else {
+            setCheckedLists([]);
+        }
+    }, [cartItems]);
+    
+    const onCheckedElement = useCallback((checked, list) => {
+        if (checked) {
+            setCheckedLists([...checkedList, list]);
+        }
+        else {
+            setCheckedLists(checkedList.filter((el) => el !== list));
+        }
+    }, [checkedList]);
 
     //effect
     useEffect(() => {
-        loadCartData();
+        loadCartData();      
     }, []);
-
-
 
     //callback
     const loadCartData = useCallback(() => {
@@ -36,12 +60,14 @@ const Cart = () => {
             axios.get(`/cart/combine/${userId}`).then(resp => {
                 setCartItems(resp.data);
                 setItemQty(resp.data);
-            });
+                
+            });   
+                  
         }
         catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
-
+        
     }, [userId]);
 
     //수량 변경 버튼을 눌렀을 때, 수정
@@ -54,60 +80,36 @@ const Cart = () => {
         }
 
     }, [cartItems]);
-    
-    const changeQty = useCallback((e, target)=>{
+
+    const changeQty = useCallback((e, target) => {
         const copy = [...cartItems];
-        const copy2 = copy.map(cartItem=>{
-            if(target.cartProductNo === cartItem.cartProductNo) { //이벤트 발생한 상품이라면
+        const copy2 = copy.map(cartItem => {
+            if (target.cartProductNo === cartItem.cartProductNo) { //이벤트 발생한 상품이라면
                 return {
                     ...cartItem,//나머지 정보는 유지
-                    [e.target.name] : e.target.value//단, 입력항목만 교체
+                    [e.target.name]: e.target.value//단, 입력항목만 교체
                 };
             }
             else {//다른 학생이라면
-                return {...cartItem};//현상유지
+                return { ...cartItem };//현상유지
             }
         });
         setCartItems(copy2);
     }, [cartItems]);
+
+
+
     
     
-    //체크박스
-    //const CheckBox = ()=>{
-        const [checkedList, setCheckedLists] = useState([]);
-
-        const onCheckedAll = useCallback((checked)=>{
-            if(checked) {
-                const checkedListArray = [];
-
-                cartItems.forEach((list) => checkedListArray.push(list.productNo));
-
-                setCheckedLists(checkedListArray);
-            }
-            else {
-                setCheckedLists([]);
-            }
-        },[cartItems]);
-
-        const onCheckedElement = useCallback((checked, list)=>{
-            if(checked) {
-                setCheckedLists([...checkedList, list.productNo]);
-            }
-            else {
-                setCheckedLists(checkedList.filter((el) => el !== list.productNo));
-            }
-        }, [checkedList]);
-    //};
-
-   
+    
     //삭제
     const deleteProduct = useCallback(async (target) => {
         const choice = window.confirm("정말 삭제하시겠습니까?");
-        if(choice === false) return;
+        if (choice === false) return;
         await axios.delete("/cart/", {
             params: {
-                productNo : target.cartProductNo,
-                userId : target.cartUserId
+                productNo: target.cartProductNo,
+                userId: target.cartUserId
             }
         });
         loadCartData();
@@ -133,14 +135,14 @@ const Cart = () => {
                                     <thead>
                                         <tr>
                                             <th scope="col"><input
-                                                    type="checkbox"
-                                                    className="large-checkbox"
-                                                    onClick={(e)=> onCheckedAll(e.target.checked)}
-                                                    checked={
-                                                        checkedList.length === 0 ? false : 
-                                                            checkedList.length === cartItems.length ? true : false
-                                                    }
-                                                /></th>
+                                                type="checkbox"
+                                                className="large-checkbox"
+                                                onClick={(e) => onCheckedAll(e.target.checked)}
+                                                checked={
+                                                    checkedList.length === 0 ? false :
+                                                        checkedList.length === cartItems.length ? true : false
+                                                }
+                                            /></th>
                                             <th scope="col" style={{ width: '32%' }}>상품명</th>
                                             <th scope="col" style={{ width: '15%' }}>판매금액</th>
                                             <th scope="col" style={{ width: '10%' }}>수량</th>
@@ -152,9 +154,9 @@ const Cart = () => {
                                         {cartItems.map((cartItem) => (
                                             <tr key={cartItem.cartProductNo}>
                                                 <td scope="row">
-                                                    <input type="checkbox" className="large-checkbox" 
-                                                        key={cartItem.productNo} onChange={(e)=>onCheckedElement(e.target.checked, cartItem)}
-                                                        checked={checkedList.includes(cartItem.productNo) ? true : false}
+                                                    <input type="checkbox" className="large-checkbox"
+                                                        key={cartItem.productNo} onChange={(e) => onCheckedElement(e.target.checked, cartItem)}
+                                                        checked={checkedList.includes(cartItem) ? true : false}
                                                     />
                                                 </td>
                                                 <td>
@@ -174,7 +176,7 @@ const Cart = () => {
                                                 <td>
 
                                                     <div class="custom-qty-container">
-                                                        <input type='number' class="qty-value form-control" name='cartQty' value={cartItem.cartQty} onChange={e=>{changeQty(e, cartItem)}}></input>
+                                                        <input type='number' class="qty-value form-control" name='cartQty' value={cartItem.cartQty} onChange={e => { changeQty(e, cartItem) }}></input>
 
                                                         {/* <div className="qty-buttons">
                                                             <button onClick={() => handleQtyChange(cartItem.cartProductNo, 1)}>+</button>
@@ -185,7 +187,7 @@ const Cart = () => {
                                                             <button onClick={()=> saveEditQty(cartItem)}>변경</button>
 
                                                         </div> */}
-                                                
+
 
                                                     </div>
 
@@ -198,7 +200,7 @@ const Cart = () => {
                                                             <Link to={`/purchase/${cartItem.productNo}`} className='edit-button btn btn-outline-dark mt-2'><IoBagHandle />구매하기</Link>
                                                         </div>
                                                         <div className="delete-button-container">
-                                                            <button className="delete-button btn btn-light" onClick={e=>deleteProduct(cartItem)}>삭제</button>
+                                                            <button className="delete-button btn btn-light" onClick={e => deleteProduct(cartItem)}>삭제</button>
                                                         </div>
                                                     </div>
                                                 </td>
@@ -206,18 +208,13 @@ const Cart = () => {
                                         ))}
                                     </tbody>
                                 </table>
-
-                            </div>
-                        </div>
-
-
-                        <div className="row justify-content-center">
-                            <div className="col-lg-8 content-body">
-                                <div className="delete-button-container">
-                                    <button className="delete-button btn btn-light">선택상품 삭제()</button>
-                                </div>
-                                <div>
-                                    <p className='text-right'>장바구니에 담긴 상품은 최대 30일까지 보관됩니다.</p>
+                                <div className='row'>
+                                    <div className="col-6">
+                                        <button className="btn btn-light">선택상품 삭제({checkedList.length})</button>
+                                    </div>
+                                    <div className="col-6">
+                                        <p className='text-end'>장바구니에 담긴 상품은 최대 30일까지 보관됩니다.</p>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -237,7 +234,7 @@ const Cart = () => {
                                 </div>
                                 <div className='row'>
                                     <div className='col-4 section-design'>
-                                        총 상품 금액
+                                        {totalPrice}
                                     </div>
                                     <div className='col-4 section-design'>
                                         할인금액
