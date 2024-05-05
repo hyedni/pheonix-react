@@ -2,11 +2,11 @@ import './AdminMovie.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from "../utils/CustomAxios";
 import { Link, useLinkClickHandler } from 'react-router-dom';
-import { CiEdit } from "react-icons/ci";
 import { TbNumber12Small } from "react-icons/tb";
 import { TbNumber15Small } from "react-icons/tb";
 import { TbNumber19Small } from "react-icons/tb";
-import { FcOk } from "react-icons/fc";
+import { FaCirclePlus } from "react-icons/fa6";
+
 
 
 
@@ -73,9 +73,10 @@ function AdminMovie() {
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
                         영화 관리
-                        <Link to="/newMovie" className="btn btn-primary ms-5">
-                            신규 영화 등록
+                        <Link to="/newMovie" className="ms-3">
+                            <FaCirclePlus style={{ marginBottom: '10px' }} />
                         </Link>
+
                     </div>
                 </div>
             </div>
@@ -105,7 +106,7 @@ function AdminMovie() {
                                 <hr />
                                 <div className='d-flex justify-content-between mb-2'>
                                     <div>
-                                        <span style={{ fontWeight: 'bold', color: 'gray'}}>{movie.movieOpenDate} 개봉</span>
+                                        <span style={{ fontWeight: 'bold', color: 'gray' }}>{movie.movieOpenDate} 개봉</span>
                                     </div>
                                     <div>
                                         <span style={{ fontWeight: 'bold', color: 'red' }}>{movie.movieOn === 'Y' ? '절찬상영중' : '개봉 전'} </span>
@@ -116,7 +117,7 @@ function AdminMovie() {
                                 </div>
                                 {/* recoil값 검사해서 포스터위에 버튼으로 추가할 것 */}
                                 <div className='d-flex justify-content-between'>
-                                    <Link to={`/movieEdit/${movie.movieNo}`} style={{textDecoration:'none', fontWeight:'bold'}}>
+                                    <Link to={`/movieEdit/${movie.movieNo}`} style={{ textDecoration: 'none', fontWeight: 'bold' }}>
                                         예매하기
                                     </Link>
                                 </div>

@@ -101,25 +101,27 @@ function MovieEdit() {
     return (
         <>
             {/* 페이지 제목 */}
+            <br />
+            <br />
             <div className="row justify-content-center">
                 <div className="col-lg-8  title-head">
                     {isEdit.edit === false ? (
                         <>
                             <div className="title-head-text">
                                 영화 정보 조회
+                                <button className='btn btn-secondary ms-3' onClick={e => editMovie()} style={{fontWeight:'bold'}}>수정시작</button>
                             </div>
                         </>
                     ) : (
                         <>
                             <div className="title-head-text">
-                                영화 정보 <span style={{color : 'rgb(237, 79, 78)'}}>수정</span>
+                                영화 정보 수정
+                                <button className='btn btn-primary ms-3' onClick={e => cancelEditMenu()} style={{fontWeight:'bold'}}>되돌리기</button>
                             </div>
                         </>
                     )}
                 </div>
             </div>
-            <button className='btn btn-primary' onClick={e => editMovie()}>수정시작하기</button>
-            <button className='btn btn-primary' onClick={e => cancelEditMenu()}>수정취소하기</button>
             <hr />
 
             <div className='row'>
@@ -132,7 +134,9 @@ function MovieEdit() {
                                 <hr />
                                 <div className="mt-3" style={{height : '450px'}}>
                                     <div class="input-group mb-5">
-                                        <input type="file" onChange={handleImageChange} class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
+                                        {isEdit.edit === true && (
+                                            <input type="file" onChange={handleImageChange} class="form-control" />
+                                        )}
                                     </div>
                                     {!imagePreview && (
                                         <img src={movie.movieImgLink} className='img-preview img-thumbnail' alt="Default Preview" />

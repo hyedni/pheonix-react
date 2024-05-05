@@ -167,6 +167,8 @@ function NewMovie() {
         <>
 
             {/* 페이지 제목 */}
+            <br />
+            <br />
             <div className="row justify-content-center">
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
