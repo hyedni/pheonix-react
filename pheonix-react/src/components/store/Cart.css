@@ -112,6 +112,22 @@ th {
     border-bottom: 1px solid #ccc;
 }
 
+.section-design2 {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+.section-design2-mid {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+.section-design2-icon {
+    display: flex;
+    justify-content: space-between;
+}
 
+.section-design2 .section-design2-mid {
+    display: flex;
+    align-items: center;
+}
 
 

@@ -12,9 +12,11 @@ import { GoPlus } from "react-icons/go";
 import { LuMinus } from "react-icons/lu";
 import countState from './../utils/RecoilData';
 import { FaCheck } from "react-icons/fa";
+import { FiMinusCircle } from "react-icons/fi";
+import { LuCircleEqual } from "react-icons/lu";
 
 const Cart = () => {
-    
+
     //state
     //const { userId } = useRecoilState({});
     const [cartItems, setCartItems] = useState([]); //카트+상품 정보
@@ -22,23 +24,22 @@ const Cart = () => {
     const [imagePreview] = useState(null);
     const [itemQty, setItemQty] = useState();
     const [checkedList, setCheckedLists] = useState([]);
-    
-    const [totalPrice, setTotalPrice] = useState(0);
-    
+
+
     //체크박스
     const onCheckedAll = useCallback((checked) => {
         if (checked) {
             const checkedListArray = [];
-    
+
             cartItems.forEach((list) => checkedListArray.push(list));
-    
+
             setCheckedLists(checkedListArray);
         }
         else {
             setCheckedLists([]);
         }
     }, [cartItems]);
-    
+
     const onCheckedElement = useCallback((checked, list) => {
         if (checked) {
             setCheckedLists([...checkedList, list]);
@@ -50,7 +51,7 @@ const Cart = () => {
 
     //effect
     useEffect(() => {
-        loadCartData();      
+        loadCartData();
     }, []);
 
     //callback
@@ -60,14 +61,14 @@ const Cart = () => {
             axios.get(`/cart/combine/${userId}`).then(resp => {
                 setCartItems(resp.data);
                 setItemQty(resp.data);
-                
-            });   
-                  
+
+            });
+
         }
         catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
-        
+
     }, [userId]);
 
     //수량 변경 버튼을 눌렀을 때, 수정
@@ -99,9 +100,9 @@ const Cart = () => {
 
 
 
-    
-    
-    
+
+
+
     //삭제
     const deleteProduct = useCallback(async (target) => {
         const choice = window.confirm("정말 삭제하시겠습니까?");
@@ -114,6 +115,50 @@ const Cart = () => {
         });
         loadCartData();
     }, [cartItems]);
+
+    // const deleteBySelected = useCallback(async (targetList) => {
+    //     const choice = window.confirm("정말 삭제하시겠습니까?");
+    //     if (choice === false) return;
+    //     await axios.delete("/cart/", {
+    //         params: {
+    //             //뭔가 for문으로 풀어서.. 하나씩 값을 백으로 넘겨줘야...?? 될 것만 같다. 아닌가?
+    //             //변수 두 개를 넘거야 하는디
+
+    //         }
+    //     });
+    // }, [checkedList]);
+
+
+    //선택된 상품의 총 상품 금액
+    const getProductPriceOfCheckedItems = useMemo(() => {
+        let totalPrice = 0;
+
+        checkedList.forEach(list => {
+            const price = list.productPrice * list.cartQty || 0; // 만약 가격 정보가 없으면 0으로 간주
+            totalPrice += price;
+        });
+        return totalPrice.toLocaleString();
+    }, [checkedList]);
+    //선택된 상품의 총 할인 금액
+    const getDiscountPriceOfCheckedItems = useMemo(() => {
+        let totalDiscountPrice = 0;
+
+        checkedList.forEach(list => {
+            const discount = Math.ceil((list.productPrice * list.productDiscount / 100) * list.cartQty) || 0;
+            totalDiscountPrice += discount;
+        });
+        return totalDiscountPrice.toLocaleString();
+    }, [checkedList]);
+    //선택된 상품의 총 결제 예정 금액
+    const getTotalPriceOfCheckedItems = useMemo(() => {
+        let totalPrice = 0;
+
+        checkedList.forEach(list => {
+            const price = (list.productPrice - Math.ceil((list.productPrice * list.productDiscount / 100))) * list.cartQty || 0;
+            totalPrice += price;
+        });
+        return totalPrice.toLocaleString();
+    }, [checkedList]);
 
 
     return (
@@ -210,7 +255,9 @@ const Cart = () => {
                                 </table>
                                 <div className='row'>
                                     <div className="col-6">
-                                        <button className="btn btn-light">선택상품 삭제({checkedList.length})</button>
+                                        <button className="btn btn-light"
+                                        // onClick={deleteBySelected(checkedList)}
+                                        >선택상품 삭제({checkedList.length})</button>
                                     </div>
                                     <div className="col-6">
                                         <p className='text-end'>장바구니에 담긴 상품은 최대 30일까지 보관됩니다.</p>
@@ -233,14 +280,23 @@ const Cart = () => {
                                     </div>
                                 </div>
                                 <div className='row'>
-                                    <div className='col-4 section-design'>
-                                        {totalPrice}
+                                    <div className='col-4 section-design2'>
+                                        {getProductPriceOfCheckedItems}원
                                     </div>
-                                    <div className='col-4 section-design'>
-                                        할인금액
+                                    <div className='col-4 section-design2-icon'>
+                                        <div className='mt-2'>
+                                            <FiMinusCircle />
+                                        </div>
+                                        <div className="section-design2-mid">
+                                            {getDiscountPriceOfCheckedItems}원
+                                        </div>
+                                        <div className='mt-2'>
+                                            <LuCircleEqual />
+                                        </div>
                                     </div>
-                                    <div className='col-4 section-design-last'>
-                                        총 결제 예정금액
+
+                                    <div className='col-4 section-design2'>
+                                        {getTotalPriceOfCheckedItems}원
                                     </div>
                                 </div>
                             </div>
