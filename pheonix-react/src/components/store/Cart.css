@@ -130,4 +130,37 @@ th {
     align-items: center;
 }
 
+/* 구매 과정 메뉴 바*/
+.purchase-menu {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+}
+
+.purchase-menu li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.purchase-menu li span {
+    font-size: 14px;
+}
+
+.purchase-menu li strong {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+.purchase-menu .icon {
+    margin-top: 15px;
+    font-size: 24px; /* 아이콘 크기 조정 */
+}
+
+.activeColor {
+    color: #B40404; 
+}
+
 

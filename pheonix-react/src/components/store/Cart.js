@@ -14,6 +14,7 @@ import countState from './../utils/RecoilData';
 import { FaCheck } from "react-icons/fa";
 import { FiMinusCircle } from "react-icons/fi";
 import { LuCircleEqual } from "react-icons/lu";
+import PruchaseMenu from './PurchaseMenu';
 
 const Cart = () => {
 
@@ -166,11 +167,12 @@ const Cart = () => {
 
             <div>
                 {/* 장바구니 출력 */}
-                <div className="row justify-content-center">
+                {/* <div className="row justify-content-center">
                     <div className="col-lg-8 content-body">
                         <h2><FaShoppingCart /> 장바구니 </h2>
                     </div>
-                </div>
+                </div> */}
+                <PruchaseMenu activeStep="1" />
                 {cartItems.length !== 0 ? ( //장바구니에 담긴 물건이 있으면               
                     <>
                         <div className="row justify-content-center">
