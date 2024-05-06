@@ -21,8 +21,8 @@ function NewMovie() {
         movieGenre: '',
         movieRunningTime: '',
         movieYear: '',
-        movieOpenDate: today,
-        movieCloseDate: today,
+        movieOpenDate: '',
+        movieCloseDate: '',
         movieAge: '전체관람가',
         movieOrigin: '',
         movieOn: 'N',
@@ -265,11 +265,11 @@ function NewMovie() {
                             <div className="row mt-3">
                                 <div className="col-md-6">
                                     <label>개봉일</label>
-                                    <input type="text" name="movieOpenDate" value={openDate} onChange={e => changeInput(e)} className="form-control" />
+                                    <input type="text" name="movieOpenDate"value={openDate === "Invalid date" ? "선택하세요" : openDate} onChange={e => changeInput(e)} className="form-control" />
                                 </div>
                                 <div className="col-md-6">
                                     <label>상영종료일</label>
-                                    <input type="text" name="movieCloseDate" value={closeDate} onChange={e => changeInput(e)} className="form-control" />
+                                    <input type="text" name="movieCloseDate" value={closeDate === "Invalid date" ? "선택하세요" : closeDate} onChange={e => changeInput(e)} className="form-control" />
                                 </div>
                             </div>
 

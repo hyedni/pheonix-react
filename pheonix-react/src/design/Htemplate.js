@@ -86,7 +86,7 @@ function Htemplate() {
                                 <div className="dropdown-menu">
                                     <NavLink className="dropdown-item" to="/adminCinema">영화관관리</NavLink>
                                     <NavLink className="dropdown-item" to="/adminMovie">영화관리</NavLink>
-                                    <NavLink className="dropdown-item" to="/movieRegister">상영관관리</NavLink>
+                                    <NavLink className="dropdown-item" to="/adminTheater">상영관관리</NavLink>
                                     <NavLink className="dropdown-item" to="/adminStore">스토어관리</NavLink>
                                     <NavLink className="dropdown-item" to="/movieRegister">회원관리</NavLink>
                                 </div>

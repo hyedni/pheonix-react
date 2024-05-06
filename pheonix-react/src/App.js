@@ -21,6 +21,7 @@ import NewProduct from './components/admin/Store/NewProduct';
 import ProductEdit from './components/admin/Store/productEdit';
 import SeatStatus from './components/admin/SeatsTypes/SeatStatus';
 import BookingButton from './design/BookingButton';
+import AdminTheater from './components/admin/AdminTheater';
 
 function App() {
   return (
@@ -35,6 +36,7 @@ function App() {
               <Route path='/adminMovie' element={<AdminMovie/>}/>
               <Route path='/adminCinema' element={<AdminCinema/>}/>
               <Route path='/adminStore' element={<AdminStore />}/>
+              <Route path='/adminTheater' element={<AdminTheater/>}/>
 
                <Route path='/movieEdit/:movieNo' element={<MovieEdit/>}/>
                <Route path='/productEdit/:productNo' element={<ProductEdit />}/>

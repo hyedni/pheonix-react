@@ -34,6 +34,8 @@ const PostApi = ({ onAddressChange }) => {
                 <div>
                     <button
                         type="button"
+                        className='btn btn-secondary mb-1' 
+                        style={{fontWeight:'bold'}}
                         onClick={toggleHandler}
                     >
                        검색

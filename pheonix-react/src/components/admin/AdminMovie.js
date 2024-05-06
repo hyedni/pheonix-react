@@ -74,7 +74,7 @@ function AdminMovie() {
                     <div className="title-head-text">
                         영화 관리
                         <Link to="/newMovie" className="ms-3">
-                            <FaCirclePlus style={{ marginBottom: '10px' }} />
+                            <FaCirclePlus style={{ marginBottom: '10px', color:'rgb(240, 86, 86)' }} />
                         </Link>
 
                     </div>
@@ -109,7 +109,7 @@ function AdminMovie() {
                                         <span style={{ fontWeight: 'bold', color: 'gray' }}>{movie.movieOpenDate} 개봉</span>
                                     </div>
                                     <div>
-                                        <span style={{ fontWeight: 'bold', color: 'red' }}>{movie.movieOn === 'Y' ? '절찬상영중' : '개봉 전'} </span>
+                                        <span style={{ fontWeight: 'bold', color: 'red' }}>{movie.movieOn === 'Y' ? '절찬상영중' : ''} </span>
                                     </div>
                                 </div>
                                 <div className='d-flex justify-content-between mb-2'>
