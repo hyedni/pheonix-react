@@ -11,7 +11,7 @@ import { FaGift } from "react-icons/fa";
 import { IoBagHandle } from "react-icons/io5";
 
 //디자인 임포트 
-import '../../admin/AdminMovie.css';
+import '../../store/list/Store.css';
 
 const StoreList = () => {
 

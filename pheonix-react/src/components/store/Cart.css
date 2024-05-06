@@ -103,11 +103,64 @@ th {
     text-align: center; /* 텍스트 중앙 정렬 */
     border-right: 1px solid #ccc; /* 각 칼럼 사이의 구분선 */
 }
+.section-design-last {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
 
 .bottom-line {
     border-bottom: 1px solid #ccc;
 }
 
+.section-design2 {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+.section-design2-mid {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+.section-design2-icon {
+    display: flex;
+    justify-content: space-between;
+}
 
+.section-design2 .section-design2-mid {
+    display: flex;
+    align-items: center;
+}
+
+/* 구매 과정 메뉴 바*/
+.purchase-menu {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+}
+
+.purchase-menu li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.purchase-menu li span {
+    font-size: 14px;
+}
+
+.purchase-menu li strong {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+.purchase-menu .icon {
+    margin-top: 15px;
+    font-size: 24px; /* 아이콘 크기 조정 */
+}
+
+.activeColor {
+    color: #B40404; 
+}
 
 
