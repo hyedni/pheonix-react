@@ -23,12 +23,12 @@ function NewMovie() {
         movieYear: '',
         movieOpenDate: today,
         movieCloseDate: today,
-        movieAge: '',
+        movieAge: '전체관람가',
         movieOrigin: '',
-        movieOn: '',
+        movieOn: 'N',
         movieSummary: '',
-        movieTranslation: '',
-        movieScreenType: '',
+        movieTranslation: 'Y',
+        movieScreenType: '2D',
         movieDirector: '',
         movieActor: ''
     });
@@ -194,7 +194,7 @@ function NewMovie() {
                                             <img src={imagePreview} alt="Preview" style={{ width: "100%" }} />
                                         </div>
                                     )}
-                                    <div id="imgArea" className="img-preview mt-3"></div>
+                                    <div id="imgArea" className="img-preview mt-3" ></div>
                                 </div>
                             </div>
                         </div>

@@ -69,6 +69,7 @@ function MovieEdit() {
     const cancelEditMenu = useCallback(() => {
         setMovie({ ...backup });
         setIsEdit({ edit: false });
+        // clearImagePreview();
         loadList();
     }, [movie]);
 
@@ -98,6 +99,20 @@ function MovieEdit() {
         }
     };
 
+    const saveEditPoster = useCallback(async (movieNo) => {
+        const formData = new FormData();
+        if (file) {
+            formData.append("attach", file);
+        }
+        try {
+            await axios.post(`/movie/${movieNo}`, formData);
+            clearImagePreview();
+            loadList();
+        } catch (error) {
+            console.error("Failed to submit the form!", error);
+        }
+    }, [file]);
+
     return (
         <>
             {/* 페이지 제목 */}
@@ -109,14 +124,16 @@ function MovieEdit() {
                         <>
                             <div className="title-head-text">
                                 영화 정보 조회
-                                <button className='btn btn-secondary ms-3' onClick={e => editMovie()} style={{fontWeight:'bold'}}>수정시작</button>
+                                <button className='btn btn-secondary ms-3' onClick={e => editMovie()} style={{ fontWeight: 'bold' }}>수정시작</button>
+                                <button className='btn btn-primary ms-3' onClick={e => deleteMovie(movie.movieNo)} style={{ fontWeight: 'bold' }}> 영화삭제 </button>
                             </div>
                         </>
                     ) : (
                         <>
                             <div className="title-head-text">
                                 영화 정보 수정
-                                <button className='btn btn-primary ms-3' onClick={e => cancelEditMenu()} style={{fontWeight:'bold'}}>되돌리기</button>
+                                <button className='btn btn-primary ms-3' onClick={e => cancelEditMenu()} style={{ fontWeight: 'bold' }}>되돌리기</button>
+                                <button className='btn btn-dark ms-3' onClick={e => saveEditMovie(movie)} style={{ fontWeight: 'bold' }}> 수정완료 </button>
                             </div>
                         </>
                     )}
@@ -131,15 +148,20 @@ function MovieEdit() {
                         <div className='col-md-3 me-4' style={{ borderRight: '0.5px solid rgb(197,198,199)' }}>
                             <div className="attach-file">
                                 <span style={{ fontSize: '30px', fontWeight: 'bold' }}>포스터</span>
+                                {isEdit.edit === true && (
+                                    <button onClick={e => saveEditPoster(movieNo)} className='btn btn-secondary mb-2 ms-2' style={{ fontWeight: 'bold' }}>
+                                        선택파일 등록
+                                    </button>
+                                )}
                                 <hr />
-                                <div className="mt-3" style={{height : '450px'}}>
+                                <div className="mt-3" style={{ height: '450px' }}>
                                     <div class="input-group mb-5">
                                         {isEdit.edit === true && (
                                             <input type="file" onChange={handleImageChange} class="form-control" />
                                         )}
                                     </div>
                                     {!imagePreview && (
-                                        <img src={movie.movieImgLink} className='img-preview img-thumbnail' alt="Default Preview" />
+                                        <img src={movie.movieImgLink} className='img-preview-admin img-thumbnail' alt="Default Preview" />
                                     )}
                                     {imagePreview && (
                                         <div className="img-preview-admin img-thumbnail mt-3">
@@ -147,23 +169,6 @@ function MovieEdit() {
                                         </div>
                                     )}
                                     <div id="imgArea" className="img-preview-admin mt-3"></div>
-                                </div>
-                                <div className='mt-5'>
-                                    <div className="row me-2 mb-3">
-                                        <button onClick={e => saveEditMovie()} className='delete-button btn btn-dark'>
-                                            포스터 등록하기 
-                                        </button>
-                                    </div>
-                                    <div className="row me-2 mb-3">
-                                        <button onClick={e => saveEditMovie(movie)} className='delete-button btn btn-dark'>
-                                            정보 수정 완료
-                                        </button>
-                                    </div>
-                                    <div className="row me-2">
-                                        <button onClick={e => deleteMovie(movie.movieNo)} className='delete-button btn btn-primary'>
-                                            영화 삭제
-                                        </button>
-                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -243,7 +248,7 @@ function MovieEdit() {
                                             <hr></hr>
                                             <div className="row mb-4">
                                                 <div className="col-3">줄거리</div>
-                                                <div className="col-9 input-content " style={{whiteSpace: 'pre-wrap'}}>{movie.movieSummary}</div>
+                                                <div className="col-9 input-content " style={{ whiteSpace: 'pre-wrap' }}>{movie.movieSummary}</div>
                                             </div>
                                         </>
                                     ) : (
@@ -365,7 +370,7 @@ function MovieEdit() {
                                             <div className="row mb-4">
                                                 <div className="col-3">줄거리</div>
                                                 <div className='col-9'>
-                                                    <textarea className="form-control" type="text" name='movieSummary' style={{width: '100%', height:'300px', whiteSpace: 'pre-wrap'}} 
+                                                    <textarea className="form-control" type="text" name='movieSummary' style={{ width: '100%', height: '300px', whiteSpace: 'pre-wrap' }}
                                                         value={movie.movieSummary} onChange={e => changeMovie(e)}></textarea>
                                                 </div>
                                             </div>
