@@ -117,17 +117,24 @@ const Cart = () => {
         loadCartData();
     }, [cartItems]);
 
-    // const deleteBySelected = useCallback(async (targetList) => {
-    //     const choice = window.confirm("정말 삭제하시겠습니까?");
-    //     if (choice === false) return;
-    //     await axios.delete("/cart/", {
-    //         params: {
-    //             //뭔가 for문으로 풀어서.. 하나씩 값을 백으로 넘겨줘야...?? 될 것만 같다. 아닌가?
-    //             //변수 두 개를 넘거야 하는디
-
-    //         }
-    //     });
-    // }, [checkedList]);
+    const deleteBySelected = useCallback(async (targetList) => {
+        const choice = window.confirm("정말 삭제하시겠습니까?");
+        if (choice === false) return;
+    
+        for (const list of targetList) { //forEach 사용 불가.
+            await axios.delete("/cart/", {
+                //뭔가 for문으로 풀어서.. 하나씩 값을 백으로 넘겨줘야...?? 될 것만 같다. 아닌가?
+                //변수 두 개를 넘거야 하는디
+                params: {
+                    productNo: list.cartProductNo,
+                    userId: list.cartUserId
+                }
+            });
+        }
+    
+        loadCartData();
+    }, [checkedList]);
+    
 
 
     //선택된 상품의 총 상품 금액
@@ -166,13 +173,10 @@ const Cart = () => {
         <>
 
             <div>
-                {/* 장바구니 출력 */}
-                {/* <div className="row justify-content-center">
-                    <div className="col-lg-8 content-body">
-                        <h2><FaShoppingCart /> 장바구니 </h2>
-                    </div>
-                </div> */}
+                {/* 장바구니 헤더 출력 */}
                 <PruchaseMenu activeStep="1" />
+
+                {/* 장바구니 내용 출력 */}
                 {cartItems.length !== 0 ? ( //장바구니에 담긴 물건이 있으면               
                     <>
                         <div className="row justify-content-center">
@@ -258,7 +262,7 @@ const Cart = () => {
                                 <div className='row'>
                                     <div className="col-6">
                                         <button className="btn btn-light"
-                                        // onClick={deleteBySelected(checkedList)}
+                                            onClick={e=> deleteBySelected(checkedList)}
                                         >선택상품 삭제({checkedList.length})</button>
                                     </div>
                                     <div className="col-6">
@@ -328,7 +332,7 @@ const Cart = () => {
                     <div className="row justify-content-center">
                         <div className="col-lg-8 content-body">
                             <h1>아이템이 없습니다</h1>
-                            <Link to="{`/cart/`}" className='btn btn-dark w-100 '>스토어 가기</Link>
+                            <Link to="/store/package" className='btn btn-dark w-100 '>스토어 가기</Link>
                         </div>
                     </div>
 
