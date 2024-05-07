@@ -44,6 +44,7 @@ th {
     display: flex;
     /* justify-content: center; 가로 방향 가운데 정렬 */
     margin-top: 10px;
+    justify-content: center;
 }
 
 .edit-buttons,
@@ -66,16 +67,17 @@ th {
 .custom-qty-container {
     display: flex;
     align-items: center;
-    width: 100px; /* 필요에 따라 너비 조절 */
+    width: 100%; /* 필요에 따라 너비 조절 */
+    padding-right: 20px;
 }
 
 .qty-value {
+    flex: 1; /* 입력란이 남은 공간을 모두 차지하도록 함 */
     margin-right: 10px; /* 왼쪽 여백 추가 */
 }
 
 .qty-buttons {
-    display: flex;
-    flex-direction: column; /* 버튼들을 세로로 배치 */
+    width: 60px; /* 버튼의 너비를 조절 */
 }
 
 .qty-button {
