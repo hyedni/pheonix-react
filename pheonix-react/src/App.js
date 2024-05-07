@@ -20,19 +20,23 @@ import AdminStore from './components/admin/Store/AdminStore';
 import NewProduct from './components/admin/Store/NewProduct';
 import ProductEdit from './components/admin/Store/productEdit';
 import SeatStatus from './components/admin/SeatsTypes/SeatStatus';
+import BookingButton from './design/BookingButton';
+import AdminTheater from './components/admin/AdminTheater';
 
 function App() {
   return (
 
     <>
     <Htemplate/>
-
+    <BookingButton/>
+    
     <Routes>
               {/* 공용공간 에티켓을 만듭시다** 분리하여 route 작성해주세요 */}
               {/* 관리자 */}
               <Route path='/adminMovie' element={<AdminMovie/>}/>
               <Route path='/adminCinema' element={<AdminCinema/>}/>
               <Route path='/adminStore' element={<AdminStore />}/>
+              <Route path='/adminTheater' element={<AdminTheater/>}/>
 
                <Route path='/movieEdit/:movieNo' element={<MovieEdit/>}/>
                <Route path='/productEdit/:productNo' element={<ProductEdit />}/>

@@ -6,6 +6,7 @@ import { Modal } from 'bootstrap';
 import React from 'react';
 import PostApi from './PostApi';
 import { useNavigate } from 'react-router';
+import { FaCirclePlus } from "react-icons/fa6";
 
 function AdminCinema() {
 
@@ -116,8 +117,8 @@ function AdminCinema() {
     //등록처리
     const saveInput = useCallback(async () => {
         await axios.post("/cinema/", input);
-        loadList();
         cancelInput();
+        loadList();
     }, [input]);
 
     //등록하기(입력값 input state에 저장)
@@ -175,6 +176,7 @@ function AdminCinema() {
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
                         영화관 관리
+                        <span className='ms-3' onClick={e => openModal()}><FaCirclePlus style={{ marginBottom: '10px', color:'rgb(240, 86, 86)'}} /></span>
                     </div>
                 </div>
             </div>
@@ -208,7 +210,7 @@ function AdminCinema() {
 
             <div className='row'>
                 <div className='offset-2 col-lg-8'>
-                    <img src={"/image/theater.png"} style={{ width: '100%', height: 'auto', marginBottom: '30px', borderRadius: '10px' }} />
+                    <img src={"/image/theater.png"} style={{ width: '100%', height: 'auto', marginBottom: '10px', borderRadius: '10px' }} />
                 </div>
                 {/* 지점이름 */}
                 <div className='offset-2 col-lg-8' style={{ marginBottom: '20px' }}>
@@ -217,7 +219,7 @@ function AdminCinema() {
                 <div className='offset-2 col-lg-8'>
                     <img src={"/image/pheonix.png"} style={{ width: '100%', height: '500px', marginBottom: '30px', borderRadius: '10px' }} />
                 </div>
-                <div className='offset-2 col-lg-8'>
+                <div className='offset-2 col-lg-8 mt-2 mb-5'>
                     <img src={"/image/ad1.png"} style={{ width: '100%', height: '100px', marginBottom: '30px', borderRadius: '10px' }} />
                 </div>
             </div>
@@ -293,15 +295,15 @@ function AdminCinema() {
                                             <input type="text" name="cinemaPost"
                                                 value={detailCinema.cinemaPost}
                                                 onChange={e => changeCinemaInput(e)}
-                                                className="form-control" />
+                                                className="form-control mb-1" />
                                             <input type="text" name="cinemaAddress1"
                                                 value={detailCinema.cinemaAddress1}
                                                 onChange={e => changeCinemaInput(e)}
-                                                className="form-control" />
+                                                className="form-control mb-1" />
                                             <input type="text" name="cinemaAddress2"
                                                 value={detailCinema.cinemaAddress2}
                                                 onChange={e => changeCinemaInput(e)}
-                                                className="form-control" />
+                                                className="form-control mb-1" />
                                         </td>
                                     </tr>
                                     <tr>
@@ -329,20 +331,19 @@ function AdminCinema() {
                 </div>
             </div>
 
-            <div className='row'>
+            <div className='row mt-3 mb-3'>
                 <div className='offset-2 col-lg-8 d-flex justify-content-end' style={{ marginBottom: '30px' }}>
                     {isEdit.edit === false ? (
                         <>
-                            <button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={e => editCinema()}>수정하기</button>
+                            <button className='btn btn-dark' style={{ marginRight: '10px', fontWeight:'bold' }} onClick={e => editCinema()}>수정</button>
                         </>
                     ) : (
                         <>
-                            <button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={e => saveEditCinema(detailCinema)}>저장하기</button>
-                            <button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={e => cancelEditCinema()}>돌아가기</button>
+                            <button className='btn btn-secondary' style={{ marginRight: '10px', fontWeight:'bold' }} onClick={e => saveEditCinema(detailCinema)}>저장</button>
+                            <button className='btn btn-dark' style={{ marginRight: '10px', fontWeight:'bold' }} onClick={e => cancelEditCinema()}>취소</button>
                         </>
                     )}
-                    <button className='btn btn-dark' style={{ marginRight: '10px' }} onClick={e => openModal()}>new 영화관 등록</button>
-                    <button className='btn btn-primary' style={{ marginRight: '10px' }} onClick={e => deleteCinema(region)}>삭제하기</button>
+                    <button className='btn btn-primary' style={{ marginRight: '10px', fontWeight:'bold' }} onClick={e => deleteCinema(region)}>삭제</button>
                 </div>
             </div>
 
@@ -351,7 +352,7 @@ function AdminCinema() {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="staticBackdropLabel">new 영화관 등록</h1>
+                            <h1 className="modal-title fs-5" id="staticBackdropLabel" style={{fontWeight:'bold'}}>new 영화관 등록</h1>
                             <button type="button" className="btn-close" aria-label="Close"
                                 onClick={e => cancelInput()}></button>
                         </div>
@@ -394,15 +395,15 @@ function AdminCinema() {
                                     <input type="text" name="cinemaPost"
                                         value={input.cinemaPost}
                                         onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                        className="form-control mb-1" />
                                     <input type="text" name="cinemaAddress1"
                                         value={input.cinemaAddress1}
                                         onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                        className="form-control mb-1" />
                                     <input type="text" name="cinemaAddress2"
                                         value={input.cinemaAddress2}
                                         onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                        className="form-control mb-1" />
                                 </div>
                             </div>
 
