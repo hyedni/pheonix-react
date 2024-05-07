@@ -19,6 +19,7 @@ import AdminCinema from './components/admin/AdminCinema';
 import AdminStore from './components/admin/Store/AdminStore';
 import NewProduct from './components/admin/Store/NewProduct';
 import ProductEdit from './components/admin/Store/productEdit';
+import Chatbot from './chatbot/chatbot';
 import SeatStatus from './components/admin/SeatsTypes/SeatStatus';
 import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
@@ -29,6 +30,7 @@ import { isLoginState, loginIdState, loginGradeState } from "./components/utils/
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from "./components/utils/CustomAxios";
 import { useCallback, useEffect } from "react";
+
 
 
 function App() {
@@ -86,18 +88,19 @@ function App() {
         <Route path='/newMovie' element={<NewMovie />} />
         <Route path='/newProduct' element={<NewProduct />} />
 
+
         {/* 좌석 */}
         {isLogin &&
           <Route path='/seatStatus' element={<SeatStatus />} />
         }
 
         {/* 회원 */}
-        
-            <Route path='/login' element={<Login />} />
-            <Route path='/join' element={<Join />} />
-            <Route path='/nonUser' element={<NonUser />} />
-        {isLogin &&  
-            <Route path='/mypage' element={<Mypage />} />   
+
+        <Route path='/login' element={<Login />} />
+        <Route path='/join' element={<Join />} />
+        <Route path='/nonUser' element={<NonUser />} />
+        {isLogin &&
+          <Route path='/mypage' element={<Mypage />} />
         }
 
         {/* 스토어 */}
@@ -116,7 +119,7 @@ function App() {
         <Route path='/lost' element={<Lost />} />
         <Route path='/writepost' element={<WritePost />} />
         <Route path='/personal' element={<Personal />} />
-      </Routes>
+      </Routes >
 
       <Footer />
     </>
