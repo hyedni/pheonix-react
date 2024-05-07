@@ -19,9 +19,11 @@ import AdminCinema from './components/admin/AdminCinema';
 import AdminStore from './components/admin/Store/AdminStore';
 import NewProduct from './components/admin/Store/NewProduct';
 import ProductEdit from './components/admin/Store/productEdit';
+import Chatbot from './chatbot/chatbot';
 import SeatStatus from './components/admin/SeatsTypes/SeatStatus';
 import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
+
 
 function App() {
   return (
@@ -63,6 +65,7 @@ function App() {
               <Route path='/lost' element={<Lost/>}/>
               <Route path='/writepost' element={<WritePost/>}/>
               <Route path='/personal' element={<Personal/>}/>
+              <Route path='/chatbot' element={<Chatbot/>}/>
     </Routes>
 
     <Footer />

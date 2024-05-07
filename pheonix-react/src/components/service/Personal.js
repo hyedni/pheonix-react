@@ -2,7 +2,7 @@ import axios from "../utils/CustomAxios";
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import Modal from 'bootstrap/js/dist/modal';
-
+import Chatbot from '../../chatbot/chatbot.js';
 
 
 const Personal = () => {
@@ -16,6 +16,13 @@ const Personal = () => {
     const bsModal = useRef(null);
     const writeModal = useRef(null);
     const replyModal = useRef(null);
+
+
+    const openChatbot = () => {
+        // chatbot.js에 정의된 함수를 호출하여 Chatbot을 열도록 처리
+        window.openChatbot(); // chatbot.js에 정의된 함수명에 따라 변경해야 할 수도 있습니다.
+    };
+
 
     const loadData = useCallback(() => {
         axios({
@@ -159,6 +166,9 @@ const Personal = () => {
             </div>
             <div className="text-end mb-3">
                 <NavLink to="/lost">분실물</NavLink>
+            </div>
+            <div className="text-end mb-3">
+                <NavLink to="/chatbot">chatbot</NavLink>
             </div>
             <div className="row justify-content-center">
                 <div className="col-lg-8">

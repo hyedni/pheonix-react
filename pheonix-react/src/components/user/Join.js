@@ -1,6 +1,7 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { NavLink } from 'react-router-dom';
 import axios from "../utils/CustomAxios";
+import './join.css';
 
 function Join() {
   // State
@@ -12,9 +13,9 @@ function Join() {
     "userContact": "",
     "userEmail": "",
     "userBirth": "",
-    "userCert":""
+    "userCert": ""
   });
-  
+
   const [isValid, setIsValid] = useState({
     userId: true,
     userPw: true,
@@ -135,8 +136,8 @@ function Join() {
   const handleCheckCert = async () => {
     console.log(user);
     try {
-      const response = await axios.post('/user/checkCert', { certEmail : user.userEmail, certCode:user.userCert});
-      
+      const response = await axios.post('/user/checkCert', { certEmail: user.userEmail, certCode: user.userCert });
+
       console.log('응답 데이터:', response.data);
 
       // 여기서 인증에 성공했을 때 setIsCertified 상태를 true로 설정합니다.
@@ -153,58 +154,85 @@ function Join() {
 
   return (
     <>
-      <h1>회원가입 화면입니다</h1>
-
-      <div>
-        {/* 입력 폼 */}
-        <form onSubmit={handleSubmit}>
+  <div className="join-container">
+    <h1>회원가입 화면입니다</h1>
+    <div className="join-form">
+      {/* 입력 폼 */}
+      <form onSubmit={handleSubmit}>
+        <div className="form-group">
           <label htmlFor="userId">아이디 * :</label>
-          <input type="text" id="userId" name="userId" onBlur={handleInputBlur} />
-          <span className={user.userId && !isValid.userId ? "invalid" : ""}>
+          <input type="text" id="userId" name="userId" onBlur={handleInputBlur} className={`form-control ${user.userId && !isValid.userId ? "is-invalid" : ""}`} />
+          <div className="invalid-feedback">
             {user.userId && !isValid.userId && '아이디가 유효하지 않습니다.'}
-          </span><br /><br />
+          </div>
+        </div>
 
+        <div className="form-group">
           <label htmlFor="userPw">비밀번호 * :</label>
-          <input type="password" id="userPw" name="userPw" onBlur={handleInputBlur} />
-          <span className={user.userPw && !isValid.userPw ? "invalid" : ""}>
+          <input type="password" id="userPw" name="userPw" onBlur={handleInputBlur} className={`form-control ${user.userPw && !isValid.userPw ? "is-invalid" : ""}`} />
+          <div className="invalid-feedback">
             {user.userPw && !isValid.userPw && '비밀번호가 유효하지 않습니다.'}
-          </span><br /><br />
+          </div>
+        </div>
 
+        <div className="form-group">
           <label htmlFor="userName">이름 * :</label>
-          <input type="text" id="userName" name="userName" onBlur={handleInputBlur} />
-          <span className={user.userName && !isValid.userName ? "invalid" : ""}>
+          <input type="text" id="userName" name="userName" onBlur={handleInputBlur} className={`form-control ${user.userName && !isValid.userName ? "is-invalid" : ""}`} />
+          <div className="invalid-feedback">
             {user.userName && !isValid.userName && '이름이 유효하지 않습니다.'}
-          </span><br /><br />
+          </div>
+        </div>
 
+        <div className="form-group">
           <label htmlFor="userNick">닉네임:</label>
-          <input type="text" id="userNick" name="userNick" onBlur={handleInputBlur} />
-          <span className={user.userNick && !isValid.userNick ? "invalid" : ""}>
+          <input type="text" id="userNick" name="userNick" onBlur={handleInputBlur} className={`form-control ${user.userNick && !isValid.userNick ? "is-invalid" : ""}`} />
+          <div className="invalid-feedback">
             {user.userNick && !isValid.userNick && '닉네임이 유효하지 않습니다.'}
-          </span><br /><br />
+          </div>
+        </div>
 
+        <div className="form-group">
           <label htmlFor="userContact">전화번호:</label>
-          <input type="text" id="userContact" name="userContact" onBlur={handleInputBlur} />
-          <span className={user.userContact && !isValid.userContact ? "invalid" : ""}>
+          <input type="text" id="userContact" name="userContact" onBlur={handleInputBlur} className={`form-control ${user.userContact && !isValid.userContact ? "is-invalid" : ""}`} />
+          <div className="invalid-feedback">
             {user.userContact && !isValid.userContact && '전화번호가 유효하지 않습니다.'}
-          </span><br /><br />
+          </div>
+        </div>
 
+        <div className="form-group">
           <label htmlFor="userEmail">이메일 * :</label>
-          <input type="email" id="userEmail" name="userEmail" onBlur={handleInputBlur} />
-          <button type="button" onClick={handleSendCert}>전송</button>
-          <span className={user.userEmail && !isValid.userEmail ? "invalid" : ""}>
+          <div className="input-group">
+            <input type="email" id="userEmail" name="userEmail" onBlur={handleInputBlur} className={`form-control ${user.userEmail && !isValid.userEmail ? "is-invalid" : ""}`} />
+            <button type="button" onClick={handleSendCert} className="btn btn-outline-secondary">전송</button>
+          </div>
+          <div className="invalid-feedback">
             {user.userEmail && !isValid.userEmail && '이메일이 유효하지 않습니다.'}
-          </span><br /><br />
+          </div>
+        </div>
 
-          {/* 인증번호 입력 필드 */}
+
+        {/* 인증번호 입력 필드 */}
+        <div className="form-group">
           <label htmlFor="userCert">인증번호 * :</label>
-          <input type="text" id="userCert" name="userCert" onChange={handleInputBlur} />
-          <button type="button" onClick={handleCheckCert}>인증확인</button>
-          <br /><br />
+          <div className="input-group">
+            <input type="text" id="userCert" name="userCert" onChange={handleInputBlur} className={`form-control ${user.userCert && !isValid.userCert ? "is-invalid" : ""}`} />
+            <div className="input-group-append">
+              <button type="button" onClick={handleCheckCert} className="btn btn-outline-secondary">인증확인</button>
+            </div>
+          </div>
+          <div className="invalid-feedback">
+            {user.userCert && !isValid.userCert && '인증번호가 유효하지 않습니다.'}
+          </div>
+        </div>
 
-          <button type="submit" className='btn btn-success'>가입하기</button>
-        </form>
-      </div>
-    </>
+        
+        <button type="submit" className='btn btn-success w-100'>가입하기</button>
+
+      </form>
+    </div>
+  </div>
+</>
+
   );
 }
 
