@@ -23,11 +23,9 @@ const Cart = () => {
     const [cartItems, setCartItems] = useState([]); //카트+상품 정보
     const [userId] = useState('testuser4');
     const [imagePreview] = useState(null);
-    const [itemQty, setItemQty] = useState();
     const [checkedList, setCheckedLists] = useState([]);
 
-
-    //체크박스
+     //체크박스
     const onCheckedAll = useCallback((checked) => {
         if (checked) {
             const checkedListArray = [];
@@ -39,6 +37,7 @@ const Cart = () => {
         else {
             setCheckedLists([]);
         }
+        console.log(checkedList);
     }, [cartItems]);
 
     const onCheckedElement = useCallback((checked, list) => {
@@ -55,27 +54,29 @@ const Cart = () => {
         loadCartData();
     }, []);
 
+    useEffect(() => { //최초 실행 시 전체 선택
+        const checkedListArray = [];
+        cartItems.forEach((list) => checkedListArray.push(list));
+        setCheckedLists(checkedListArray);
+    }, [cartItems]);
+
     //callback
     const loadCartData = useCallback(() => {
         //회원별 장바구니 정보
         try {
             axios.get(`/cart/combine/${userId}`).then(resp => {
                 setCartItems(resp.data);
-                setItemQty(resp.data);
-
             });
-
         }
         catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
-
     }, [userId]);
 
     //수량 변경 버튼을 눌렀을 때, 수정
     const saveEditQty = useCallback(async (target) => {
         try {
-            await axios.patch("/cart/", target);
+            await axios.patch("/cart/combine", target);
             loadCartData();
         } catch (error) {
             console.error("수량 변경 중 오류 발생:", error);
@@ -83,7 +84,7 @@ const Cart = () => {
 
     }, [cartItems]);
 
-    const changeQty = useCallback((e, target) => {
+    const changeQty = useCallback(async (e, target) => {
         const copy = [...cartItems];
         const copy2 = copy.map(cartItem => {
             if (target.cartProductNo === cartItem.cartProductNo) { //이벤트 발생한 상품이라면
@@ -97,9 +98,15 @@ const Cart = () => {
             }
         });
         setCartItems(copy2);
+        //saveEditQty(target);
     }, [cartItems]);
 
+    //변경 버튼을 없애고 싶다면.. 생각해야하는 부분 
+    // useEffect(()=>{
+    //     //cartItems에 변경이 생기면 cartItems 전체를 DB로 전송해서 갱신
+    //     //발생빈도를 줄이고 싶다면 lodash의 debounce를 적극적으로 사용할 것!
 
+    // }, [cartItems]);
 
 
 
@@ -120,7 +127,7 @@ const Cart = () => {
     const deleteBySelected = useCallback(async (targetList) => {
         const choice = window.confirm("정말 삭제하시겠습니까?");
         if (choice === false) return;
-    
+
         for (const list of targetList) { //forEach 사용 불가.
             await axios.delete("/cart/", {
                 //뭔가 for문으로 풀어서.. 하나씩 값을 백으로 넘겨줘야...?? 될 것만 같다. 아닌가?
@@ -131,10 +138,10 @@ const Cart = () => {
                 }
             });
         }
-    
+
         loadCartData();
     }, [checkedList]);
-    
+
 
 
     //선택된 상품의 총 상품 금액
@@ -184,7 +191,7 @@ const Cart = () => {
 
                                 <table className="table">
                                     <thead>
-                                        <tr>
+                                        <tr className='text-center'>
                                             <th scope="col"><input
                                                 type="checkbox"
                                                 className="large-checkbox"
@@ -194,16 +201,16 @@ const Cart = () => {
                                                         checkedList.length === cartItems.length ? true : false
                                                 }
                                             /></th>
-                                            <th scope="col" style={{ width: '32%' }}>상품명</th>
-                                            <th scope="col" style={{ width: '15%' }}>판매금액</th>
-                                            <th scope="col" style={{ width: '10%' }}>수량</th>
-                                            <th scope="col" style={{ width: '15%' }}>구매금액</th>
-                                            <th scope="col" style={{ width: '20%' }}>선택</th>
+                                            <th scope="col" style={{ width: '30%' }}>상품명</th>
+                                            <th scope="col" style={{ width: '17%' }}>판매금액</th>
+                                            <th scope="col" style={{ width: '17%' }}>수량</th>
+                                            <th scope="col" style={{ width: '13%' }}>구매금액</th>
+                                            <th scope="col" style={{ width: '15%' }}>선택</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                         {cartItems.map((cartItem) => (
-                                            <tr key={cartItem.cartProductNo}>
+                                            <tr key={cartItem.cartProductNo}  className='text-center'>
                                                 <td scope="row">
                                                     <input type="checkbox" className="large-checkbox"
                                                         key={cartItem.productNo} onChange={(e) => onCheckedElement(e.target.checked, cartItem)}
@@ -227,19 +234,8 @@ const Cart = () => {
                                                 <td>
 
                                                     <div class="custom-qty-container">
-                                                        <input type='number' class="qty-value form-control" name='cartQty' value={cartItem.cartQty} onChange={e => { changeQty(e, cartItem) }}></input>
-
-                                                        {/* <div className="qty-buttons">
-                                                            <button onClick={() => handleQtyChange(cartItem.cartProductNo, 1)}>+</button>
-                                                            <button onClick={() => handleQtyChange(cartItem.cartProductNo, -1)}>-</button>
-                                                        </div> */}
-
-                                                        {/* <div>
-                                                            <button onClick={()=> saveEditQty(cartItem)}>변경</button>
-
-                                                        </div> */}
-
-
+                                                        <input type='number' class="qty-value form-control" name='cartQty' value={cartItem.cartQty} onChange={e => { changeQty(e, cartItem) }} min={1} ></input>
+                                                        <button className='qty-buttons btn btn-light' onClick={() => saveEditQty(cartItem)}>변경</button>
                                                     </div>
 
                                                 </td>
@@ -262,7 +258,7 @@ const Cart = () => {
                                 <div className='row'>
                                     <div className="col-6">
                                         <button className="btn btn-light"
-                                            onClick={e=> deleteBySelected(checkedList)}
+                                            onClick={e => deleteBySelected(checkedList)}
                                         >선택상품 삭제({checkedList.length})</button>
                                     </div>
                                     <div className="col-6">
