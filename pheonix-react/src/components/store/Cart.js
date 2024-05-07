@@ -2,6 +2,7 @@ import './Cart.css';
 import axios from "../utils/CustomAxios";
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link } from 'react-router-dom';
+//import { useHistory } from 'react-router-dom';
 //import { useRecoilState } from 'recoil';
 
 //아이콘 임포트
@@ -14,7 +15,11 @@ import countState from './../utils/RecoilData';
 import { FaCheck } from "react-icons/fa";
 import { FiMinusCircle } from "react-icons/fi";
 import { LuCircleEqual } from "react-icons/lu";
-import PruchaseMenu from './PurchaseMenu';
+
+//이미지 임포트
+import kakaopay from "./image/kakaopay.png";
+
+import PurchaseMenu from './PurchaseMenu';
 
 const Cart = () => {
 
@@ -23,10 +28,17 @@ const Cart = () => {
     const [cartItems, setCartItems] = useState([]); //카트+상품 정보
     const [userId] = useState('testuser4');
     const [imagePreview] = useState(null);
-    const [itemQty, setItemQty] = useState();
     const [checkedList, setCheckedLists] = useState([]);
 
+    const [btnPurchase, setBtnPurchase] = useState(false);
 
+    // const history = useHistory();
+
+    // const handleGoBack = () => {
+    //     history.goBack();
+    // };
+
+    //장바구니 기능들....
     //체크박스
     const onCheckedAll = useCallback((checked) => {
         if (checked) {
@@ -39,6 +51,7 @@ const Cart = () => {
         else {
             setCheckedLists([]);
         }
+        console.log(checkedList);
     }, [cartItems]);
 
     const onCheckedElement = useCallback((checked, list) => {
@@ -52,8 +65,20 @@ const Cart = () => {
 
     //effect
     useEffect(() => {
-        loadCartData();
+        if (btnPurchase) {
+            checkedList();
+        }
+        else {
+            loadCartData();
+            getUserInfo();
+        }
     }, []);
+
+    useEffect(() => { //최초 실행 시 전체 선택
+        const checkedListArray = [];
+        cartItems.forEach((list) => checkedListArray.push(list));
+        setCheckedLists(checkedListArray);
+    }, [cartItems]);
 
     //callback
     const loadCartData = useCallback(() => {
@@ -61,21 +86,17 @@ const Cart = () => {
         try {
             axios.get(`/cart/combine/${userId}`).then(resp => {
                 setCartItems(resp.data);
-                setItemQty(resp.data);
-
             });
-
         }
         catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
-
     }, [userId]);
 
     //수량 변경 버튼을 눌렀을 때, 수정
     const saveEditQty = useCallback(async (target) => {
         try {
-            await axios.patch("/cart/", target);
+            await axios.patch("/cart/combine", target);
             loadCartData();
         } catch (error) {
             console.error("수량 변경 중 오류 발생:", error);
@@ -83,7 +104,7 @@ const Cart = () => {
 
     }, [cartItems]);
 
-    const changeQty = useCallback((e, target) => {
+    const changeQty = useCallback(async (e, target) => {
         const copy = [...cartItems];
         const copy2 = copy.map(cartItem => {
             if (target.cartProductNo === cartItem.cartProductNo) { //이벤트 발생한 상품이라면
@@ -97,12 +118,15 @@ const Cart = () => {
             }
         });
         setCartItems(copy2);
+        //saveEditQty(target);
     }, [cartItems]);
 
+    //변경 버튼을 없애고 싶다면.. 생각해야하는 부분 
+    // useEffect(()=>{
+    //     //cartItems에 변경이 생기면 cartItems 전체를 DB로 전송해서 갱신
+    //     //발생빈도를 줄이고 싶다면 lodash의 debounce를 적극적으로 사용할 것!
 
-
-
-
+    // }, [cartItems]);
 
     //삭제
     const deleteProduct = useCallback(async (target) => {
@@ -120,7 +144,7 @@ const Cart = () => {
     const deleteBySelected = useCallback(async (targetList) => {
         const choice = window.confirm("정말 삭제하시겠습니까?");
         if (choice === false) return;
-    
+
         for (const list of targetList) { //forEach 사용 불가.
             await axios.delete("/cart/", {
                 //뭔가 for문으로 풀어서.. 하나씩 값을 백으로 넘겨줘야...?? 될 것만 같다. 아닌가?
@@ -131,11 +155,9 @@ const Cart = () => {
                 }
             });
         }
-    
+
         loadCartData();
     }, [checkedList]);
-    
-
 
     //선택된 상품의 총 상품 금액
     const getProductPriceOfCheckedItems = useMemo(() => {
@@ -169,176 +191,350 @@ const Cart = () => {
     }, [checkedList]);
 
 
+    //회원 정보 가져오기
+    const [userInfo, setUserInfo] = useState([]);
+
+    const getUserInfo = useCallback(async () => {
+        await axios.get(`/user/${userId}`).then(resp => {
+            console.log(resp.data);
+            setUserInfo(resp.data);
+        });
+    }, [userId]);
+
+    //이용약관 체크박스
+    const [termsOfUseAllChecked, setTermsOfUserAllChecked] = useState(false);
+    const [termsOfUseChecked, setTermsOfUseChecked] = useState(false);
+
+    const handleAllCheck = () => {
+        setTermsOfUserAllChecked(!termsOfUseAllChecked);
+        setTermsOfUseChecked(!termsOfUseChecked);
+    };
+
+    const handleSingleCheck = () => {
+        setTermsOfUseChecked(!termsOfUseChecked);
+    };
+
     return (
         <>
 
             <div>
-                {/* 장바구니 헤더 출력 */}
-                <PruchaseMenu activeStep="1" />
 
-                {/* 장바구니 내용 출력 */}
-                {cartItems.length !== 0 ? ( //장바구니에 담긴 물건이 있으면               
-                    <>
-                        <div className="row justify-content-center">
-                            <div className="col-lg-8 content-body">
+                {cartItems.length !== 0 ? ( //장바구니DB가 있으면 
+                    btnPurchase === false ? ( //장바구니 내역 출력
+                        <>
+                            {/* 장바구니 헤더 출력 */}
+                            <PurchaseMenu activeStep="1" />
+                            <div className="row justify-content-center">
+                                <div className="col-lg-8 content-body">
 
-                                <table className="table">
-                                    <thead>
-                                        <tr>
-                                            <th scope="col"><input
-                                                type="checkbox"
-                                                className="large-checkbox"
-                                                onClick={(e) => onCheckedAll(e.target.checked)}
-                                                checked={
-                                                    checkedList.length === 0 ? false :
-                                                        checkedList.length === cartItems.length ? true : false
-                                                }
-                                            /></th>
-                                            <th scope="col" style={{ width: '32%' }}>상품명</th>
-                                            <th scope="col" style={{ width: '15%' }}>판매금액</th>
-                                            <th scope="col" style={{ width: '10%' }}>수량</th>
-                                            <th scope="col" style={{ width: '15%' }}>구매금액</th>
-                                            <th scope="col" style={{ width: '20%' }}>선택</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        {cartItems.map((cartItem) => (
-                                            <tr key={cartItem.cartProductNo}>
-                                                <td scope="row">
-                                                    <input type="checkbox" className="large-checkbox"
-                                                        key={cartItem.productNo} onChange={(e) => onCheckedElement(e.target.checked, cartItem)}
-                                                        checked={checkedList.includes(cartItem) ? true : false}
-                                                    />
-                                                </td>
-                                                <td>
-                                                    <div className="product-info">
-                                                        <div className="img-preview img-thumbnail">
-                                                            <img src={imagePreview || cartItem.productImgLink} alt="상품이미지" style={{ width: "90px", height: "90px" }} />
-                                                        </div>
-                                                        <div className="product-info-text">
-                                                            {cartItem.productName}
-                                                        </div>
-                                                    </div>
-                                                </td>
-                                                <td>
-                                                    <span className="font-large">{(Math.ceil(cartItem.productPrice - (cartItem.productPrice * cartItem.productDiscount / 100))).toLocaleString()}원</span> <br />
-                                                    <span className="original-price">{(cartItem.productPrice).toLocaleString()} 원</span>
-                                                </td>
-                                                <td>
-
-                                                    <div class="custom-qty-container">
-                                                        <input type='number' class="qty-value form-control" name='cartQty' value={cartItem.cartQty} onChange={e => { changeQty(e, cartItem) }}></input>
-
-                                                        {/* <div className="qty-buttons">
-                                                            <button onClick={() => handleQtyChange(cartItem.cartProductNo, 1)}>+</button>
-                                                            <button onClick={() => handleQtyChange(cartItem.cartProductNo, -1)}>-</button>
-                                                        </div> */}
-
-                                                        {/* <div>
-                                                            <button onClick={()=> saveEditQty(cartItem)}>변경</button>
-
-                                                        </div> */}
-
-
-                                                    </div>
-
-                                                </td>
-                                                <td className="font-large">{(Math.ceil((cartItem.productPrice - (cartItem.productPrice * cartItem.productDiscount / 100)) * cartItem.cartQty)).toLocaleString()}원</td>
-                                                <td>
-                                                    <div className="action-buttons-container">
-                                                        <div className="edit-buttons">
-                                                            <Link to={`/gift/${cartItem.productNo}`} className='edit-button btn btn-outline-dark'><FaGift />선물하기</Link>
-                                                            <Link to={`/purchase/${cartItem.productNo}`} className='edit-button btn btn-outline-dark mt-2'><IoBagHandle />구매하기</Link>
-                                                        </div>
-                                                        <div className="delete-button-container">
-                                                            <button className="delete-button btn btn-light" onClick={e => deleteProduct(cartItem)}>삭제</button>
-                                                        </div>
-                                                    </div>
-                                                </td>
+                                    <table className="table">
+                                        <thead>
+                                            <tr className='text-center'>
+                                                <th scope="col"><input
+                                                    type="checkbox"
+                                                    className="large-checkbox"
+                                                    onClick={(e) => onCheckedAll(e.target.checked)}
+                                                    checked={
+                                                        checkedList.length === 0 ? false :
+                                                            checkedList.length === cartItems.length ? true : false
+                                                    }
+                                                /></th>
+                                                <th scope="col" style={{ width: '30%' }}>상품명</th>
+                                                <th scope="col" style={{ width: '17%' }}>판매금액</th>
+                                                <th scope="col" style={{ width: '17%' }}>수량</th>
+                                                <th scope="col" style={{ width: '13%' }}>구매금액</th>
+                                                <th scope="col" style={{ width: '15%' }}>선택</th>
                                             </tr>
-                                        ))}
-                                    </tbody>
-                                </table>
-                                <div className='row'>
-                                    <div className="col-6">
-                                        <button className="btn btn-light"
-                                            onClick={e=> deleteBySelected(checkedList)}
-                                        >선택상품 삭제({checkedList.length})</button>
-                                    </div>
-                                    <div className="col-6">
-                                        <p className='text-end'>장바구니에 담긴 상품은 최대 30일까지 보관됩니다.</p>
+                                        </thead>
+                                        <tbody>
+                                            {cartItems.map((cartItem) => (
+                                                <tr key={cartItem.cartProductNo} className='text-center'>
+                                                    <td scope="row">
+                                                        <input type="checkbox" className="large-checkbox"
+                                                            key={cartItem.productNo} onChange={(e) => onCheckedElement(e.target.checked, cartItem)}
+                                                            checked={checkedList.includes(cartItem) ? true : false}
+                                                        />
+                                                    </td>
+                                                    <td>
+                                                        <div className="product-info">
+                                                            <Link to={`/productDetail/${cartItem.productNo}`} className="text-dark text-decoration-none">
+                                                                <div className="img-preview img-thumbnail">
+                                                                    <img src={imagePreview || cartItem.productImgLink} alt="상품이미지" style={{ width: "90px", height: "90px" }} />
+                                                                </div>
+                                                                <div className="product-info-text">
+                                                                    {cartItem.productName}
+                                                                </div>
+                                                            </Link>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span className="font-large">{(Math.ceil(cartItem.productPrice - (cartItem.productPrice * cartItem.productDiscount / 100))).toLocaleString()}원</span> <br />
+                                                        <span className="original-price">{(cartItem.productPrice).toLocaleString()} 원</span>
+                                                    </td>
+                                                    <td>
+
+                                                        <div class="custom-qty-container">
+                                                            <input type='number' class="qty-value form-control" name='cartQty' value={cartItem.cartQty} onChange={e => { changeQty(e, cartItem) }} min={1} ></input>
+                                                            <button className='qty-buttons btn btn-light' onClick={() => saveEditQty(cartItem)}>변경</button>
+                                                        </div>
+
+                                                    </td>
+                                                    <td className="font-large">{(Math.ceil((cartItem.productPrice - (cartItem.productPrice * cartItem.productDiscount / 100)) * cartItem.cartQty)).toLocaleString()}원</td>
+                                                    <td>
+                                                        <div className="action-buttons-container">
+                                                            <div className="edit-buttons">
+                                                                <Link to={`/gift/${cartItem.productNo}`} className='edit-button btn btn-outline-dark'><FaGift />선물하기</Link>
+                                                                <Link to={`/purchase/${cartItem.productNo}`} className='edit-button btn btn-outline-dark mt-2'><IoBagHandle />구매하기</Link>
+                                                            </div>
+                                                            <div className="delete-button-container">
+                                                                <button className="delete-button btn btn-light" onClick={e => deleteProduct(cartItem)}>삭제</button>
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                    <div className='row'>
+                                        <div className="col-6">
+                                            <button className="btn btn-light"
+                                                onClick={e => deleteBySelected(checkedList)}
+                                            >선택상품 삭제({checkedList.length})</button>
+                                        </div>
+                                        <div className="col-6">
+                                            <p className='text-end'>장바구니에 담긴 상품은 최대 30일까지 보관됩니다.</p>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <div className="row justify-content-center">
-                            <div className="col-lg-8 content-body outline-design">
-                                <div className='row  botton-line header-line'>
-                                    <div className='col-4 section-design'>
-                                        총 상품 금액
-                                    </div>
-                                    <div className='col-4 section-design'>
-                                        할인금액
-                                    </div>
-                                    <div className='col-4 section-design-last'>
-                                        총 결제 예정금액
-                                    </div>
-                                </div>
-                                <div className='row'>
-                                    <div className='col-4 section-design2'>
-                                        {getProductPriceOfCheckedItems}원
-                                    </div>
-                                    <div className='col-4 section-design2-icon'>
-                                        <div className='mt-2'>
-                                            <FiMinusCircle />
+                            <div className="row justify-content-center">
+                                <div className="col-lg-8 content-body outline-design">
+                                    <div className='row  botton-line header-line'>
+                                        <div className='col-4 section-design'>
+                                            총 상품 금액
                                         </div>
-                                        <div className="section-design2-mid">
-                                            {getDiscountPriceOfCheckedItems}원
+                                        <div className='col-4 section-design'>
+                                            할인금액
                                         </div>
-                                        <div className='mt-2'>
-                                            <LuCircleEqual />
+                                        <div className='col-4 section-design-last'>
+                                            총 결제 예정금액
                                         </div>
                                     </div>
+                                    <div className='row'>
+                                        <div className='col-4 section-design2'>
+                                            {getProductPriceOfCheckedItems}원
+                                        </div>
+                                        <div className='col-4 section-design2-icon'>
+                                            <div className='mt-2'>
+                                                <FiMinusCircle />
+                                            </div>
+                                            <div className="section-design2-mid">
+                                                {getDiscountPriceOfCheckedItems}원
+                                            </div>
+                                            <div className='mt-2'>
+                                                <LuCircleEqual />
+                                            </div>
+                                        </div>
 
-                                    <div className='col-4 section-design2'>
-                                        {getTotalPriceOfCheckedItems}원
+                                        <div className='col-4 section-design2'>
+                                            {getTotalPriceOfCheckedItems}원
+                                        </div>
                                     </div>
                                 </div>
                             </div>
-                        </div>
+
+                            <div className="row justify-content-center">
+                                <div className="col-lg-8 content-body">
+                                    <div className='row'>
+                                        <div className="col-6">
+                                            <Link to={`/gift/`} className='btn btn-dark w-100 btn-lg'>선물하기</Link>
+                                        </div>
+                                        <div className="col-6">
+                                            {/* <Link to={`/purchase/`} className='btn btn-dark w-100 btn-lg'>구매하기</Link> */}
+                                            <button className='btn btn-dark w-100 btn-lg' onClick={() => setBtnPurchase(true)}>구매하기</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </>
+                    ) : ( //구매하기 출력
+                        <>
+                            <PurchaseMenu activeStep="3" />
+
+                            {/* 구매할 정보 출력 */}
+                            <div className="row justify-content-center">
+                                <div className="col-lg-8 content-body">
+
+                                    <h3 className="custom-heading mt-4 mb-4">구매상품 정보</h3>
+
+                                    <table className="table" style={{ borderTop: '4px solid #000' }}>
+                                        <thead>
+                                            <tr className='text-center'>
+                                                <th scope="col" style={{ width: '40%' }}>상품명</th>
+                                                <th scope="col" style={{ width: '20%' }}>판매금액</th>
+                                                <th scope="col" style={{ width: '20%' }}>수량</th>
+                                                <th scope="col" style={{ width: '20%' }}>구매금액</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {checkedList.map((checkedItem) => (
+                                                <tr key={checkedItem.cartProductNo} className='text-center'>
+                                                    <td>
+                                                        <div className="product-info">
+                                                            <div className="img-preview img-thumbnail">
+                                                                <img src={imagePreview || checkedItem.productImgLink} alt="상품이미지" style={{ width: "90px", height: "90px" }} />
+                                                            </div>
+                                                            <div className="product-info-text">
+                                                                {checkedItem.productName}
+                                                            </div>
+                                                        </div>
+                                                    </td>
+                                                    <td>
+                                                        <span className="font-large">{(Math.ceil(checkedItem.productPrice - (checkedItem.productPrice * checkedItem.productDiscount / 100))).toLocaleString()}원</span> <br />
+                                                        <span className="original-price">{(checkedItem.productPrice).toLocaleString()} 원</span>
+                                                    </td>
+                                                    <td>{checkedItem.cartQty}개</td>
+                                                    <td className="font-large">{(Math.ceil((checkedItem.productPrice - (checkedItem.productPrice * checkedItem.productDiscount / 100)) * checkedItem.cartQty)).toLocaleString()}원</td>
+                                                </tr>
+                                            ))}
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div className="row justify-content-center">
+                                <div className="col-lg-8 content-body outline-design">
+                                    <div className='row  botton-line header-line'>
+                                        <div className='col-4 section-design'>
+                                            총 상품 금액
+                                        </div>
+                                        <div className='col-4 section-design'>
+                                            할인금액
+                                        </div>
+                                        <div className='col-4 section-design-last'>
+                                            총 결제 예정금액
+                                        </div>
+                                    </div>
+                                    <div className='row'>
+                                        <div className='col-4 section-design2'>
+                                            {getProductPriceOfCheckedItems}원
+                                        </div>
+                                        <div className='col-4 section-design2-icon'>
+                                            <div className='mt-2'>
+                                                <FiMinusCircle />
+                                            </div>
+                                            <div className="section-design2-mid">
+                                                {getDiscountPriceOfCheckedItems}원
+                                            </div>
+                                            <div className='mt-2'>
+                                                <LuCircleEqual />
+                                            </div>
+                                        </div>
+
+                                        <div className='col-4 section-design2'>
+                                            {getTotalPriceOfCheckedItems}원
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 주문자 정보 확인 */}
+                            <div className="row justify-content-center mt-4">
+                                <div className="col-lg-8 content-body">
+                                    <h3 className="custom-heading me-4">주문자 정보 확인</h3>
+                                    <hr className="custom-hr" />
+                                    <div className='row'>
+                                        <div className='col'>
+                                            <span className="custom-span me-4">이름</span>
+                                            <span>{userInfo.userName}</span>
+                                        </div>
+                                        <div className='col'>
+                                            <span className="custom-span me-4">전화번호</span>
+                                            <span>{userInfo.userContact}</span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>
+                            </div>
+
+                            {/* 결제 수단 */}
+                            <div className="row justify-content-center mt-4">
+                                <div className="col-lg-8 content-body">
+                                    <h3 className="custom-heading me-4">결제 수단</h3>
+                                    <hr className="custom-hr" />
+                                    <input type="radio" checked={true} />
+                                    <label htmlFor="option1">
+                                        <img style={{ width: '150px' }} src={kakaopay} alt="카카오페이" />
+                                    </label>
+                                    <hr />
+                                    <span className="custom-span-info">
+                                        ＊ 카카오페이는 신용카드 선할인과 카드사 포인트는 이용하실 수 없으며 신용카드별 청구 할인은 이용하실 수 있습니다.
+                                    </span>
+                                </div>
+                            </div>
+
+                            {/* 약관 동의 */}
+                            <div className="row justify-content-center mt-4">
+                                <div className="col-lg-8 content-body">
+                                    <h3 className="custom-heading me-4">약관 동의</h3>
+                                    <hr className="custom-hr" />
+                                    <div className='row'>
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                checked={termsOfUseAllChecked}
+                                                onChange={handleAllCheck}
+                                            />
+                                            전체 동의하기
+                                        </label>
+                                        <br />
+                                        <label>
+                                            <input
+                                                type="checkbox"
+                                                checked={termsOfUseChecked}
+                                                onChange={handleSingleCheck}
+                                            />
+                                            개별 동의
+                                        </label>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* 결제하기 버튼 클릭 */}
+                            <div className="row justify-content-center mt-4">
+                                <div className="col-lg-8 content-body me-4">
+                                    <div className='row'>
+                                        <div className="col-3">
+                                            {/* <button onClick={handleGoBack}>Go Back</button> */}
+                                        </div>
+                                        <div className="col-9">
+                                            <Link to={`/purchase/`} className='btn btn-dark w-100 btn-lg'>결제하기</Link>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
 
 
+
+                        </>
+                    )
+                ) : ( //장바구니DB가 없으면
+                    <>
+                        {/* 장바구니 헤더 출력 */}
+                        <PurchaseMenu activeStep="1" />
 
                         <div className="row justify-content-center">
                             <div className="col-lg-8 content-body">
-                                <div className='row'>
-                                    <div className="col-6">
-                                        <Link to={`/gift/`} className='btn btn-dark w-100 btn-lg'>선물하기</Link>
-                                    </div>
-                                    <div className="col-6">
-                                        <Link to={`/purchase/`} className='btn btn-dark w-100 btn-lg'>구매하기</Link>
-                                    </div>
-                                </div>
+                                <h1>아이템이 없습니다</h1>
+                                <Link to="/store/package" className='btn btn-dark w-100 '>스토어 가기</Link>
                             </div>
                         </div>
-
-
-
                     </>
+                )}
 
-                ) : //장바구니에 아이템이 없을 때
-
-                    <div className="row justify-content-center">
-                        <div className="col-lg-8 content-body">
-                            <h1>아이템이 없습니다</h1>
-                            <Link to="/store/package" className='btn btn-dark w-100 '>스토어 가기</Link>
-                        </div>
-                    </div>
-
-                }
-
-            </div>
+            </div >
         </>
     );
 };

@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { NavLink } from "react-router-dom";
 import { useRecoilState } from "recoil";
 import { seatsState } from '../../utils/RecoilData';
+import './Seat.css';
 
 
 function SeatStatus() {
@@ -88,12 +89,9 @@ function SeatStatus() {
                                 </td>
                                 {Array.from({ length: cellCols }).map((__, colIndex) => (
                                     <td key={colIndex} style={{
-                                        border: '1px solid black',
-                                        padding: '10px',
-                                        textAlign: 'center',
-                                        // rowIndex, colIndex를 cellX, cellY로 변환
                                         backgroundColor: seats.find(seat => seat.cellX === rowIndex + 1 && seat.cellY === colIndex + 1)?.cellActive === "활성화" ? 'yellow' : 'lightgrey',
-                                    }}>
+                                    }}
+                                    className='seatDesign'>
                                         {rowIndex + 1}, {colIndex + 1}
                                     </td>
                                 ))}
