@@ -1,0 +1,6 @@
+/* Lost.css */
+.card-image img {
+    width: 100px; /* 원하는 너비(px) */
+    height: 100px; /* 원하는 높이(px) */
+    object-fit: contain; /* 이미지를 요소에 맞게 조절하되 비율을 유지하여 잘리지 않게 함 */
+}
