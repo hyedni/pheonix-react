@@ -1,40 +1,31 @@
-import { loginIdState, loginGradeState, isLoginState } from "../utils/RecoilData";
+import React, { useCallback, useState } from "react";
+import { initializeApp } from "firebase/app";
+import { getAnalytics } from "firebase/analytics";
+import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
+import axios from "axios";
 import { useNavigate } from "react-router";
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
+import { loginIdState, loginGradeState, isLoginState } from "../utils/RecoilData";
 
-function nonUser() {
+function NonUser() {
 
-    const isLogin = useRecoilValue(isLoginState);
     
-    //recoil
-    const [loginId, setLoginId] = useRecoilState(loginIdState);
-    const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
 
     return (
         <>
             <div className="container mt-4" style={{ maxWidth: "400px" }}>
                 <h1>회원가입 화면입니다</h1>
-                <div className="d-flex">
-                    {isLogin ? (//로그인
-                        <>
-                            로그인됨
-                        </>
-                    ) : (//로그아웃
-                        <>
-                            로그아웃됨
-                        </>
-                    )}
-                </div>
+                
                 <div className="mb-4">
                     <button className="btn btn-outline-secondary">
-                        <NavLink to="/user/login">로그인</NavLink>
+                        <NavLink to="/login">로그인</NavLink>
                     </button>
                     <button className="btn btn-outline-secondary">
-                        <NavLink to="/user/nonUser">비회원 예매</NavLink>
+                        <NavLink to="/nonUser">비회원 예매</NavLink>
                     </button>
                     <button className="btn btn-outline-secondary">
-                        <NavLink to="/user/nonUserCheck">비회원 예매확인</NavLink>
+                        <NavLink to="/nonUserCheck">비회원 예매확인</NavLink>
                     </button>
                 </div>
             </div>
@@ -43,4 +34,4 @@ function nonUser() {
     )
 }
 
-export default nonUser;
+export default NonUser;

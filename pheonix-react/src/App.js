@@ -24,7 +24,7 @@ import SeatStatus from './components/admin/SeatsTypes/SeatStatus';
 import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
 import Mypage from './components/user/Mypage';
-import NonUser from './components/user/nonUser';
+import NonUser from './components/user/NonUser';
 
 import { isLoginState, loginIdState, loginGradeState } from "./components/utils/RecoilData";
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -99,6 +99,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/join' element={<Join />} />
         <Route path='/nonUser' element={<NonUser />} />
+
         {isLogin &&
           <Route path='/mypage' element={<Mypage />} />
         }
