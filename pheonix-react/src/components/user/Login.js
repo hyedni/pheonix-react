@@ -20,6 +20,7 @@ const firebaseConfig = {
 };
 
 function Login() {
+
     const isLogin = useRecoilValue(isLoginState);
     //state
     const [user, setUser] = useState({
@@ -31,7 +32,7 @@ function Login() {
     const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
 
     //callback
-    const changeUser = useCallback((e)=>{
+    const changeUser = useCallback((e) => {
         const { name, value } = e.target;
 
         setUser({
@@ -43,25 +44,31 @@ function Login() {
     //navigator
     const navigator = useNavigate();
 
-    const login = async () =>{
-        if (user.userId.length === 0) return;
-        if (user.userPw.length === 0) return;
+    const login = useCallback(async () => {
+        try {
+            if (user.userId.length === 0) throw new Error("사용자 ID를 입력하세요.");
+            if (user.userPw.length === 0) throw new Error("비밀번호를 입력하세요.");
 
-        const resp = await axios.post('/user/login', user);
-        console.log(resp.data);
-        setLoginId(resp.data.userId);
-        setLoginGrade(resp.data.userGrade);
-        
-        //accessToken은 이후의 axios 요청에 포함시켜서 서버로 가져가야 한다
-        //-> 이 순간 이후로 모든 요청의 header에 Authorization이라는 이름으로 토큰을 첨부하겠다
-        axios.defaults.headers.common['Authorization'] = resp.data.accessToken;
+            const resp = await axios.post(`http://localhost:8080/user/login`, user);
+            console.log(resp.data);
+            setLoginId(resp.data.userId);
+            setLoginGrade(resp.data.userGrade);
 
-        //(+추가) refreshToken을 localStroage에 저장
-        window.localStorage.setItem("refreshToken", resp.data.refreshToken);
+            // accessToken은 이후의 axios 요청에 포함시켜서 서버로 가져가야 합니다.
+            // 이 순간 이후로 모든 요청의 header에 Authorization이라는 이름으로 토큰을 첨부하겠습니다.
+            axios.defaults.headers.common['Authorization'] = resp.data.accessToken;
 
-        //강제 페이지 이동 - useNavigate()
-        //navigator("/");
-    };
+            // refreshToken을 localStorage에 저장합니다.
+            window.localStorage.setItem("refreshToken", resp.data.refreshToken);
+
+            // 강제 페이지 이동을 하고자 한다면 여기에 코드를 추가합니다.
+            navigator("/");
+
+        } catch (error) {
+            // 로그인 과정에서 오류가 발생한 경우 오류를 콘솔에 기록합니다.
+            console.error("로그인 오류:", error.message);
+        }
+    }, [user]);
 
     const handleGoogleLogin = () => {
         const app = initializeApp(firebaseConfig);
@@ -87,33 +94,35 @@ function Login() {
     };
 
 
+
     return (
         <>
-            <h1>회원가입 화면입니다</h1>
-            <div className="d-flex">
-                {isLogin ? (//로그인
-                    <>
-                        로그인됨
-                    </>
-                ) : (//로그아웃
-                    <>
-                        로그아웃됨
-                    </>
-                )}
-            </div>
-
-            <div>
-                <button className="clicked">로그인</button>
-                <button>
-                    <NavLink to="/non-user">비회원예매</NavLink>
-                </button>
-                <button>
-                    <NavLink to="/non-user-check">비회원 예매확인</NavLink>
-                </button>
-            </div>
-
 
             <div className="container mt-4" style={{ maxWidth: "400px" }}>
+                <h1>회원가입 화면입니다</h1>
+                <div className="d-flex">
+                    {isLogin ? (//로그인
+                        <>
+                            로그인됨
+                        </>
+                    ) : (//로그아웃
+                        <>
+                            로그아웃됨
+                        </>
+                    )}
+                </div>
+                <div className="mb-4">
+                    <button className="btn btn-outline-secondary">
+                        <NavLink to="/user/login">로그인</NavLink>
+                    </button>
+                    <button className="btn btn-outline-secondary">
+                        <NavLink to="/user/nonUser">비회원 예매</NavLink>
+                    </button>
+                    <button className="btn btn-outline-secondary">
+                        <NavLink to="/user/nonUserCheck">비회원 예매확인</NavLink>
+                    </button>
+                </div>
+
                 <div className="row">
                     <div className="col">
                         <label>아이디:</label>
