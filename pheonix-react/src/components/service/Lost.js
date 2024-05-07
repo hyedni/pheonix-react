@@ -2,6 +2,7 @@ import axios from "../utils/CustomAxios";
 import { useCallback, useEffect, useRef, useState } from "react";
 import Modal from 'bootstrap/js/dist/modal'; // 모달 라이브러리 import 추가
 import { NavLink } from 'react-router-dom';
+import './Lost.css'
 
 const Lost = () => {
     const [losts, setLosts] = useState([]);
