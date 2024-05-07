@@ -27,6 +27,8 @@ function Login() {
         userId: "", userPw: ""
     });
 
+    const [userData, setUserData] = useState(null);
+
     //recoil
     const [loginId, setLoginId] = useRecoilState(loginIdState);
     const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
@@ -49,7 +51,7 @@ function Login() {
             if (user.userId.length === 0) throw new Error("사용자 ID를 입력하세요.");
             if (user.userPw.length === 0) throw new Error("비밀번호를 입력하세요.");
 
-            const resp = await axios.post(`http://localhost:8080/user/login`, user);
+            const resp = await axios.post(`http://localhost:8080/login`, user);
             console.log(resp.data);
             setLoginId(resp.data.userId);
             setLoginGrade(resp.data.userGrade);
@@ -78,10 +80,12 @@ function Login() {
         auth.languageCode = "ko";
 
         signInWithPopup(auth, provider)
-            .then((result) => {
+            .then((result) => { // data 매개변수 제거
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
                 const user = result.user;
+                setUserData(user); // 사용자 정보 설정
+                console.log(user); // 사용자 정보 출력
                 console.log(result);
             })
             .catch((error) => {
@@ -91,7 +95,7 @@ function Login() {
                 const credential = GoogleAuthProvider.credentialFromError(error);
                 console.error(error);
             });
-    };
+    }; 
 
 
 
@@ -100,26 +104,16 @@ function Login() {
 
             <div className="container mt-4" style={{ maxWidth: "400px" }}>
                 <h1>회원가입 화면입니다</h1>
-                <div className="d-flex">
-                    {isLogin ? (//로그인
-                        <>
-                            로그인됨
-                        </>
-                    ) : (//로그아웃
-                        <>
-                            로그아웃됨
-                        </>
-                    )}
-                </div>
+
                 <div className="mb-4">
                     <button className="btn btn-outline-secondary">
-                        <NavLink to="/user/login">로그인</NavLink>
+                        <NavLink to="/login">로그인</NavLink>
                     </button>
                     <button className="btn btn-outline-secondary">
-                        <NavLink to="/user/nonUser">비회원 예매</NavLink>
+                        <NavLink to="/nonUser">비회원 예매</NavLink>
                     </button>
                     <button className="btn btn-outline-secondary">
-                        <NavLink to="/user/nonUserCheck">비회원 예매확인</NavLink>
+                        <NavLink to="/nonUserCheck">비회원 예매확인</NavLink>
                     </button>
                 </div>
 
