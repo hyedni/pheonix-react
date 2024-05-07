@@ -2,31 +2,18 @@ import { useCallback, useEffect, useState } from "react";
 import axios from "../utils/CustomAxios";
 import './AdminCinema.css';
 import { FaCirclePlus } from "react-icons/fa6";
+import { useActionData, useNavigate } from 'react-router';
 
 function AdminTheater() {
     const [cinemas, setCinemas] = useState([]);
     const [theaters, setTheaters] = useState([]);
-    const [cinemaFind, setCinemaFind] = useState({
-        cinemaNo: '',
-        cinemaName: '',
-        cinemaTotalTheater: '',
-        cinemaRegion: '',
-        cinemaPost: '',
-        cinemaAddress1: '',
-        cinemaAddress2: '',
-        cinemaManager: '',
-        cinemaManagerCall: '',
-        cinemaCall: ''
-    });
+    const useNavigate = useNavigate();
+
     //번호만 따로 관리 
     const [cinemaNo, setCinemaNo] = useState('');
 
-    const [isAddVisible, setIsAddVisible] = useState(false);
     const [isListVisible, setIsListVisible] = useState(false);
 
-    const showAddDiv= () => {
-        setIsAddVisible(true);
-    };
     const showListDiv = () => {
         setIsListVisible(true);
     }
@@ -44,14 +31,9 @@ function AdminTheater() {
         showListDiv();       
     }, [cinemas]);
 
-    // const selectedRegion = useCallback(async (target) => {
-    //     setRegion({
-    //         cinemaNo: target.cinemaNo
-    //     });
-    //     const resp = await axios.get("/cinema/" + target.cinemaNo);
-    //     setDetailCinema(resp.data);
-    //     setIsEdit({ edit: false });
-    // }, [region]);
+    const addTheater = useCallback((cinemaNo) => {
+        navigate('이동할화면');
+    }, []);
     
     useEffect(() => {
         loadCinemaList();
@@ -76,8 +58,8 @@ function AdminTheater() {
 
             <div className="row">
                 <div className="offset-2 col-lg-8">
-                    <div className="mb-3">
-                        1단계 영화관 선택
+                    <div className="mt-3 mb-3" style={{fontWeight:'bold', fontSize:'25px'}}>
+                        <span style={{color:'rgb(240, 86, 86)'}}>1단계</span> 영화관 선택
                     </div>
 
                     <div className='cinema-wrapper2 table-responsive'>
@@ -102,11 +84,12 @@ function AdminTheater() {
                 </div>
             </div>
 
-            <div className="row" style={{ display: isListVisible ? 'block' : 'none' }}>
+            <div className="row mb-5" style={{ display: isListVisible ? 'block' : 'none' }}>
                 <div className="offset-2 col-lg-8">
-                    <div className="mb-3">
-                        2단계 상영관 조회/수정
-                        <FaCirclePlus style={{ marginBottom: '10px', color:'rgb(240, 86, 86)'}} onClick={showAddDiv}/>
+                    <div className="mb-3" style={{fontWeight:'bold', fontSize:'25px'}}>
+                        <span style={{color:'rgb(240, 86, 86)'}}>2단계</span> 상영관 조회/수정
+                        <button className="btn btn-secondary ms-4" style={{fontWeight:'bold'}} onClick={e => addTheater(cinemaNo)}>신규등록</button>
+
                     </div>
 
                     <div>
@@ -123,25 +106,12 @@ function AdminTheater() {
                                     <tr key={theater.theaterNo}>
                                         <td>{theater.theaterNo}</td>
                                         <td>{theater.theaterName}</td>
-                                        <td>{theater.theaterTotalSeats}</td>
+                                        <td>{theater.theaterTotalSeats} 석</td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
                     </div>
-                </div>
-            </div>
-
-            <div className="row" style={{ display: isAddVisible ? 'block' : 'none' }}>
-                <div className="offset-2 col-lg-8">
-                    <h3>3단계 상영관 등록</h3>
-                </div>
-            </div>
-
-
-            <div className="row">
-                <div className="offset-2 col-lg-8">
-                    <button className="btn btn-secondary">좌석설정</button>
                 </div>
             </div>
 
