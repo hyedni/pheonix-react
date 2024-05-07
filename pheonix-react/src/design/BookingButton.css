@@ -1,0 +1,31 @@
+.booking-button {
+    position: fixed;
+    right: 80px;  /* 오른쪽 여백 */
+    bottom: 100px; /* 하단 여백 */
+    padding: 15px 30px;  /* 패딩 증가 */
+    font-size: 18px;  /* 폰트 사이즈 증가 */
+    background-image: linear-gradient(to right, rgb(251,73,83), rgb(254,130,86));  /* 그라데이션 효과*/
+    color: white;
+    border: none;
+    font-weight: bold;
+    border-radius: 30px;
+    cursor: pointer;
+    z-index: 1000;  /* 다른 요소 위에 표시 */
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+    margin-right: 5px;
+}
+
+.scroll-to-top {
+    position: fixed;
+    right: 30px;
+    bottom: 100px;
+    padding: 7px 10px;
+    background-color: white; /* 어두운 회색으로 설정 */
+    color: black;
+    font-size: 28px;  /* 폰트 사이즈 증가 */
+    border: none;
+    border-radius: 50px;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); 
+}

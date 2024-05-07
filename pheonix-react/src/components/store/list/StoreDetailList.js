@@ -27,6 +27,7 @@ const StoreDetailList = () => {
     //state
     const { productNo } = useParams(); //파라미터에서 번호 추출
     const [products, setProducts] = useState({});
+    const [imagePreview] = useState(null);
     //회원 아이디
     //const { userId } = useRecoilState(loginIdState);
     //상품 수량 정보
@@ -126,8 +127,15 @@ const StoreDetailList = () => {
             <div className="row justify-content-center">
                 <div className="col-lg-8 content-body">
                     <div className="row">
-                        <div className="col-4">
-                            이미지
+                        <div className="col-4">   
+                        <div className="img-thumbnail mt-3 image-wrapper list-img" style={{ height: "400px" }}>
+                            {!imagePreview && (
+                                <img src={products.productImgLink}  alt="상품이미지" />
+                            )}
+                            {imagePreview && (
+                                <img src={imagePreview} alt="Preview"  />
+                            )}
+                        </div>
                         </div>
                         <div className="col-8">
                             <div>

@@ -2,7 +2,11 @@ import './AdminMovie.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from "../utils/CustomAxios";
 import { Link, useLinkClickHandler } from 'react-router-dom';
-import { CiEdit } from "react-icons/ci";
+import { TbNumber12Small } from "react-icons/tb";
+import { TbNumber15Small } from "react-icons/tb";
+import { TbNumber19Small } from "react-icons/tb";
+import { FaCirclePlus } from "react-icons/fa6";
+
 
 
 
@@ -24,6 +28,20 @@ function AdminMovie() {
         movieDirector: '',
         movieActor: ''
     });
+
+    //관람등급 아이콘
+    const getAgeIcon = (movieAge) => {
+        switch (movieAge) {
+            case '12세 이상':
+                return <TbNumber12Small style={{ fontSize: '30px', backgroundColor: 'yellow', borderRadius: '10px' }} />;
+            case '15세 이상':
+                return <TbNumber15Small style={{ fontSize: '30px', backgroundColor: 'orange', borderRadius: '10px' }} />;
+            case '청소년관람불가':
+                return <TbNumber19Small style={{ fontSize: '30px', backgroundColor: 'red', borderRadius: '10px' }} />;
+            case '전체관람가':
+                return <span style={{ fontSize: '15px', color: 'white', fontWeight: 'bold', backgroundColor: 'green', borderRadius: '10px', width: '10px', padding: '5px' }}>all</span>;
+        }
+    };
     //첨부파일관련
     const [file, setFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
@@ -55,13 +73,14 @@ function AdminMovie() {
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
                         영화 관리
-                        <Link to="/newMovie" className="btn btn-primary ms-5">
-                            신규 영화 등록
+                        <Link to="/newMovie" className="ms-3">
+                            <FaCirclePlus style={{ marginBottom: '10px', color:'rgb(240, 86, 86)' }} />
                         </Link>
+
                     </div>
                 </div>
             </div>
-            <hr/>
+            <hr />
 
             <div className="row">
                 <div className="offset-2 col-lg-9">
@@ -72,6 +91,7 @@ function AdminMovie() {
                                 <div className='admin-flex-box mt-2'>
                                     <input type="hidden" value={movie.movieNo} />
                                     <span style={{ fontSize: '20px', fontWeight: 'bold' }} className='ms-2'>{movie.movieTitle}</span>
+                                    <span> {getAgeIcon(movie.movieAge)}</span>
                                 </div>
                                 <hr />
                                 <div className='image-wrapper'>
@@ -79,15 +99,27 @@ function AdminMovie() {
                                     <Link to={`/movieEdit/${movie.movieNo}`} className='edit-button btn btn-secondary'>
                                         조회/수정
                                     </Link>
-                                    <button onClick={e => deleteMovie(movie)} className='delete-button btn btn-primary'>
+                                    <button onClick={e => deleteMovie(movie)} className='delete-button btn btn-primary' style={{ margin: '0px' }}>
                                         바로삭제
                                     </button>
                                 </div>
                                 <hr />
-                                <div className='content-wrapper'>
-                                    <span>개봉일 {movie.movieOpenDate}</span>
-                                    <br />
-                                    <span>{movie.movieOn === 'Y' ? '상영중' : '미개봉'} </span>
+                                <div className='d-flex justify-content-between mb-2'>
+                                    <div>
+                                        <span style={{ fontWeight: 'bold', color: 'gray' }}>{movie.movieOpenDate} 개봉</span>
+                                    </div>
+                                    <div>
+                                        <span style={{ fontWeight: 'bold', color: 'red' }}>{movie.movieOn === 'Y' ? '절찬상영중' : ''} </span>
+                                    </div>
+                                </div>
+                                <div className='d-flex justify-content-between mb-2'>
+                                    <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 0.00%</span>
+                                </div>
+                                {/* recoil값 검사해서 포스터위에 버튼으로 추가할 것 */}
+                                <div className='d-flex justify-content-between'>
+                                    <Link to={`/movieEdit/${movie.movieNo}`} style={{ textDecoration: 'none', fontWeight: 'bold' }}>
+                                        예매하기
+                                    </Link>
                                 </div>
                             </div>
                         ))}

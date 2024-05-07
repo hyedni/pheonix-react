@@ -1,0 +1,166 @@
+th {
+    font-size: 1.2em; /* 예시로 텍스트를 1.2em 크기로 키웁니다. */
+    border-bottom: 2px solid black; /* 아래쪽에 검은색 선 추가 */
+}
+
+.product-info {
+    display: flex;
+    align-items: center; /* 이미지와 텍스트를 수직 정렬 */
+    gap: 10px; /* 이미지와 텍스트 사이의 간격 조정 */
+}
+
+.product-info-text {
+    font-weight: bold; /* 굵은 텍스트 */
+    margin-top: 0;
+    padding-top: 0;
+    font-size: 1.2em;
+}
+
+.delete-button-container {
+    margin-top: 5px; /* 링크와의 간격 조정 */
+    text-align: right;
+}
+
+
+.large-checkbox {
+    width: 20px; /* Large size */
+    height: 20px; /* Large size */
+}
+
+.img-preview {
+    width: 90px;
+    height: 90px;
+}
+
+.font-large {
+    font-size: 1.2em; /* Larger font size */
+}
+
+.original-price {
+    text-decoration: line-through; /* Strike-through effect */
+}
+
+.action-buttons-container {
+    display: flex;
+    /* justify-content: center; 가로 방향 가운데 정렬 */
+    margin-top: 10px;
+}
+
+.edit-buttons,
+.delete-button-container {
+    display: flex;
+    flex-direction: column;
+    align-items: center; /* 세로 방향 가운데 정렬 */
+}
+
+.delete-button {
+    margin-top: 20px;
+    text-align: right;
+    margin-left: 5px; /* 추가된 부분 */
+    align-items: center; /* 세로 방향 가운데 정렬 */
+    justify-content: center; /* 가로 방향 가운데 정렬 */
+}
+
+
+
+.custom-qty-container {
+    display: flex;
+    align-items: center;
+    width: 100px; /* 필요에 따라 너비 조절 */
+}
+
+.qty-value {
+    margin-right: 10px; /* 왼쪽 여백 추가 */
+}
+
+.qty-buttons {
+    display: flex;
+    flex-direction: column; /* 버튼들을 세로로 배치 */
+}
+
+.qty-button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+    margin: 2px 0; /* 버튼 사이의 간격 설정 */
+}
+
+.outline-design {
+    background-color: #fff; /* 전체 배경색 */
+    border: 2px solid #ccc; /* 테이블 외곽선 */
+    border-radius: 8px; /* 모서리 둥글게 */
+    overflow: hidden; /* 둥근 모서리에 맞춰 내용물을 자름 */
+    box-shadow: 0 2px 5px rgba(0,0,0,0.1); /* 그림자 효과 */
+}
+
+.header-line {
+    font-weight: bold; /* 글자 굵게 */
+    background-color: #f8f9fa; /* 약간 다른 배경색 */
+}
+
+.section-design {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+    border-right: 1px solid #ccc; /* 각 칼럼 사이의 구분선 */
+}
+.section-design-last {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+
+.bottom-line {
+    border-bottom: 1px solid #ccc;
+}
+
+.section-design2 {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+.section-design2-mid {
+    padding: 10px 15px; /* 적당한 패딩 */
+    text-align: center; /* 텍스트 중앙 정렬 */
+}
+.section-design2-icon {
+    display: flex;
+    justify-content: space-between;
+}
+
+.section-design2 .section-design2-mid {
+    display: flex;
+    align-items: center;
+}
+
+/* 구매 과정 메뉴 바*/
+.purchase-menu {
+    display: flex;
+    justify-content: space-between;
+    list-style-type: none;
+    padding: 0;
+}
+
+.purchase-menu li {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.purchase-menu li span {
+    font-size: 14px;
+}
+
+.purchase-menu li strong {
+    font-size: 18px;
+    margin-top: 5px;
+}
+
+.purchase-menu .icon {
+    margin-top: 15px;
+    font-size: 24px; /* 아이콘 크기 조정 */
+}
+
+.activeColor {
+    color: #B40404; 
+}
+
+

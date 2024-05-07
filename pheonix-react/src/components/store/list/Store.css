@@ -1,35 +1,203 @@
+.list-img {
+  width: 300px; /* 너비를 100%로 설정 */
+  height: 400px; /* 높이 설정 */
+  overflow: hidden; /* 넘치는 이미지는 숨김 */
+  display: flex; /* 이미지를 가운데 정렬하기 위해 flex 사용 */
+  justify-content: center;
+  align-items: center;
+}
+
 .quantity-container {
     display: flex;
     align-items: center;
   }
   
-  .quantity-button {
-    border: none;
-    background-color: transparent;
-    cursor: pointer;
-    width: 60px; /* 원하는 너비로 설정 */
-    font-size: 1.2em;
-  }
-  
-  .quantity-span {
-    width: 50%;
-    text-align: center;
-    font-weight: bold; /* 굵은 글꼴 */
-    font-size: 1.2em; /* 원하는 폰트 크기로 설정 */
-  }
-  
-  .total-design-right {
-    margin : 4px;
-    text-align: right;
-    font-weight: bold;
-    font-size: 1.5em;
-  }
-  .total-design-left {
-    margin : 4px;
-    font-weight: bold;
-    font-size: 1.5em;
-  }
+.quantity-button {
+  border: none;
+  background-color: transparent;
+  cursor: pointer;
+  width: 60px; /* 원하는 너비로 설정 */
+  font-size: 1.2em;
+}
 
-  li {
-    margin-top : 6px;
-  }
+.quantity-span {
+  width: 50%;
+  text-align: center;
+  font-weight: bold; /* 굵은 글꼴 */
+  font-size: 1.2em; /* 원하는 폰트 크기로 설정 */
+}
+
+.total-design-right {
+  margin : 4px;
+  text-align: right;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+.total-design-left {
+  margin : 4px;
+  font-weight: bold;
+  font-size: 1.5em;
+}
+
+li {
+  margin-top : 6px;
+}
+
+
+.item-wrapper {
+  height:500px;
+  border-radius: 10px;
+  padding: 0.5em;
+  margin-right: 100px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.1);
+  word-break: keep-all;
+  overflow: auto;
+}
+
+.item-wrapper img {
+  max-width: 100%;  /* 너비를 부모 요소에 맞춤 */
+  max-height: 100%; /* 높이를 부모 요소에 맞춤 */
+  height: auto;     /* 비율 유지 */
+  object-fit: cover;  /* 이미지가 비율을 유지하며 컨테이너를 채우도록 조정 */
+}
+
+.image-wrapper {
+  padding: 0.5em;
+  height: 280px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+/*이미지 위 hover시 버튼 생성*/
+.image-wrapper .edit-button {
+  position: absolute;
+  top: calc(50% - 20px); /* 버튼을 조금 위로 올림 */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 10;
+}
+
+.image-wrapper .delete-button {
+  position: absolute;
+  top: calc(50% + 25px); /* 버튼을 조금 아래로 내림 */
+  left: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  transition: opacity 0.5s ease;
+  z-index: 10;
+}
+
+/*이미지 위 hover시 버튼 생성*/
+.image-wrapper::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5); /* 검정색, 50% 불투명도 */
+  opacity: 0; /* 초기 상태에서는 보이지 않음 */
+  transition: opacity 0.5s ease;
+}
+.image-wrapper:hover::after {
+  opacity: 0.5; /* 이미지 불투명하게 */
+}
+
+/*이미지 위 hover시 버튼 생성*/
+.image-wrapper:hover .edit-button,
+.image-wrapper:hover .delete-button {
+  opacity: 1; /* 버튼 표시 */
+}
+
+.content-wrapper {
+  height: 70px;
+  max-width: 100%;  /* 너비를 부모 요소에 맞춤 */
+  max-height: 100%; /* 높이를 부모 요소에 맞춤 */
+}
+
+/*입력한 text가 div 정중앙에 오도록*/
+.input-content {
+  text-align: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border-radius: 5px;
+ 
+}
+
+.admin-flex-box {
+  display: flex;
+  justify-content: space-between; /* 번호와 버튼이 양쪽 끝으로 정렬되도록 함 */
+  align-items: center; /* 세로 중앙 정렬 */
+  width: 100%; /* 전체 너비 사용 */
+}
+
+.list-img {
+  width: 300px; /* 너비를 100%로 설정 */
+  height: 50px; /* 높이 설정 */
+  overflow: hidden; /* 넘치는 이미지는 숨김 */
+  display: flex; /* 이미지를 가운데 정렬하기 위해 flex 사용 */
+  justify-content: center;
+  align-items: center;
+}
+
+.list-img img {
+  width: auto; /* 이미지의 원래 비율을 유지 */
+  height: 100%; /* 높이는 미리보기 영역에 맞춤 */
+}
+
+.datePicker {
+  display: flex;
+  align-items: center;
+  border-style: none;
+  border-radius: 10px;
+  background-color: rgb(213, 34, 14);
+  box-sizing: border-box;
+  width: 100%;
+  height: 46px;
+  color: white;
+  text-align: center;
+  padding-right: 10px;
+}
+
+
+.list-img .edit-button,
+.list-img .delete-button,
+.list-img .btn {
+  position: absolute;
+  top: 50%; /* 이미지 상단으로부터 50% 위치 */
+  transform: translateY(-50%); /* 세로 중앙 정렬 */
+  width: 60px; /* 버튼 너비 설정 */
+  height: 60px; /* 버튼 높이 설정 */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  transition: opacity 0.5s ease; /* 투명도 변화를 부드럽게 처리 */
+  opacity: 0; /* 초기 투명도는 0 */
+}
+
+.list-img:hover .btn-secondary {
+  opacity: 1; /* 마우스를 올리면 투명도 1로 변경 */
+}
+
+.list-img .edit-button { /*구매하기 버튼*/
+  left: 39%; /* 첫 번째 버튼 왼쪽에서 15% 위치 */
+}
+
+.list-img .btn:nth-child(2) {/*장바구니 버튼 */
+  left: 12%; /* 두 번째 버튼 왼쪽에서 50% 위치 */
+}
+
+.list-img .btn:nth-child(3) { /*선물하기 버튼*/
+  left: 66%; /* 세 번째 버튼 왼쪽에서 85% 위치 */
+}
+
+
+.list-img .btn svg {
+  width: 70%; /* 아이콘 크기 설정 */
+  height: auto; /* 비율 유지 */
+}

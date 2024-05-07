@@ -19,6 +19,7 @@
     padding: 0; /* 기본 패딩 제거 */
     gap: 20px; /* 각 항목 사이의 간격 */
     word-break: keep-all;
+    flex-wrap: wrap;
 }
 
 .region-wrapper {
@@ -40,4 +41,11 @@
     padding: 15px;
     margin-bottom: 50px;
 }
-
+.inner-ul li {
+    border-right: 1px solid gray;
+    flex: 0 0 9%;  
+    max-width: 14%;  
+    box-sizing: border-box; 
+    margin-bottom: 10px;  
+    white-space: nowrap;  
+}
