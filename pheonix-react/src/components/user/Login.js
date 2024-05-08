@@ -51,7 +51,7 @@ function Login() {
             if (user.userId.length === 0) throw new Error("사용자 ID를 입력하세요.");
             if (user.userPw.length === 0) throw new Error("비밀번호를 입력하세요.");
 
-            const resp = await axios.post(`http://localhost:8080/login`, user);
+            const resp = await axios.post(`http://localhost:8080/user/login`, user);
             console.log(resp.data);
             setLoginId(resp.data.userId);
             setLoginGrade(resp.data.userGrade);
