@@ -158,11 +158,15 @@ const Personal = () => {
                 <img src="/image/personal.png" alt="Personal" />
             </div>
             <div className="text-end mb-3">
-                <NavLink to="/lost">분실물</NavLink>
-            </div>
-            <div className="text-end mb-3">
-                <NavLink to="/chatbot">Chatbot</NavLink>
-                </div>
+    <NavLink to="/lost">
+        <img src="/image/bunsil.png" alt="분실물" />
+    </NavLink>
+</div>
+<div className="text-end mb-3">
+    <NavLink to="/chatbot">
+        <img src="/image/chatbot.png" alt="Chatbot" />
+    </NavLink>
+</div>
             <div className="row justify-content-center">
                 <div className="col-lg-8">
                     <table className="table text-center">
@@ -190,9 +194,9 @@ const Personal = () => {
                 </div>
             </div>
             <div className="row justify-content-end">
-                <div className="col-lg-8 text-end">
-                    <button className="btn btn-positive" onClick={openWriteModal}>글쓰기</button>
-                </div>
+                    <div className="col-lg-8 text-end">
+                    <img src="/image/write.png" alt="글쓰기" onClick={openWriteModal} style={{ cursor: 'pointer' }} />
+                    </div>
             </div>
             <div className="modal fade" id="exampleModal" tabIndex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true" ref={bsModal}>
                 <div className="modal-dialog">
