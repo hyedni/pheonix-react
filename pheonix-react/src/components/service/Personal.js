@@ -15,6 +15,19 @@ const Personal = () => {
     const writeModal = useRef(null);
     const replyModal = useRef(null);
 
+    const closeModal = useCallback(() => {
+        const modal = Modal.getInstance(bsModal.current);
+        if (modal) {
+            modal.hide();
+        }
+    }, []);
+
+    const closeReplyModal = useCallback(() => {
+        const modal = Modal.getInstance(replyModal.current);
+        if (modal) {
+            modal.hide();
+        }
+    }, []);
 
     const loadData = useCallback(() => {
         axios({
@@ -53,7 +66,7 @@ const Personal = () => {
             });
             closeModal();
         });
-    }, [input, loadData]);
+    }, [input, loadData, closeModal]);
 
     const cancelInput = useCallback(() => {
         setInput({
@@ -62,7 +75,7 @@ const Personal = () => {
             personalContent:"",
         });
         closeModal();
-    }, []);
+    }, [closeModal]);
 
     const openWriteModal = useCallback(() => {
         setInput({
@@ -131,21 +144,6 @@ const Personal = () => {
             newModal.show();
         }
     }, []);
-
-     const closeModal = useCallback(() => {
-        const modal = Modal.getInstance(bsModal.current);
-        if (modal) {
-            modal.hide();
-        }
-    }, []);
-
-    const closeReplyModal = useCallback(() => {
-        const modal = Modal.getInstance(replyModal.current);
-        if (modal) {
-            modal.hide();
-        }
-    }, []);
-
 
     return (
         <div className="container">
