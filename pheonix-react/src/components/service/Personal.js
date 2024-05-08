@@ -111,7 +111,7 @@ const Personal = () => {
         setReplyContent(e.target.value);
     }, []);
 
-     const saveReply = useCallback(() => {
+    const saveReply = useCallback(() => {
         axios({
             url: `/personal/reply/${selectedPersonal.personalNo}`,
             method: "post",
@@ -120,20 +120,27 @@ const Personal = () => {
             }
         })
         .then(() => {
-            loadData();
-            setReplyContent("");
-            closeReplyModal();
-            // 답글이 저장된 후에 글 내용 모달에 해당 답글을 동적으로 추가
+            // 답글 저장 후, 선택된 개인 정보를 업데이트합니다.
             const newReply = {
                 replyContent: replyContent,
-                // 여기에 필요한 다른 속성들 추가
+                // 다른 필요한 속성 추가
             };
+    
             setSelectedPersonal(prevPersonal => ({
                 ...prevPersonal,
                 replies: [...(prevPersonal.replies || []), newReply] // 기존 답글 배열과 새로운 답글을 합침
             }));
+    
+            // 답글 저장 후, 모달 닫기
+            closeReplyModal();
+        })
+        .catch(error => {
+            // 오류 처리
+            console.error("Error saving reply:", error);
         });
-    }, [selectedPersonal, replyContent, loadData, closeReplyModal]);
+    }, [selectedPersonal, replyContent, closeReplyModal]);
+    
+    
     
     
     const openReplyModal = useCallback((selectedPersonal) => {
@@ -204,7 +211,7 @@ const Personal = () => {
                                             <p><strong>답글 {index + 1}:</strong> {reply.replyContent}</p>
                                         </div>
                                     ))}
-                                    <button type="button" className="btn btn-primary" onClick={() => openReplyModal(selectedPersonal)}>답글 작성</button>
+                                   <button type="button" className="btn btn-primary" onClick={() => openReplyModal(selectedPersonal)}>답글 작성</button>
                                 </>
                             )}
                         </div>
