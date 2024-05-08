@@ -7,7 +7,7 @@ import { useActionData, useNavigate } from 'react-router';
 function AdminTheater() {
     const [cinemas, setCinemas] = useState([]);
     const [theaters, setTheaters] = useState([]);
-    const useNavigate = useNavigate();
+    const navigate = useNavigate();
 
     //번호만 따로 관리 
     const [cinemaNo, setCinemaNo] = useState('');

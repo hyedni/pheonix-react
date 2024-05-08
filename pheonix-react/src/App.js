@@ -24,7 +24,7 @@ import SeatStatus from './components/admin/SeatsTypes/SeatStatus';
 import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
 import Mypage from './components/user/Mypage';
-import NonUser from './components/user/NonUser';
+import NonUser from './components/user/nonUser';
 
 import { isLoginState, loginIdState, loginGradeState } from "./components/utils/RecoilData";
 import { useRecoilState, useRecoilValue } from 'recoil';
