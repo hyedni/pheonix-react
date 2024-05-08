@@ -30,6 +30,7 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from "./components/utils/CustomAxios";
 import { useCallback, useEffect } from "react";
 import NonUser from './components/user/NonUser'; 
+import BookingListPage from './components/booking/BookingListPage';
 
 
 
@@ -121,6 +122,10 @@ function App() {
         <Route path='/writepost' element={<WritePost />} />
         <Route path='/personal' element={<Personal />} />
         <Route path='/chatbot' element={<Chatbot/>}/>
+       
+        {/* 예매 */}
+        <Route path='/booking' element={<BookingListPage />} />
+
       </Routes >
 
       <Footer />
