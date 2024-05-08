@@ -2,8 +2,6 @@ import axios from "../utils/CustomAxios";
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { NavLink } from 'react-router-dom';
 import Modal from 'bootstrap/js/dist/modal';
-import Chatbot from '../../chatbot/chatbot.js';
-
 
 const Personal = () => {
     const [personals, setPersonals] = useState([]);
@@ -16,12 +14,6 @@ const Personal = () => {
     const bsModal = useRef(null);
     const writeModal = useRef(null);
     const replyModal = useRef(null);
-
-
-    const openChatbot = () => {
-        // chatbot.js에 정의된 함수를 호출하여 Chatbot을 열도록 처리
-        window.openChatbot(); // chatbot.js에 정의된 함수명에 따라 변경해야 할 수도 있습니다.
-    };
 
 
     const loadData = useCallback(() => {
@@ -106,7 +98,7 @@ const Personal = () => {
         setReplyContent(e.target.value);
     }, []);
 
-    const saveReply = useCallback(() => {
+     const saveReply = useCallback(() => {
         axios({
             url: `/personal/reply/${selectedPersonal.personalNo}`,
             method: "post",
@@ -128,18 +120,22 @@ const Personal = () => {
                 replies: [...(prevPersonal.replies || []), newReply] // 기존 답글 배열과 새로운 답글을 합침
             }));
         });
-    }, [selectedPersonal, replyContent, loadData]);
+    }, [selectedPersonal, replyContent, loadData, closeReplyModal]);
     
-
+    
     const openReplyModal = useCallback((selectedPersonal) => {
         setSelectedPersonal(selectedPersonal);
-
-        // 모달 창이 이미 열려 있는지 확인
         const modal = Modal.getInstance(replyModal.current);
         if (!modal) {
-            // 모달 창이 열려 있지 않으면 새로 열기
             const newModal = new Modal(replyModal.current);
             newModal.show();
+        }
+    }, []);
+
+     const closeModal = useCallback(() => {
+        const modal = Modal.getInstance(bsModal.current);
+        if (modal) {
+            modal.hide();
         }
     }, []);
 
@@ -150,14 +146,6 @@ const Personal = () => {
         }
     }, []);
 
-    const closeModal = useCallback(() => {
-        const modal = Modal.getInstance(bsModal.current);
-        if (modal) {
-            modal.hide();
-        }
-
-      
-    }, []);
 
     return (
         <div className="container">
@@ -166,9 +154,6 @@ const Personal = () => {
             </div>
             <div className="text-end mb-3">
                 <NavLink to="/lost">분실물</NavLink>
-            </div>
-            <div className="text-end mb-3">
-                <NavLink to="/chatbot">chatbot</NavLink>
             </div>
             <div className="row justify-content-center">
                 <div className="col-lg-8">
@@ -183,7 +168,7 @@ const Personal = () => {
                         </thead>
                         <tbody>
                             {personals.map((item, index) => (
-                               <tr key={index} onClick={() => openContentModal(item)} style={{ cursor: 'pointer' }}>
+                                <tr key={index} onClick={(e) => { e.preventDefault(); openContentModal(item); }} style={{ cursor: 'pointer' }}>
                                     <td>{item.personalNo}</td>
                                     <td><strong><a href="#" onClick={() => openContentModal(item)}>{item.personalTitle}</a></strong></td>
                                     <td>{item.personalId}</td>
@@ -208,23 +193,20 @@ const Personal = () => {
                             <h5 className="modal-title" id="exampleModalLabel">{selectedPersonal && selectedPersonal.personalTitle}</h5>
                             <button type="button" className="btn-close" data-bs-dismiss="modal" aria-label="Close" onClick={cancelInput}></button>
                         </div>
-                       
-        <div className="modal-body">
-            {selectedPersonal && (
-                <>
-                    <p><strong>글쓴이:</strong> {selectedPersonal.personalId}</p>
-                    <p><strong>내용:</strong> {selectedPersonal.personalContent}</p>
-                    {/* 답글 내용 추가 */}
-                    {selectedPersonal.replies && selectedPersonal.replies.map((reply, index) => (
-                        <div key={index}>
-                            <p><strong>답글 {index + 1}:</strong> {reply.replyContent}</p>
+                        <div className="modal-body">
+                            {selectedPersonal && (
+                                <>
+                                    <p><strong>글쓴이:</strong> {selectedPersonal.personalId}</p>
+                                    <p><strong>내용:</strong> {selectedPersonal.personalContent}</p>
+                                    {selectedPersonal.replies && selectedPersonal.replies.map((reply, index) => (
+                                        <div key={index}>
+                                            <p><strong>답글 {index + 1}:</strong> {reply.replyContent}</p>
+                                        </div>
+                                    ))}
+                                    <button type="button" className="btn btn-primary" onClick={() => openReplyModal(selectedPersonal)}>답글 작성</button>
+                                </>
+                            )}
                         </div>
-                    ))}
-                    <button type="button" className="btn btn-primary" onClick={() => openReplyModal(selectedPersonal)}>답글 작성</button>
-                </>
-            )}
-        </div>
-    
                     </div>
                 </div>
             </div>
@@ -285,7 +267,7 @@ const Personal = () => {
                 </div>
             </div>
         </div>
-       );
-    };
+    );
+};
     
-    export default Personal;
+export default Personal;
