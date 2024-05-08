@@ -78,7 +78,6 @@ function Htemplate() {
                             <li className="nav-item dropdown">
                                 <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">영화</NavLink>
                                 <div className="dropdown-menu">
-                                    <NavLink className="dropdown-item" href="#">예매</NavLink>
                                     <NavLink className="dropdown-item" href="#">something</NavLink>
                                     <NavLink className="dropdown-item" href="#">Something</NavLink>
                                     {/* <div className="dropdown-divider"></div>
@@ -98,7 +97,7 @@ function Htemplate() {
                             <li className="nav-item dropdown">
                                 <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">예매</NavLink>
                                 <div className="dropdown-menu">
-                                    <NavLink className="dropdown-item" href="#">Action</NavLink>
+                                    <NavLink className="dropdown-item" to="/booking">예매</NavLink>
                                     <NavLink className="dropdown-item" href="#">Another action</NavLink>
                                     <NavLink className="dropdown-item" href="#">Something else here</NavLink>
                                     {/* <div className="dropdown-divider"></div>
