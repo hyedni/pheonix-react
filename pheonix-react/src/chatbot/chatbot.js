@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import SockJS from 'sockjs-client';
-import './chatbot.css'; // 스타일 파일 import
+import './chatbot.css'; // 스타일 파일 import ㅇ
 
 function Chatbot() { 
   const [socket, setSocket] = useState(null);

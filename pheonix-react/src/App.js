@@ -120,6 +120,7 @@ function App() {
         <Route path='/lost' element={<Lost />} />
         <Route path='/writepost' element={<WritePost />} />
         <Route path='/personal' element={<Personal />} />
+        <Route path='/chatbot' element={<Chatbot/>}/>
       </Routes >
 
       <Footer />
