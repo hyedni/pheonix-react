@@ -7,13 +7,29 @@ function BookingListPage() {
     const [isTheaterShow, setIsTheaterShow] = useState(false);
 
     //전체데이터(Vo)담긴 state
-    const [bookData, setBookData] = useState([]);
-    //영화명 
-    const [movieData, setMovieData] = useState([]); 
+    const [bookData, setBookData] = useState({
+        movieNo: '',
+        cinemaName: '',
+        cinemaRegion: '',
+        theaterName: '',
+        theaterTotalSeats: '',
+        startDate: '',
+        endDate: '',
+        startTime: '',
+        endTime: '',
+        remainingSeats: '',
+        movieScheduleDateDisc: '',
+        movieScheduleTimeDisc: '',
+        movieScheduleNo: ''
+    });
+    const [results, setResults] = useState([]);
 
+    //영화, 영화관
+    const [movieData, setMovieData] = useState([]);
+    const [cinemaData, setCinemaData] = useState([]);
 
-     //영화목록
-     const loadMovie = useCallback(async()=>{
+    //영화목록
+    const loadMovie = useCallback(async () => {
         const resp = await axios.get("/booking/movie");
         setMovieData(resp.data);
     }, [movieData]);
@@ -22,23 +38,113 @@ function BookingListPage() {
         loadMovie();
     }, []);
 
-    const loadListAll = useCallback(async () => {
-        const resp = await axios.get("/booking/");
-        setBookData(resp.data);
-    }, [bookData]);  
-
     const loadTheaterList = useCallback(async (movieNo) => {
         const resp = await axios.get(`/booking/theater/${movieNo}`);
-        setBookData(resp.data);
+        setCinemaData(resp.data);
         setIsTheaterShow(true);
+        setBookData({
+            ...bookData,
+            movieNo: movieNo
+        });
     }, [bookData]);
 
+    const saveCinema = useCallback((data) => {
+        setBookData({
+            ...bookData,
+            cinemaName: data
+        });
+    }, [cinemaData]);
+
+    const loadSchedule = useCallback(async (data) => {
+        setSelectedDate(data);
+        const updatedBookData = {
+            ...bookData,
+            startDate: data
+        };
+        setBookData(updatedBookData);
+        const resp = await axios.post("/booking/date", updatedBookData);
+        setResults(resp.data);
+        const newTimes = resp.data.map(item => item.startTime); // startTime 값을 추출
+        setTimes(newTimes); // 추출된 startTime 값들로 times 상태 업데이트
+    }, [bookData]);
+
+    // 달력 
+    const date = new Date();
+    const calendarMonth = date.getMonth() + 1;
+
+    const [weekDays, setWeekDays] = useState([]);
+
+    function formatDate(date) {
+        const year = date.getFullYear();
+        const month = date.getMonth() + 1; // getMonth()는 0부터 시작하므로 1을 더해줍니다.
+        const day = date.getDate();
+        return `${year}-${month.toString().padStart(2, '0')}-${day.toString().padStart(2, '0')}`;
+    }
+
+    useEffect(() => {
+        const today = new Date(); // 오늘 날짜를 기준으로
+        const days = [];
+        var calendarDays = ["일", "월", "화", "수", "목", "금", "토"];
+
+        // 오늘부터 시작해서 일주일간 날짜 계산
+        for (let i = 0; i < 14; i++) {
+            const nextDay = new Date(today);
+            nextDay.setDate(today.getDate() + i); // 오늘 날짜에 i일을 더함
+            const day = nextDay.getDate(); // 일자
+            const weekDay = calendarDays[nextDay.getDay()]; // 요일을 calendarDays 배열에서 가져옴
+            const formattedDate = formatDate(nextDay);
+            const dayInfo = {
+                date: `${weekDay}     ${day}`, // 날짜와 요일을 문자열로 함께 저장
+                weekDayIndex: nextDay.getDay(), // 요일의 인덱스 (일요일: 0, 토요일: 6)
+                fullDate: formattedDate
+            };
+            days.push(dayInfo); // 날짜와 요일을 문자열로 함께 저장
+        }
+        setWeekDays(days); // 상태 업데이트
+    }, []); // 컴포넌트 마운트 시 한 번만 실행
+
+
+    const [selectedDate, setSelectedDate] = useState('');
+    const [times, setTimes] = useState([]);
+
+    useEffect(() => {
+        const currentDate = new Date();
+        setSelectedDate(currentDate.toISOString().split('T')[0]); // "YYYY-MM-DD" 형식으로 날짜 설정
+        setTimes(["12:34", "14:15", "18:00"]); // 시간 배열 초기화
+    }, []);
+
+
+     // 시간 데이터 배열에 대한 검사 수행
+     const checkTimes = () => {
+        const currentDate = new Date().toISOString().split('T')[0];
+        const currentTime = new Date().toISOString().split('T')[1].substring(0, 5);
+
+        if (selectedDate === currentDate) { // 오늘 날짜와 같은 경우
+            const currentHourMinute = currentTime.split(':');
+            const currentTimeMinutes = parseInt(currentHourMinute[0], 10) * 60 + parseInt(currentHourMinute[1], 10);
+
+            const timeResults = times.map(time => {
+                const eventHourMinute = time.split(':');
+                const eventTimeMinutes = parseInt(eventHourMinute[0], 10) * 60 + parseInt(eventHourMinute[1], 10);
+
+                return eventTimeMinutes > currentTimeMinutes 
+                    ? `${time} is later than current time.`
+                    : `${time} is not later than current time.`;
+            });
+
+            console.log(timeResults);
+        } else {
+            console.log('It is not today, no need to check time.');
+        }
+    };
 
     return (
         <>
+            <br />
+            <br />
             <div className="row">
 
-                <div className="offset-3 col-2 movie-wrapper">
+                <div className="offset-2 col-2 book-wrapper">
                     <table>
                         <tr><th>영화</th></tr>
                         {movieData.map((data) => (
@@ -47,24 +153,51 @@ function BookingListPage() {
                     </table>
                 </div>
 
-                <div className="col-2">
+                <div className="col-2 book-wrapper">
                     <table>
                         <tr><th>영화관</th></tr>
                         <span style={{ display: isTheaterShow ? 'block' : 'none' }}>
-                            {bookData.map((data) => (
-                                <tr><td onClick={e => loadTheaterList(data.movieNo)}>{data.cinemaName}</td></tr>
+                            {cinemaData.map((data) => (
+                                <tr><td onClick={e => saveCinema(data)}>{data}</td></tr>
                             ))}
                         </span>
                     </table>
                 </div>
 
-                <div className="col-1">
-                    <h1>날짜</h1>
-                </div>
-                <div className="col-3">
-                    <h1>3</h1>
+                <div className="col-1 book-wrapper">
+                    <table>
+                        <tr><th>날짜</th></tr>
+                        <tr><td style={{ fontWeight: 'bold' }}>{calendarMonth}월</td></tr>
+                        {weekDays.map((day, index) => (
+                            <tr>
+                                <td key={index}
+                                    style={{ color: day.weekDayIndex === 0 ? 'red' : day.weekDayIndex === 6 ? 'blue' : 'black', whiteSpace: 'pre-wrap' }}
+                                    onClick={e => loadSchedule(day.fullDate)}>
+                                    {day.date}
+                                </td>
+                            </tr> //배열의 각 요소를 리스트 아이템으로 렌더링
+                        ))}
+                    </table>
                 </div>
 
+                <div className="col-2 book-wrapper">
+                    <table>
+                        <tr><th>시간</th></tr>
+                        {results.map((result) => (
+                        <tr>
+                             <td onClick={checkTimes}>{result.startTime}</td>
+                            <td>{result.theaterName}</td>
+                        </tr>
+                        ))}
+                    </table>
+                </div>
+
+            </div>
+
+            <div className="row mt-4 ms-5 mb-5">
+                <div className="offset-2 col-lg-7 d-flex justify-content-end">
+                    <button className="btn btn-secondary btn-lg">좌석선택</button>
+                </div>
             </div>
 
 
