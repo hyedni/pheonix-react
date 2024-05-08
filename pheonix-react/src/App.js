@@ -29,7 +29,7 @@ import { isLoginState, loginIdState, loginGradeState } from "./components/utils/
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from "./components/utils/CustomAxios";
 import { useCallback, useEffect } from "react";
-import NonUser from './components/user/NonUser';
+import NonUser from './components/user/NonUser'; 
 
 
 
