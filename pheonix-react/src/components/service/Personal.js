@@ -139,13 +139,12 @@ const Personal = () => {
         }
     }, []);
 
-    const closeReplyModal = useCallback(() => {
-        const modal = Modal.getInstance(replyModal.current);
-        if (modal) {
-            modal.hide();
-        }
-    }, []);
-
+   const closeReplyModal = useCallback(() => {
+    const modal = Modal.getInstance(replyModal.current);
+    if (modal) {
+        modal.hide();
+    }
+}, []);
 
     return (
         <div className="container">
