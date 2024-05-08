@@ -7,14 +7,15 @@ import { Link } from 'react-router-dom';
 
 //아이콘 임포트
 import { FaShoppingCart } from "react-icons/fa";
-import { FaGift } from "react-icons/fa";
-import { IoBagHandle } from "react-icons/io5";
 import { GoPlus } from "react-icons/go";
 import { LuMinus } from "react-icons/lu";
 import countState from './../utils/RecoilData';
 import { FaCheck } from "react-icons/fa";
+import { FaGift } from "react-icons/fa";
+import { IoBagHandle } from "react-icons/io5";
 import { FiMinusCircle } from "react-icons/fi";
 import { LuCircleEqual } from "react-icons/lu";
+import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 //이미지 임포트
 import kakaopay from "./image/kakaopay.png";
@@ -195,24 +196,66 @@ const Cart = () => {
     const [userInfo, setUserInfo] = useState([]);
 
     const getUserInfo = useCallback(async () => {
-        await axios.get(`/user/${userId}`).then(resp => {
+        await axios.get(`/cart/user/${userId}`).then(resp => {
             console.log(resp.data);
             setUserInfo(resp.data);
         });
     }, [userId]);
 
     //이용약관 체크박스
-    const [termsOfUseAllChecked, setTermsOfUserAllChecked] = useState(false);
-    const [termsOfUseChecked, setTermsOfUseChecked] = useState(false);
+    const [termsOfUseAllChecked, setTermsOfUserAllChecked] = useState(false); //전체동의
+    const [paymentTermsChecked, setPaymentTermsChecked] = useState(false); //결제 대행 서비스 약관 모두 동의
+    const [financialTermsChecked, setFinancialTermsChecked] = useState(false); //전자 금융거래 약관
+    const [personalInfoTermsChecked, setPersonalInfoTermsChecked] = useState(false); //개인정보 수집 이용약관
+    const [infoSharingTermsChecked, setInfoSharingTermsChecked] = useState(false); // 개인정보 제공 및 위탁
+    const [giftConChecked, setGiftConChecked] = useState(false); //기프티콘 구매 동의
 
-    const handleAllCheck = () => {
+    const handleAllCheck = () => { //체크박스 전체 선택
         setTermsOfUserAllChecked(!termsOfUseAllChecked);
-        setTermsOfUseChecked(!termsOfUseChecked);
+        setGiftConChecked(!giftConChecked);
+        setPaymentTermsChecked(!paymentTermsChecked);
+        setFinancialTermsChecked(!financialTermsChecked);
+        setPersonalInfoTermsChecked(!personalInfoTermsChecked);
+        setInfoSharingTermsChecked(!infoSharingTermsChecked);
     };
 
-    const handleSingleCheck = () => {
-        setTermsOfUseChecked(!termsOfUseChecked);
+    const handleSingleCheck = (target) => { //체크박스 단일 선택에 대한 조건식..
+        switch (target) {
+            case 'paymentTerms':
+                setPaymentTermsChecked(!paymentTermsChecked);
+                setFinancialTermsChecked(!financialTermsChecked);
+                setPersonalInfoTermsChecked(!personalInfoTermsChecked);
+                setInfoSharingTermsChecked(!infoSharingTermsChecked);
+                if (giftConChecked) setTermsOfUserAllChecked(true);
+                break;
+            case 'financialTerms':
+                setFinancialTermsChecked(!financialTermsChecked);
+                break;
+            case 'personalInfoTerms':
+                setPersonalInfoTermsChecked(!personalInfoTermsChecked);
+                break;
+            case 'infoSharingTerms':
+                setInfoSharingTermsChecked(!infoSharingTermsChecked);
+                break;
+            case 'giftCon':
+                setGiftConChecked(!giftConChecked);
+                if (paymentTermsChecked) setTermsOfUserAllChecked(true);
+                break;
+            default:
+                break;
+        }
     };
+
+    //결제 버튼 클릭시
+    const isValidToPay = useCallback(()=>{
+        if(termsOfUseAllChecked) { //약관 동의 시
+            //카카오페이 큐알 모달.
+            window.confirm("확인용");
+        }
+        else { //약관 미동의 시
+            window.alert("결제대행서비스 약관에 모두 동의하셔야 결제가 가능합니다");
+        }
+    }, [termsOfUseAllChecked]);
 
     return (
         <>
@@ -450,8 +493,8 @@ const Cart = () => {
                                             <span>{userInfo.userName}</span>
                                         </div>
                                         <div className='col'>
-                                            <span className="custom-span me-4">전화번호</span>
-                                            <span>{userInfo.userContact}</span>
+                                            <span className="custom-span me-4">이메일</span>
+                                            <span>{userInfo.userEmail}</span>
                                         </div>
                                     </div>
                                     <hr />
@@ -479,24 +522,30 @@ const Cart = () => {
                                 <div className="col-lg-8 content-body">
                                     <h3 className="custom-heading me-4">약관 동의</h3>
                                     <hr className="custom-hr" />
-                                    <div className='row'>
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                checked={termsOfUseAllChecked}
-                                                onChange={handleAllCheck}
-                                            />
-                                            전체 동의하기
+                                    <div className='row terms'>
+                                        <label className="all-agree-label">
+                                            <input type="checkbox" checked={termsOfUseAllChecked} onChange={handleAllCheck} />
+                                            <span className='custom-span all-agree-text mb-3'> 주문정보/결제 대행 서비스 약관 모두 동의</span>
                                         </label>
-                                        <br />
-                                        <label>
-                                            <input
-                                                type="checkbox"
-                                                checked={termsOfUseChecked}
-                                                onChange={handleSingleCheck}
-                                            />
-                                            개별 동의
-                                        </label>
+                                        <div className="agreement-box" style={{ borderBottom: 'none' }}>
+                                            <label className="agreement-label">
+                                                <input type="checkbox" checked={giftConChecked} onChange={() => handleSingleCheck('giftCon')} />
+                                                <span className='custom-span bold'> 기프티콘 구매 동의</span><br />
+                                                <span className='m-4'> - 기프트콘 발송 및 CS처리 등을 이해 수신자로부터 CJCGV에 수신자의 휴대전화번호를 제공하는 것에 대한 적합한 동의를 받습니다.</span>
+                                            </label>
+                                        </div>
+                                        <div className="agreement-box" style={{ borderTop: 'none' }}>
+                                            <label className="agreement-label">
+                                                <input type="checkbox" checked={paymentTermsChecked} onChange={() => handleSingleCheck('paymentTerms')} />
+                                                <span className='custom-span bold'> 결제 대행 서비스 약관 모두 동의</span><br />
+                                                <input type="checkbox" checked={financialTermsChecked} onChange={() => handleSingleCheck('financialTerms')} />
+                                                <span className='m-4'> 전자 금융거래 이용약관</span><br />
+                                                <input type="checkbox" checked={personalInfoTermsChecked} onChange={() => handleSingleCheck('personalInfoTerms')} />
+                                                <span className='m-4'> 개인정보 수집 이용약관</span><br />
+                                                <input type="checkbox" checked={infoSharingTermsChecked} onChange={() => handleSingleCheck('infoSharingTerms')} />
+                                                <span className='m-4'> 개인정보 제공 및 위탁안내</span>
+                                            </label>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
@@ -506,10 +555,10 @@ const Cart = () => {
                                 <div className="col-lg-8 content-body me-4">
                                     <div className='row'>
                                         <div className="col-3">
-                                            {/* <button onClick={handleGoBack}>Go Back</button> */}
+                                            <button className='btn btn-outline-dark w-100 btn-lg' onClick={() => setBtnPurchase(false)}><FaArrowAltCircleLeft /> 이전화면</button>
                                         </div>
                                         <div className="col-9">
-                                            <Link to={`/purchase/`} className='btn btn-dark w-100 btn-lg'>결제하기</Link>
+                                            <button className='btn btn-dark w-100 btn-lg' onClick={()=> isValidToPay()}>결제하기</button>
                                         </div>
                                     </div>
 

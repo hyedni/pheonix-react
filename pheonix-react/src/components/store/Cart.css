@@ -166,3 +166,27 @@ th {
 }
 
 
+/* 약관 */
+.terms {
+    display: flex;
+    flex-direction: column;
+}
+
+.all-agree-label {
+    font-weight: bold;
+    font-size: 1.2em; /* adjust font size as needed */
+}
+
+.agreement-box {
+    background-color:  #ccc; /* border style */
+    padding: 10px; /* padding around the content */
+    margin-top: 10px; /* adjust margin as needed */
+}
+
+.agreement-label {
+    display: block;
+}
+
+.bold {
+    font-weight: bold;
+}
