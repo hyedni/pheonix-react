@@ -153,6 +153,9 @@ const Personal = () => {
             <div className="text-end mb-3">
                 <NavLink to="/lost">분실물</NavLink>
             </div>
+            <div className="text-end mb-3">
+                <NavLink to="/chatbot">Chatbot</NavLink>
+                </div>
             <div className="row justify-content-center">
                 <div className="col-lg-8">
                     <table className="table text-center">
