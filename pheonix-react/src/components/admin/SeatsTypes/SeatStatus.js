@@ -7,6 +7,7 @@ import './Seat.css';
 
 function SeatStatus() {
 
+    
     const [cellRows, setCellRows] = useState(0);
     const [cellCols, setCellCols] = useState(0);
     const [seats, setSeats] = useRecoilState(seatsState);
@@ -89,7 +90,7 @@ function SeatStatus() {
                                 </td>
                                 {Array.from({ length: cellCols }).map((__, colIndex) => (
                                     <td key={colIndex} style={{
-                                        backgroundColor: seats.find(seat => seat.cellX === rowIndex + 1 && seat.cellY === colIndex + 1)?.cellActive === "활성화" ? 'yellow' : 'lightgrey',
+                                        backgroundColor: seats.find(seat => seat.cellX === rowIndex + 1 && seat.cellY === colIndex + 1)?.cellActive === "활성화" ? '#9BFA73' : 'lightgrey',
                                     }}
                                     className='seatDesign'>
                                         {rowIndex + 1}, {colIndex + 1}
@@ -102,7 +103,7 @@ function SeatStatus() {
             </div>
 
             <div>
-                <button><NavLink to='/Asd22'>버튼버튼</NavLink></button>
+                <button><NavLink to='/SeatDetails'>버튼버튼</NavLink></button>
             </div>
 
             </div>
