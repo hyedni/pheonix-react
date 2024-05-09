@@ -1,16 +1,11 @@
 import './Cart.css';
 import axios from "../utils/CustomAxios";
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link } from 'react-router-dom';
-//import { useHistory } from 'react-router-dom';
-//import { useRecoilState } from 'recoil';
+import { Link, Navigate } from 'react-router-dom';
+import { useRecoilState } from 'recoil';
+import { partnerOrderId, partnerUserId, tid, vo } from './../utils/RecoilData';
 
 //아이콘 임포트
-import { FaShoppingCart } from "react-icons/fa";
-import { GoPlus } from "react-icons/go";
-import { LuMinus } from "react-icons/lu";
-import countState from './../utils/RecoilData';
-import { FaCheck } from "react-icons/fa";
 import { FaGift } from "react-icons/fa";
 import { IoBagHandle } from "react-icons/io5";
 import { FiMinusCircle } from "react-icons/fi";
@@ -22,9 +17,18 @@ import kakaopay from "./image/kakaopay.png";
 
 import PurchaseMenu from './PurchaseMenu';
 
+
 const Cart = () => {
 
     //state
+    //이용약관 체크박스
+    const [termsOfUseAllChecked, setTermsOfUserAllChecked] = useState(false); //전체동의
+    const [paymentTermsChecked, setPaymentTermsChecked] = useState(false); //결제 대행 서비스 약관 모두 동의
+    const [financialTermsChecked, setFinancialTermsChecked] = useState(false); //전자 금융거래 약관
+    const [personalInfoTermsChecked, setPersonalInfoTermsChecked] = useState(false); //개인정보 수집 이용약관
+    const [infoSharingTermsChecked, setInfoSharingTermsChecked] = useState(false); // 개인정보 제공 및 위탁
+    const [giftConChecked, setGiftConChecked] = useState(false); //기프티콘 구매 동의
+
     //const { userId } = useRecoilState({});
     const [cartItems, setCartItems] = useState([]); //카트+상품 정보
     const [userId] = useState('testuser4');
@@ -33,11 +37,15 @@ const Cart = () => {
 
     const [btnPurchase, setBtnPurchase] = useState(false);
 
-    // const history = useHistory();
+    const [cartPartnerOrderId, setCartPartnerOrderId] = useRecoilState(partnerOrderId);
+    const [cartPartnerUserId, setCartPartnerUserId] = useRecoilState(partnerUserId);
+    const [cartTid, setCartTid] = useRecoilState(tid);
+    const [cartVo, setCartVo] = useRecoilState(vo);
 
-    // const handleGoBack = () => {
-    //     history.goBack();
-    // };
+    const [purchaseList, setPurchaseList] = useState({
+        no: "",
+        qty: ""
+    });
 
     //장바구니 기능들....
     //체크박스
@@ -75,11 +83,71 @@ const Cart = () => {
         }
     }, []);
 
+
     useEffect(() => { //최초 실행 시 전체 선택
         const checkedListArray = [];
         cartItems.forEach((list) => checkedListArray.push(list));
         setCheckedLists(checkedListArray);
     }, [cartItems]);
+
+    useEffect(() => {
+        const newPurchaseList = checkedList.map(item => ({
+          no: item.cartProductNo,
+          qty: item.cartQty
+        }));
+        setPurchaseList(newPurchaseList);
+      }, [checkedList]);
+
+
+    //결제
+    //결제 버튼 클릭시
+    const isValidToPay = useCallback(() => {
+        if (termsOfUseAllChecked) { //약관 동의 시
+            purchase(); //구매 비동기 함수... 
+        }
+        else { //약관 미동의 시
+            window.alert("결제대행서비스 약관에 모두 동의하셔야 결제가 가능합니다");
+        }
+    }, [termsOfUseAllChecked]);
+
+    const purchase = useCallback(async () => {
+        const resp = await axios.post("/purchase/", purchaseList);
+        //useState에 필요한 데이터 저장
+        setCartPartnerOrderId(resp.data.partnerOrderId);
+        setCartPartnerUserId(resp.data.partnerUserId);
+        setCartTid(resp.data.tid);
+        setCartVo(resp.data.vo);
+        //새 창을 열고 결제 프로세스 시작
+        window.open(resp.data.nextRedirectPcUrl, "_blank", "width=400px, height=800px");        
+    });
+
+    const purchaseApprove = useCallback(async (pgToken)=> {
+        //console.log("결제 성공");
+        const postData = {
+            cartPartnerOrderId,
+            cartPartnerUserId,
+            cartTid,
+            pgToken,
+            purchaseList
+        };
+        //console.log(postData)
+        const resp = await axios.post("/purchase/success", postData);
+        <Navigate to='/purchase/success-complete' />
+    });
+
+    useEffect(()=> {
+        const handleMessage = (e)=> {
+            if(e.data.type && e.data.type === 'successComplete') {
+                purchaseApprove(e.data.pgToken);
+            }
+        };
+        window.addEventListener('message', handleMessage);
+        return ()=> {
+            window.removeEventListener('message', handleMessage);
+        }
+    }, [purchaseApprove]);
+
+   
 
     //callback
     const loadCartData = useCallback(() => {
@@ -203,13 +271,6 @@ const Cart = () => {
     }, [userId]);
 
     //이용약관 체크박스
-    const [termsOfUseAllChecked, setTermsOfUserAllChecked] = useState(false); //전체동의
-    const [paymentTermsChecked, setPaymentTermsChecked] = useState(false); //결제 대행 서비스 약관 모두 동의
-    const [financialTermsChecked, setFinancialTermsChecked] = useState(false); //전자 금융거래 약관
-    const [personalInfoTermsChecked, setPersonalInfoTermsChecked] = useState(false); //개인정보 수집 이용약관
-    const [infoSharingTermsChecked, setInfoSharingTermsChecked] = useState(false); // 개인정보 제공 및 위탁
-    const [giftConChecked, setGiftConChecked] = useState(false); //기프티콘 구매 동의
-
     const handleAllCheck = () => { //체크박스 전체 선택
         setTermsOfUserAllChecked(!termsOfUseAllChecked);
         setGiftConChecked(!giftConChecked);
@@ -245,17 +306,6 @@ const Cart = () => {
                 break;
         }
     };
-
-    //결제 버튼 클릭시
-    const isValidToPay = useCallback(()=>{
-        if(termsOfUseAllChecked) { //약관 동의 시
-            //카카오페이 큐알 모달.
-            window.confirm("확인용");
-        }
-        else { //약관 미동의 시
-            window.alert("결제대행서비스 약관에 모두 동의하셔야 결제가 가능합니다");
-        }
-    }, [termsOfUseAllChecked]);
 
     return (
         <>
@@ -558,7 +608,7 @@ const Cart = () => {
                                             <button className='btn btn-outline-dark w-100 btn-lg' onClick={() => setBtnPurchase(false)}><FaArrowAltCircleLeft /> 이전화면</button>
                                         </div>
                                         <div className="col-9">
-                                            <button className='btn btn-dark w-100 btn-lg' onClick={()=> isValidToPay()}>결제하기</button>
+                                            <button className='btn btn-dark w-100 btn-lg' onClick={() => isValidToPay()}>결제하기</button>
                                         </div>
                                     </div>
 
