@@ -7,6 +7,7 @@ import { useNavigate } from "react-router";
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loginIdState, loginGradeState, isLoginState } from "../utils/RecoilData";
+import { createUserWithEmailAndPassword } from 'firebase/auth'
 
 
 const firebaseConfig = {
@@ -51,7 +52,7 @@ function Login() {
             if (user.userId.length === 0) throw new Error("사용자 ID를 입력하세요.");
             if (user.userPw.length === 0) throw new Error("비밀번호를 입력하세요.");
 
-            const resp = await axios.post(`http://localhost:8080/login`, user);
+            const resp = await axios.post(`http://localhost:8080/user/login`, user);
             console.log(resp.data);
             setLoginId(resp.data.userId);
             setLoginGrade(resp.data.userGrade);
@@ -80,13 +81,14 @@ function Login() {
         auth.languageCode = "ko";
 
         signInWithPopup(auth, provider)
-            .then((result) => { // data 매개변수 제거
+            .then((result) => { 
                 const credential = GoogleAuthProvider.credentialFromResult(result);
                 const token = credential.accessToken;
                 const user = result.user;
                 setUserData(user); // 사용자 정보 설정
-                console.log(user); // 사용자 정보 출력
-                console.log(result);
+
+                //console.log(user); // 사용자 정보 출력
+                console.log(result, '합격');
             })
             .catch((error) => {
                 const errorCode = error.code;

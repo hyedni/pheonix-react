@@ -31,7 +31,11 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from "./components/utils/CustomAxios";
 import { useCallback, useEffect } from "react";
 import NonUser from './components/user/NonUser'; 
+
 import AddTheater from './components/admin/AddTheater';
+
+import BookingListPage from './components/booking/BookingListPage';
+
 
 
 
@@ -128,6 +132,11 @@ function App() {
         <Route path='/lost' element={<Lost />} />
         <Route path='/writepost' element={<WritePost />} />
         <Route path='/personal' element={<Personal />} />
+        <Route path='/chatbot' element={<Chatbot/>}/>
+       
+        {/* 예매 */}
+        <Route path='/booking' element={<BookingListPage />} />
+
       </Routes >
 
       <Footer />
