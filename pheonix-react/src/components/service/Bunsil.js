@@ -26,7 +26,7 @@ const Bunsil = () => {
                     'Content-Type': 'multipart/form-data',
                 },
             });
-            // 등록 성공 후 필드 초기화
+            // 등록 성공 후 필드 초기화ㅇ
             setLostTitle('');
             setLostContent('');
             setFile(null);
