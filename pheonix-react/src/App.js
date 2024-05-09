@@ -21,6 +21,7 @@ import NewProduct from './components/admin/Store/NewProduct';
 import ProductEdit from './components/admin/Store/productEdit';
 import Chatbot from './chatbot/chatbot';
 import SeatStatus from './components/admin/SeatsTypes/SeatStatus';
+import SeatDetails from './components/admin/SeatsTypes/SeatDetails';
 import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
 import Mypage from './components/user/Mypage';
@@ -30,8 +31,12 @@ import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from "./components/utils/CustomAxios";
 import { useCallback, useEffect } from "react";
 import NonUser from './components/user/NonUser'; 
+
+import AddTheater from './components/admin/AddTheater';
+
 import BookingListPage from './components/booking/BookingListPage';
 import MovieChart from './components/booking/MovieChart';
+
 
 
 
@@ -91,10 +96,16 @@ function App() {
         <Route path='/newProduct' element={<NewProduct />} />
 
 
-        {/* 좌석 */}
+        {/* 좌석 + 상영관등록 */}
         {isLogin &&
-          <Route path='/seatStatus' element={<SeatStatus />} />
+        <>
+          
+          
+          </>
         }
+        <Route path='/addTheater' element={<AddTheater/>} />
+        <Route path='/seatStatus' element={<SeatStatus />} />
+        <Route path='/seatDetails' element={<SeatDetails/>} />
 
         {/* 회원 */}
 
