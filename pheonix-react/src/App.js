@@ -8,8 +8,6 @@ import MovieEdit from './components/admin/MovieEdit';
 import Store from './components/store/Store';
 import Cart from './components/store/Cart';
 import Gift from './components/store/Gift';
-import Purchase from './components/store/Purchase';
-import PurchaseComplete from './components/store/PurchaseComplete';
 import NewMovie from './components/admin/NewMovie';
 import Personal from './components/service/Personal';
 import Lost from './components/service/Lost';
@@ -115,8 +113,6 @@ function App() {
           <>
             <Route path='/cart' element={<Cart />} />
             <Route path='/gift' element={<Gift />} />
-            <Route path='/purchase' element={<Purchase />} />
-            <Route path='/purchase-complete' element={<PurchaseComplete />} />
           </>
         }
 
