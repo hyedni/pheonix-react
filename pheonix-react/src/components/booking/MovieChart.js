@@ -1,7 +1,7 @@
 import '../admin/AdminMovie.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from "../utils/CustomAxios";
-import { Link, useLinkClickHandler } from 'react-router-dom';
+import { Link, useLinkClickHandler, useNavigate, useNavigation } from 'react-router-dom';
 import { TbNumber12Small } from "react-icons/tb";
 import { TbNumber15Small } from "react-icons/tb";
 import { TbNumber19Small } from "react-icons/tb";
@@ -26,6 +26,11 @@ function MovieChart () {
         movieDirector: '',
         movieActor: ''
     });
+
+    const navigate = useNavigate();
+    const moveToDetail = (movieNo) => {
+        navigate(`/movieEdit/${movieNo}`);
+    };
 
     //관람등급 아이콘
     const getAgeIcon = (movieAge) => {
@@ -59,6 +64,7 @@ function MovieChart () {
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
                         무비차트
+                        <button className='btn'>상영 예정작</button>
                     </div>
                     <hr />
                 </div>
@@ -78,12 +84,12 @@ function MovieChart () {
                                 <hr />
                                 <div className='image-wrapper'>
                                     <img src={movie.movieImgLink} className='img-thumbnail' />
-                                    <Link to="/booking" className='edit-button btn btn-primary' style={{ margin: '0px' }}>
+                                    <Link to="/booking" className='edit-button btn btn-primary'>
                                         예매하기
                                     </Link>
-                                    <Link to={`/movieEdit/${movie.movieNo}`} className='edit-button btn btn-secondary' >
+                                    <button onClick={e=>moveToDetail(movie.movieNo)} className='delete-button btn btn-secondary'  style={{ margin: '0px' }}>
                                         상세정보
-                                    </Link>
+                                    </button>
                                 </div>
                                 <hr />
                                 <div className='d-flex justify-content-between mb-2'>
