@@ -45,7 +45,7 @@ function AdminMovie() {
     const [imagePreview, setImagePreview] = useState(null);
 
     const loadList = useCallback(async () => {
-        const resp = await axios.get("/movie/");
+        const resp = await axios.get("/movie/all");
         setMovies(resp.data);
     }, [movies]);
 

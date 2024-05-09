@@ -26,7 +26,7 @@ function MovieChart () {
         movieDirector: '',
         movieActor: ''
     });
-
+    
     const navigate = useNavigate();
     const moveToDetail = (movieNo) => {
         navigate(`/movieEdit/${movieNo}`);
@@ -49,11 +49,20 @@ function MovieChart () {
     const loadList = useCallback(async () => {
         const resp = await axios.get("/movie/");
         setMovies(resp.data);
+        setIsClicked(false);
     }, [movies]);
 
     useEffect(() => {
         loadList();
     }, []);
+
+    const [isClicked, setIsClicked] = useState(false);
+
+    const loadOnList = useCallback(async () => {
+        const resp = await axios.get("/movie/on");
+        setMovies(resp.data);
+        setIsClicked(true);
+    }, [movies]);
 
     return (
         <>
@@ -64,7 +73,15 @@ function MovieChart () {
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
                         무비차트
-                        <button className='btn'>상영 예정작</button>
+                        {isClicked ? (
+                            <>
+                               <button className='btn movie-button' onClick={e=> loadList()}>현재 상영작만 보기</button>
+                            </>
+                        ) : (
+                            <>
+                                <button className='btn movie-button' onClick={e=> loadOnList()}>상영 예정작 보기</button>
+                            </>
+                        )}
                     </div>
                     <hr />
                 </div>

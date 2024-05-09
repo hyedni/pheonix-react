@@ -78,27 +78,12 @@ function Htemplate() {
                             <li className='nav-item dropdown'>
                                 <NavLink className="nav-link fs-5 me-5" to="/moviechart">영화</NavLink>
                             </li>
-                            <li className="nav-item dropdown">
-                                <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">극장</NavLink>
-                                <div className="dropdown-menu">
-                                    <NavLink className="dropdown-item" href="#">Action</NavLink>
-                                    <NavLink className="dropdown-item" href="#">Another action</NavLink>
-                                    <NavLink className="dropdown-item" href="#">Something else here</NavLink>
-                                    {/* <div className="dropdown-divider"></div>
-                                        <NavLink className="dropdown-item" href="#">Separated link</NavLink> */}
-                                </div>
+                            <li className='nav-item dropdown'>
+                                <NavLink className="nav-link fs-5 me-5" to="/adminCinema">극장</NavLink>
                             </li>
-                            <li className="nav-item dropdown">
-                                <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">예매</NavLink>
-                                <div className="dropdown-menu">
-                                    <NavLink className="dropdown-item" to="/booking">예매</NavLink>
-                                    <NavLink className="dropdown-item" href="#">Another action</NavLink>
-                                    <NavLink className="dropdown-item" href="#">Something else here</NavLink>
-                                    {/* <div className="dropdown-divider"></div>
-                                        <NavLink className="dropdown-item" href="#">Separated link</NavLink> */}
-                                </div>
+                            <li className='nav-item dropdown'>
+                                <NavLink className="nav-link fs-5 me-5" to="/booking">예매</NavLink>
                             </li>
-
                             <li className="nav-item dropdown">
                                 <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">스토어</NavLink>
                                 <div className="dropdown-menu">
