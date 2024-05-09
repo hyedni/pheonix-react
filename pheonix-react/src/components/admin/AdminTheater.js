@@ -32,8 +32,9 @@ function AdminTheater() {
     }, [cinemas]);
 
     const addTheater = useCallback((cinemaNo) => {
-        navigate('이동할화면');
-    }, []);
+        // navigate를 사용해 이동하면서 state로 cinemaNo를 전달
+        navigate('/addTheater', { state: { cinemaNo } });
+    }, [navigate]);
     
     useEffect(() => {
         loadCinemaList();
