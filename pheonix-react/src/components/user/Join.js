@@ -31,6 +31,8 @@ function Join() {
   const [isCertified, setIsCertified] = useState(false); // 추가: 인증번호 확인 상태
   const [sending, setSending] = useState(false);//전송중 상태
   const [sent, setSent] = useState(false);//전송완료
+  const [file, setFile] = useState(null);//파일
+  const [imagePreview, setImagePreview] = useState(null);
 
   //navigator
   const navigator = useNavigate();
@@ -45,15 +47,37 @@ function Join() {
     });
   }, [user]);
 
+  //첨부파일관련
+  const handleImageChange = e => {
+    const file = e.target.files[0];
+    const reader = new FileReader();
+    reader.onloadend = () => {
+      setImagePreview(reader.result);
+    };
+    if (file) {
+      setFile(file);
+      reader.readAsDataURL(file);
+    }
+  };
 
   // 폼 제출 함수
   const handleSubmit = async (e) => {
     e.preventDefault();
     // 양식 유효성 확인
     if (isFormValid && isCertified) {
+      const formData = new FormData();
+      for(const key in user){
+        formData.append(key, user[key]);
+        console.log(user);
+      }
+      
+      if (file) {
+        formData.append('attach', file); // 파일 추가
+      }
+      console.log(formData);
       try {
         // 서버로 데이터 전송
-        const response = await axios.post("/user/join", user);
+        const response = await axios.post('/user/join', formData);
         console.log("가입 성공:", response.data);
         // 추가 작업 수행 (예: 사용자에게 성공 메시지 표시)
 
@@ -65,6 +89,7 @@ function Join() {
     } else {
       alert("' * '표시는 무조건 작성해야함");
     }
+
   };
 
 
@@ -167,10 +192,18 @@ function Join() {
 
   return (
     <>
+
       <div className="join-container">
         <h1>회원가입 화면입니다</h1>
         <div className="join-form">
+
           {/* 입력 폼 */}
+          <div className="form-group">
+            <label htmlFor="userId">프로필 이미지 :</label>
+            <div className="input-group">
+              <input type="file" onChange={handleImageChange} className="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
+            </div>
+          </div>
 
           <div className="form-group">
             <label htmlFor="userId">아이디 * :</label>
@@ -205,6 +238,11 @@ function Join() {
           </div>
 
           <div className="form-group">
+            <label htmlFor="userBirth">생일:</label>
+            <input type="date" id="userBick" name="userBirth" onBlur={handleInputBlur} className="form-control" />
+          </div>
+
+          <div className="form-group">
             <label htmlFor="userContact">전화번호:</label>
             <input type="text" id="userContact" name="userContact" onBlur={handleInputBlur} className={`form-control ${user.userContact && !isValid.userContact ? "is-invalid" : ""}`} />
             <div className="invalid-feedback">
@@ -225,7 +263,7 @@ function Join() {
             <div id="emailFeedback" className="invalid-feedback d-block">
               {user.userEmail && !isValid.userEmail && '이메일이 유효하지 않습니다.'}
             </div>
-            <div id="emailCheckFeedback" className="invalid-feedback d-block"/>
+            <div id="emailCheckFeedback" className="invalid-feedback d-block" />
           </div>
 
 
@@ -236,19 +274,19 @@ function Join() {
               <input type="text" id="userCert" name="userCert" onChange={handleInputBlur}
                 className={`form-control ${user.userCert && !isValid.userCert ? "is-invalid" : ""}`}
                 aria-describedby="button-addon2" />
-              <button type="button" onClick= {isCertified ? undefined: handleCheckCert} className="btn btn-outline-primary">
-                {isCertified ? "인증확인" : "인증완료"}
+              <button type="button" onClick={isCertified ? undefined : handleCheckCert} className="btn btn-outline-primary">
+                {isCertified ? "인증완료" : "인증"}
               </button>
             </div>
-            <div id="certFeedback" className="invalid-feedback d-block"/>
+            <div id="certFeedback" className="invalid-feedback d-block" />
           </div>
 
 
           <button className='btn btn-success w-100 mt-4' onClick={handleSubmit}>가입하기</button>
 
-
         </div>
       </div>
+
     </>
 
   );
