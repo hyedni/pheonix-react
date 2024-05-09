@@ -7,8 +7,13 @@ import React from 'react';
 import PostApi from './PostApi';
 import { useNavigate } from 'react-router';
 import { FaCirclePlus } from "react-icons/fa6";
+import { useRecoilState } from 'recoil';
+import { loginGradeState, loginIdState } from '../utils/RecoilData';
 
 function AdminCinema() {
+    //recoil state
+    const [loginId, setLoginId] = useRecoilState(loginIdState);
+    const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
 
     const [cinemas, setCinemas] = useState([]);
     const [region, setRegion] = useState({

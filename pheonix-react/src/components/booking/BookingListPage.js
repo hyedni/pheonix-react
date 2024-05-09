@@ -154,7 +154,7 @@ function BookingListPage() {
             <br />
             <br />
             <div className="row">
-                <div className="offset-2 col-2 book-wrapper">
+                <div className="offset-3 col-2 book-wrapper">
                     <table className="book-table">
                         <tr><th className="title-wrapper">영화</th></tr>
                         {movieData.map((data) => (
@@ -217,12 +217,13 @@ function BookingListPage() {
                 </div>
             </div>
 
-            <div className="row mt-4 ms-5 mb-5">
-                <div className="offset-2 col-lg-7 d-flex justify-content-end">
-                    <button className="btn btn-secondary btn-lg"
+            <div className="row mt-5 mb-5">
+                <div className="offset-3 col-lg-6">
+                    {/* <button className="btn btn-secondary btn-lg"
                          onClick={e => moveToSeat(scheduleNo)}   >
                         좌석선택
-                    </button>
+                    </button> */}
+                    
                 </div>
             </div>
 

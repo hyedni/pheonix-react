@@ -79,7 +79,7 @@ function Htemplate() {
                                 <NavLink className="nav-link fs-5 me-5" to="/moviechart">영화</NavLink>
                             </li>
                             <li className='nav-item dropdown'>
-                                <NavLink className="nav-link fs-5 me-5" to="/adminCinema">극장</NavLink>
+                                <NavLink className="nav-link fs-5 me-5" to="/adminCinema">영화관</NavLink>
                             </li>
                             <li className='nav-item dropdown'>
                                 <NavLink className="nav-link fs-5 me-5" to="/booking">예매</NavLink>
