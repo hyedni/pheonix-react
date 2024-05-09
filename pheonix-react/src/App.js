@@ -30,11 +30,20 @@ import { isLoginState, loginIdState, loginGradeState } from "./components/utils/
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from "./components/utils/CustomAxios";
 import { useCallback, useEffect } from "react";
+
+import PersonalDetail from './components/service/PersonalDetail';
+import Pagination from './components/service/Pagination';
+import Bunsil from './components/service/Bunsil';
+
+
+
+
 import NonUser from './components/user/NonUser'; 
 
 import AddTheater from './components/admin/AddTheater';
 
 import BookingListPage from './components/booking/BookingListPage';
+
 
 
 
@@ -133,9 +142,16 @@ function App() {
         <Route path='/writepost' element={<WritePost />} />
         <Route path='/personal' element={<Personal />} />
         <Route path='/chatbot' element={<Chatbot/>}/>
+        <Route path='/writepost' element={<WritePost/>}/>
+        <Route path='/personalDetail/:personalNo' element={<PersonalDetail/>}/>
+        <Route path='/pagination' element={<Pagination/>}/>
+        <Route path='/bunsil' element={<Bunsil/>}/>
+
+
        
         {/* 예매 */}
         <Route path='/booking' element={<BookingListPage />} />
+
 
       </Routes >
 
