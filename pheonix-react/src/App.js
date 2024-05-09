@@ -8,8 +8,6 @@ import MovieEdit from './components/admin/MovieEdit';
 import Store from './components/store/Store';
 import Cart from './components/store/Cart';
 import Gift from './components/store/Gift';
-import Purchase from './components/store/Purchase';
-import PurchaseComplete from './components/store/PurchaseComplete';
 import NewMovie from './components/admin/NewMovie';
 import Personal from './components/service/Personal';
 import Lost from './components/service/Lost';
@@ -25,17 +23,30 @@ import SeatDetails from './components/admin/SeatsTypes/SeatDetails';
 import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
 import Mypage from './components/user/Mypage';
+import Success from './components/store/purchase/success';
+import Fail from './components/store/purchase/fail';
+import Cancel from './components/store/purchase/cancel';
+import SuccessComplete from './components/store/purchase/successComplete';
 
 import { isLoginState, loginIdState, loginGradeState } from "./components/utils/RecoilData";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from "./components/utils/CustomAxios";
 import { useCallback, useEffect } from "react";
+
+import PersonalDetail from './components/service/PersonalDetail';
+import Pagination from './components/service/Pagination';
+import Bunsil from './components/service/Bunsil';
+
+
+
+
 import NonUser from './components/user/NonUser'; 
 
 import AddTheater from './components/admin/AddTheater';
 
 import BookingListPage from './components/booking/BookingListPage';
 import MovieChart from './components/booking/MovieChart';
+
 
 
 
@@ -124,20 +135,31 @@ function App() {
           <>
             <Route path='/cart' element={<Cart />} />
             <Route path='/gift' element={<Gift />} />
-            <Route path='/purchase' element={<Purchase />} />
-            <Route path='/purchase-complete' element={<PurchaseComplete />} />
           </>
         }
+
+        {/* 결제 */}
+        <Route path='/purchase/success' element={<Success />} />
+        <Route path='/purchase/fail' element={<Fail />}/>
+        <Route path='/purchase/cancel' element={<Cancel />}/>
+        <Route path='/purchase/success-complete' element={<SuccessComplete />}/>
 
         {/* 게시판 */}
         <Route path='/lost' element={<Lost />} />
         <Route path='/writepost' element={<WritePost />} />
         <Route path='/personal' element={<Personal />} />
         <Route path='/chatbot' element={<Chatbot/>}/>
+        <Route path='/writepost' element={<WritePost/>}/>
+        <Route path='/personalDetail/:personalNo' element={<PersonalDetail/>}/>
+        <Route path='/pagination' element={<Pagination/>}/>
+        <Route path='/bunsil' element={<Bunsil/>}/>
+
+
        
         {/* 예매 */}
         <Route path='/booking' element={<BookingListPage />} />
         <Route path='/moviechart' element={<MovieChart />} />
+
 
       </Routes >
 

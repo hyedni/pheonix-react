@@ -38,8 +38,39 @@ const seatsState = atom({
     default: [], // 초기 상태 값
   });
 
+  //카카오페이
+  const partnerOrderId = atom({
+    key : 'partnerOrderId',
+    default : ''
+  }); 
+
+  const partnerUserId = atom({
+    key : 'partnerUserId',
+    default : ''
+  });
+
+  const tid = atom({
+    key : 'tid',
+    default : ''
+  });
+
+  const vo = atom({
+    key: 'vo',
+    default: []
+  });
+
+  const pgToken = atom({
+    key : 'pgToken',
+    default : ''
+  });
+
+
+
+
 //default export는 하나밖에 할 수 없다
 //export default countState;
 
 //naming export는 여러 개 할 수 있다.
-export {countState, loginIdState, loginGradeState, isLoginState , seatsState};
+export {countState, loginIdState, loginGradeState, isLoginState , seatsState
+    , partnerOrderId, partnerUserId, tid, vo, pgToken
+};
