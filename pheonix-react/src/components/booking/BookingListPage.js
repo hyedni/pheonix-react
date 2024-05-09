@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import axios from "../utils/CustomAxios";
 import './BookingListPage.css';
 import { useCallback, useEffect, useState } from 'react';
@@ -5,6 +6,13 @@ import { useCallback, useEffect, useState } from 'react';
 function BookingListPage() {
 
     const [isTheaterShow, setIsTheaterShow] = useState(false);
+    const navigate = useNavigate();
+    const [scheduleNo, setScheduleNo] = useState('');
+    //일정 PK번호 넘기기
+    const moveToSeat = (scheduleNo) => {
+        console.log(scheduleNo);
+        navigate(`/주소/${scheduleNo}`)
+    };
 
     //전체데이터(Vo)담긴 state
     const [bookData, setBookData] = useState({
@@ -68,6 +76,10 @@ function BookingListPage() {
         setTimes(newTimes); // 추출된 startTime 값들로 times 상태 업데이트
     }, [bookData]);
 
+    const selectedSchedule = (seleted) => {
+        setScheduleNo(seleted);
+    };
+
     // 달력 
     const date = new Date();
     const calendarMonth = date.getMonth() + 1;
@@ -100,78 +112,77 @@ function BookingListPage() {
             };
             days.push(dayInfo); // 날짜와 요일을 문자열로 함께 저장
         }
-        setWeekDays(days); // 상태 업데이트
-    }, []); // 컴포넌트 마운트 시 한 번만 실행
+        setWeekDays(days); 
+    }, []); 
 
-
+    //시간계산
     const [selectedDate, setSelectedDate] = useState('');
     const [times, setTimes] = useState([]);
+    const [timeOptions, setTimeOptions] = useState([]);
 
     useEffect(() => {
-        const currentDate = new Date();
-        setSelectedDate(currentDate.toISOString().split('T')[0]); // "YYYY-MM-DD" 형식으로 날짜 설정
-        setTimes(["12:34", "14:15", "18:00"]); // 시간 배열 초기화
-    }, []);
-
+        checkTimes();
+    }, [times, selectedDate]);
 
      // 시간 데이터 배열에 대한 검사 수행
      const checkTimes = () => {
         const currentDate = new Date().toISOString().split('T')[0];
-        const currentTime = new Date().toISOString().split('T')[1].substring(0, 5);
+        const now = new Date();
+        const currentTime = `${now.getHours()}:${now.getMinutes()}`;
+        const currentHourMinute = currentTime.split(':');
+        const currentTimeMinutes = parseInt(currentHourMinute[0], 10) * 60 + parseInt(currentHourMinute[1], 10);
 
         if (selectedDate === currentDate) { // 오늘 날짜와 같은 경우
-            const currentHourMinute = currentTime.split(':');
-            const currentTimeMinutes = parseInt(currentHourMinute[0], 10) * 60 + parseInt(currentHourMinute[1], 10);
-
             const timeResults = times.map(time => {
                 const eventHourMinute = time.split(':');
                 const eventTimeMinutes = parseInt(eventHourMinute[0], 10) * 60 + parseInt(eventHourMinute[1], 10);
-
-                return eventTimeMinutes > currentTimeMinutes 
-                    ? `${time} is later than current time.`
-                    : `${time} is not later than current time.`;
+                return {
+                    time,
+                    available: eventTimeMinutes > currentTimeMinutes
+                };
             });
-
-            console.log(timeResults);
+            setTimeOptions(timeResults);
         } else {
-            console.log('It is not today, no need to check time.');
+            const timeResults = times.map(time => ({ time, available: true }));
+            setTimeOptions(timeResults);
         }
     };
+
 
     return (
         <>
             <br />
             <br />
             <div className="row">
-
-                <div className="offset-2 col-2 book-wrapper">
-                    <table>
-                        <tr><th>영화</th></tr>
+                <div className="offset-3 col-2 book-wrapper">
+                    <table className="book-table">
+                        <tr><th className="title-wrapper">영화</th></tr>
                         {movieData.map((data) => (
-                            <tr><td onClick={e => loadTheaterList(data.movieNo)}>{data.movieTitle}</td></tr>
+                            <tr><td onClick={e => loadTheaterList(data.movieNo)} style={{padding:'0.5em'}}>{data.movieTitle}</td></tr>
                         ))}
                     </table>
                 </div>
 
                 <div className="col-2 book-wrapper">
-                    <table>
-                        <tr><th>영화관</th></tr>
+                    <table className="book-table">
+                        <tr><th className="title-wrapper">영화관</th></tr>
                         <span style={{ display: isTheaterShow ? 'block' : 'none' }}>
                             {cinemaData.map((data) => (
-                                <tr><td onClick={e => saveCinema(data)}>{data}</td></tr>
+                                <tr><td onClick={e => saveCinema(data)} style={{padding:'0.5em'}}>{data}</td></tr>
                             ))}
                         </span>
                     </table>
                 </div>
 
                 <div className="col-1 book-wrapper">
-                    <table>
-                        <tr><th>날짜</th></tr>
-                        <tr><td style={{ fontWeight: 'bold' }}>{calendarMonth}월</td></tr>
+                    <table className="book-table text-center">
+                        <tr><th className="title-wrapper">날짜</th></tr>
+                        <tr><td style={{ fontWeight: 'bold', fontSize: '40px', color:'rgb(121,120,114)'}}>{calendarMonth}</td></tr>
                         {weekDays.map((day, index) => (
                             <tr>
                                 <td key={index}
-                                    style={{ color: day.weekDayIndex === 0 ? 'red' : day.weekDayIndex === 6 ? 'blue' : 'black', whiteSpace: 'pre-wrap' }}
+                                    style={{ color: day.weekDayIndex === 0 ? 'rgb(173,39,39)' : day.weekDayIndex === 6 ? 'rgb(60,108,153)' : 'black', 
+                                    whiteSpace: 'pre-wrap', padding:'0.3em', fontSize:'15px' }}
                                     onClick={e => loadSchedule(day.fullDate)}>
                                     {day.date}
                                 </td>
@@ -180,23 +191,39 @@ function BookingListPage() {
                     </table>
                 </div>
 
-                <div className="col-2 book-wrapper">
-                    <table>
-                        <tr><th>시간</th></tr>
+                <div className="col-1 book-wrapper2">
+                    <table className="book-table">
+                        <tr><th className="title-wrapper">시간</th></tr>
                         {results.map((result) => (
-                        <tr>
-                             <td onClick={checkTimes}>{result.startTime}</td>
-                            <td>{result.theaterName}</td>
+                            <tr key={result.movieNo}>
+                            <td>
+                                {timeOptions.filter(option => option.time === result.startTime).map((option) => (
+                                    <>
+                                    <button onClick={e=>selectedSchedule(result.movieScheduleNo)} className="btn btn-secondary btn-sm"
+                                        disabled={!option.available}>
+                                        {result.startTime}
+                                    </button>
+                                    <span
+                                        key={option.time}
+                                        style={{ color: option.available ? '' : 'rgb(121,120,114)', fontSize:'13px' }}>
+                                    {option.available ? '' : '  예매불가'}
+                                    </span>
+                                    </>
+                              ))}
+                            </td>
                         </tr>
                         ))}
                     </table>
                 </div>
-
             </div>
 
-            <div className="row mt-4 ms-5 mb-5">
-                <div className="offset-2 col-lg-7 d-flex justify-content-end">
-                    <button className="btn btn-secondary btn-lg">좌석선택</button>
+            <div className="row mt-5 mb-5">
+                <div className="offset-3 col-lg-6">
+                    {/* <button className="btn btn-secondary btn-lg"
+                         onClick={e => moveToSeat(scheduleNo)}   >
+                        좌석선택
+                    </button> */}
+                    
                 </div>
             </div>
 

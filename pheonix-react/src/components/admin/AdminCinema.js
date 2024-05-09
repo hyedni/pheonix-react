@@ -7,8 +7,13 @@ import React from 'react';
 import PostApi from './PostApi';
 import { useNavigate } from 'react-router';
 import { FaCirclePlus } from "react-icons/fa6";
+import { useRecoilState } from 'recoil';
+import { loginGradeState, loginIdState } from '../utils/RecoilData';
 
 function AdminCinema() {
+    //recoil state
+    const [loginId, setLoginId] = useRecoilState(loginIdState);
+    const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
 
     const [cinemas, setCinemas] = useState([]);
     const [region, setRegion] = useState({
@@ -178,9 +183,9 @@ function AdminCinema() {
                         영화관 관리
                         <span className='ms-3' onClick={e => openModal()}><FaCirclePlus style={{ marginBottom: '10px', color:'rgb(240, 86, 86)'}} /></span>
                     </div>
+                <hr />
                 </div>
             </div>
-            <hr />
 
             <div className="row" style={{ marginTop: '30px' }}>
                 <div className="offset-2 col-md-8">

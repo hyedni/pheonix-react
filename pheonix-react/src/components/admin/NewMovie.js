@@ -174,9 +174,9 @@ function NewMovie() {
                     <div className="title-head-text">
                         신규 영화 등록
                     </div>
+                <hr />
                 </div>
             </div>
-            <hr />
 
             <div className='row'>
                 <div className='offset-2 col-lg-8'>
