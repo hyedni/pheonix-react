@@ -24,6 +24,10 @@ import SeatStatus from './components/admin/SeatsTypes/SeatStatus';
 import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
 import Mypage from './components/user/Mypage';
+import Success from './components/store/purchase/success';
+import Fail from './components/store/purchase/fail';
+import Cancel from './components/store/purchase/cancel';
+import SuccessComplete from './components/store/purchase/successComplete';
 
 import { isLoginState, loginIdState, loginGradeState } from "./components/utils/RecoilData";
 import { useRecoilState, useRecoilValue } from 'recoil';
@@ -115,6 +119,12 @@ function App() {
             <Route path='/purchase-complete' element={<PurchaseComplete />} />
           </>
         }
+
+        {/* 결제 */}
+        <Route path='/purchase/success' element={<Success />} />
+        <Route path='/purchase/fail' element={<Fail />}/>
+        <Route path='/purchase/cancel' element={<Cancel />}/>
+        <Route path='/purchase/success-complete' element={<SuccessComplete />}/>
 
         {/* 게시판 */}
         <Route path='/lost' element={<Lost />} />
