@@ -31,6 +31,7 @@ import axios from "./components/utils/CustomAxios";
 import { useCallback, useEffect } from "react";
 import NonUser from './components/user/NonUser'; 
 import BookingListPage from './components/booking/BookingListPage';
+import MovieChart from './components/booking/MovieChart';
 
 
 
@@ -125,6 +126,7 @@ function App() {
        
         {/* 예매 */}
         <Route path='/booking' element={<BookingListPage />} />
+        <Route path='/moviechart' element={<MovieChart />} />
 
       </Routes >
 

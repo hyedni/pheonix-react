@@ -1,3 +1,4 @@
+import { useNavigate } from "react-router";
 import axios from "../utils/CustomAxios";
 import './BookingListPage.css';
 import { useCallback, useEffect, useState } from 'react';
@@ -5,6 +6,9 @@ import { useCallback, useEffect, useState } from 'react';
 function BookingListPage() {
 
     const [isTheaterShow, setIsTheaterShow] = useState(false);
+    const navigate = useNavigate();
+
+
 
     //전체데이터(Vo)담긴 state
     const [bookData, setBookData] = useState({
@@ -100,24 +104,22 @@ function BookingListPage() {
             };
             days.push(dayInfo); // 날짜와 요일을 문자열로 함께 저장
         }
-        setWeekDays(days); // 상태 업데이트
-    }, []); // 컴포넌트 마운트 시 한 번만 실행
+        setWeekDays(days); 
+    }, []); 
 
-
+    //시간계산
     const [selectedDate, setSelectedDate] = useState('');
     const [times, setTimes] = useState([]);
 
     useEffect(() => {
-        const currentDate = new Date();
-        setSelectedDate(currentDate.toISOString().split('T')[0]); // "YYYY-MM-DD" 형식으로 날짜 설정
-        setTimes(["12:34", "14:15", "18:00"]); // 시간 배열 초기화
+        
     }, []);
-
 
      // 시간 데이터 배열에 대한 검사 수행
      const checkTimes = () => {
         const currentDate = new Date().toISOString().split('T')[0];
-        const currentTime = new Date().toISOString().split('T')[1].substring(0, 5);
+        const now = new Date();
+        const currentTime = `${now.getHours()}:${now.getMinutes()}`;
 
         if (selectedDate === currentDate) { // 오늘 날짜와 같은 경우
             const currentHourMinute = currentTime.split(':');
@@ -126,27 +128,30 @@ function BookingListPage() {
             const timeResults = times.map(time => {
                 const eventHourMinute = time.split(':');
                 const eventTimeMinutes = parseInt(eventHourMinute[0], 10) * 60 + parseInt(eventHourMinute[1], 10);
+                console.log(eventHourMinute);
+                console.log(currentHourMinute);
 
                 return eventTimeMinutes > currentTimeMinutes 
-                    ? `${time} is later than current time.`
-                    : `${time} is not later than current time.`;
+                    ? `${time} 예매가능`
+                    : `${time} 예매불가능`;
             });
-
             console.log(timeResults);
         } else {
-            console.log('It is not today, no need to check time.');
+            console.log('오늘아님');
         }
     };
+
+    //일정 PK번호 넘기기
+
 
     return (
         <>
             <br />
             <br />
             <div className="row">
-
                 <div className="offset-2 col-2 book-wrapper">
-                    <table>
-                        <tr><th>영화</th></tr>
+                    <table className="book-table">
+                        <tr className="title-wrapper"><th>영화</th></tr>
                         {movieData.map((data) => (
                             <tr><td onClick={e => loadTheaterList(data.movieNo)}>{data.movieTitle}</td></tr>
                         ))}
@@ -154,8 +159,8 @@ function BookingListPage() {
                 </div>
 
                 <div className="col-2 book-wrapper">
-                    <table>
-                        <tr><th>영화관</th></tr>
+                    <table className="book-table">
+                        <tr className="title-wrapper"><th>영화관</th></tr>
                         <span style={{ display: isTheaterShow ? 'block' : 'none' }}>
                             {cinemaData.map((data) => (
                                 <tr><td onClick={e => saveCinema(data)}>{data}</td></tr>
@@ -165,9 +170,9 @@ function BookingListPage() {
                 </div>
 
                 <div className="col-1 book-wrapper">
-                    <table>
-                        <tr><th>날짜</th></tr>
-                        <tr><td style={{ fontWeight: 'bold' }}>{calendarMonth}월</td></tr>
+                    <table className="book-table text-center">
+                        <tr className="title-wrapper"><th>날짜</th></tr>
+                        <tr><td style={{ fontWeight: 'bold', fontSize: '20px'}}>{calendarMonth}월</td></tr>
                         {weekDays.map((day, index) => (
                             <tr>
                                 <td key={index}
@@ -180,19 +185,26 @@ function BookingListPage() {
                     </table>
                 </div>
 
-                <div className="col-2 book-wrapper">
-                    <table>
-                        <tr><th>시간</th></tr>
+                <div className="col-2 book-wrapper2">
+                    <table className="book-table">
+                        <tr className="title-wrapper"><th>시간</th></tr>
                         {results.map((result) => (
                         <tr>
-                             <td onClick={checkTimes}>{result.startTime}</td>
+                            <td>
+                                <button onClick={checkTimes} className="btn btn-secondary btn-sm">
+                                    {result.startTime}
+                                </button>
+                            </td>
                             <td>{result.theaterName}</td>
                         </tr>
                         ))}
                     </table>
                 </div>
 
+
             </div>
+
+
 
             <div className="row mt-4 ms-5 mb-5">
                 <div className="offset-2 col-lg-7 d-flex justify-content-end">

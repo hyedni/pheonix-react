@@ -75,14 +75,8 @@ function Htemplate() {
                     </button>
                     <div className="collapse navbar-collapse" id="navbarColor03">
                         <ul className="navbar-nav me-auto">
-                            <li className="nav-item dropdown">
-                                <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">영화</NavLink>
-                                <div className="dropdown-menu">
-                                    <NavLink className="dropdown-item" href="#">something</NavLink>
-                                    <NavLink className="dropdown-item" href="#">Something</NavLink>
-                                    {/* <div className="dropdown-divider"></div>
-                                        <NavLink className="dropdown-item" href="#">Separated </NavLink> */}
-                                </div>
+                            <li className='nav-item dropdown'>
+                                <NavLink className="nav-link fs-5 me-5" to="/moviechart">영화</NavLink>
                             </li>
                             <li className="nav-item dropdown">
                                 <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">극장</NavLink>

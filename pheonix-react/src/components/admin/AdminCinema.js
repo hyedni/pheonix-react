@@ -178,9 +178,9 @@ function AdminCinema() {
                         영화관 관리
                         <span className='ms-3' onClick={e => openModal()}><FaCirclePlus style={{ marginBottom: '10px', color:'rgb(240, 86, 86)'}} /></span>
                     </div>
+                <hr />
                 </div>
             </div>
-            <hr />
 
             <div className="row" style={{ marginTop: '30px' }}>
                 <div className="offset-2 col-md-8">
