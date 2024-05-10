@@ -2,6 +2,10 @@ import { useNavigate } from "react-router";
 import axios from "../utils/CustomAxios";
 import './BookingListPage.css';
 import { useCallback, useEffect, useState } from 'react';
+import { TbNumber12Small } from "react-icons/tb";
+import { TbNumber15Small } from "react-icons/tb";
+import { TbNumber19Small } from "react-icons/tb";
+import React, { Fragment } from 'react';
 
 function BookingListPage() {
 
@@ -10,7 +14,6 @@ function BookingListPage() {
     const [scheduleNo, setScheduleNo] = useState('');
     //일정 PK번호 넘기기
     const moveToSeat = (scheduleNo) => {
-        console.log(scheduleNo);
         navigate(`/주소/${scheduleNo}`)
     };
 
@@ -28,7 +31,8 @@ function BookingListPage() {
         remainingSeats: '',
         movieScheduleDateDisc: '',
         movieScheduleTimeDisc: '',
-        movieScheduleNo: ''
+        movieScheduleNo: '',
+        theaterCount: ''
     });
     const [results, setResults] = useState([]);
 
@@ -46,12 +50,30 @@ function BookingListPage() {
         loadMovie();
     }, []);
 
+    //관람등급 아이콘
+    const getAgeIcon = (movieAge) => {
+        switch (movieAge) {
+            case '12세 이상':
+                return <TbNumber12Small style={{ fontSize: '30px', backgroundColor: 'yellow', borderRadius: '10px' }} />;
+            case '15세 이상':
+                return <TbNumber15Small style={{ fontSize: '30px', backgroundColor: 'orange', borderRadius: '10px' }} />;
+            case '청소년관람불가':
+                return <TbNumber19Small style={{ fontSize: '30px', backgroundColor: 'red', borderRadius: '10px' }} />;
+            case '전체관람가':
+                return <span style={{ fontSize: '15px', color: 'white', fontWeight: 'bold', backgroundColor: 'green', borderRadius: '10px', width: '10px', padding: '5px' }}>all</span>;
+        }
+    };
+
     const loadTheaterList = useCallback(async (movieNo) => {
         const resp = await axios.get(`/booking/theater/${movieNo}`);
         setCinemaData(resp.data);
         setIsTheaterShow(true);
         setBookData({
             ...bookData,
+            movieNo: movieNo
+        });
+        setCntData({
+            ...cntData,
             movieNo: movieNo
         });
     }, [bookData]);
@@ -61,9 +83,32 @@ function BookingListPage() {
             ...bookData,
             cinemaName: data
         });
+        setCntData({
+            ...cntData,
+            cinemaName: data
+        });
     }, [cinemaData]);
 
+    const [theaterCnt, setTheaterCnt] = useState('');
+    const [theaterData, setTheaterData] = useState([]);
+    const [cntData, setCntData] = useState({
+        movieNo: 0,
+        cinemaName: ''
+    });
+
+    const getCnt = useCallback(async (cntData) => {
+        const resp = await axios.post("/booking/count", cntData)
+        setTheaterCnt(resp.data);
+    }, [bookData.movieNo, cinemaData.cinemaName]);
+
+    const theaterDistinct = useCallback(async (cntData) => {
+        const resp = await axios.get(`booking/theaterdistinct/${cntData.cinemaName}`)
+        setTheaterData(resp.data);
+    }, []);
+
     const loadSchedule = useCallback(async (data) => {
+        getCnt(cntData);
+        theaterDistinct(cntData);
         setSelectedDate(data);
         const updatedBookData = {
             ...bookData,
@@ -112,8 +157,8 @@ function BookingListPage() {
             };
             days.push(dayInfo); // 날짜와 요일을 문자열로 함께 저장
         }
-        setWeekDays(days); 
-    }, []); 
+        setWeekDays(days);
+    }, []);
 
     //시간계산
     const [selectedDate, setSelectedDate] = useState('');
@@ -124,8 +169,8 @@ function BookingListPage() {
         checkTimes();
     }, [times, selectedDate]);
 
-     // 시간 데이터 배열에 대한 검사 수행
-     const checkTimes = () => {
+    // 시간 데이터 배열에 대한 검사 수행
+    const checkTimes = () => {
         const currentDate = new Date().toISOString().split('T')[0];
         const now = new Date();
         const currentTime = `${now.getHours()}:${now.getMinutes()}`;
@@ -134,20 +179,71 @@ function BookingListPage() {
 
         if (selectedDate === currentDate) { // 오늘 날짜와 같은 경우
             const timeResults = times.map(time => {
+                // 해당 시간이 포함된 스케줄에서 상영관 번호를 찾습니다.
+                const matchingResult = results.find(result => result.startTime === time);
+                const theaterNo = matchingResult ? matchingResult.theaterName : null; // 상영관 이름 가져오기
+
                 const eventHourMinute = time.split(':');
                 const eventTimeMinutes = parseInt(eventHourMinute[0], 10) * 60 + parseInt(eventHourMinute[1], 10);
+
                 return {
                     time,
-                    available: eventTimeMinutes > currentTimeMinutes
+                    available: eventTimeMinutes > currentTimeMinutes,
+                    theaterNo: theaterNo // 상영관 이름 추가
                 };
             });
             setTimeOptions(timeResults);
         } else {
-            const timeResults = times.map(time => ({ time, available: true }));
+            const timeResults = times.map(time => {
+                // 해당 시간이 포함된 스케줄에서 상영관 번호를 찾습니다.
+                const matchingResult = results.find(result => result.startTime === time);
+                const theaterNo = matchingResult ? matchingResult.theaterName : null; // 상영관 이름 가져오기
+
+                return {
+                    time,
+                    available: true,
+                    theaterNo: theaterNo // 상영관 이름 추가
+                };
+            });
             setTimeOptions(timeResults);
         }
     };
 
+    const filterUniqueResults = useCallback(() => {
+        // 각 상영관별 고유한 `startTime` 값을 가진 항목만 남기도록 `Map`을 사용하여 필터링
+        const filteredResults = new Map();
+        results.forEach((result) => {
+            const key = `${result.movieScheduleNo}-${result.startTime}`;
+            if (!filteredResults.has(key)) {
+                filteredResults.set(key, result);
+            }
+        });
+        return Array.from(filteredResults.values());
+    }, [results]);
+
+    const uniqueResults = filterUniqueResults();
+
+    const [filteredTimeOptions, setFilteredTimeOptions] = useState([]);
+
+    // 옵션 필터링 함수 정의
+    const filterTimeOptions = useCallback(() => {
+        const options = uniqueResults.map(result => {
+            // 해당 시간에 대한 옵션 찾기
+            const optionsForTime = timeOptions.filter(option => option.time === result.startTime);
+            // 옵션의 예매 가능 여부 확인
+            const available = optionsForTime.length > 0 ? optionsForTime[0].available : false;
+            return {
+                ...result,
+                available: available
+            };
+        });
+        setFilteredTimeOptions(options);
+    }, [uniqueResults, timeOptions]);
+
+    // 의존성이 변경될 때마다 함수 호출
+    useEffect(() => {
+        filterTimeOptions();
+    }, [filterTimeOptions]);
 
     return (
         <>
@@ -158,7 +254,11 @@ function BookingListPage() {
                     <table className="book-table">
                         <tr><th className="title-wrapper">영화</th></tr>
                         {movieData.map((data) => (
-                            <tr><td onClick={e => loadTheaterList(data.movieNo)} style={{padding:'0.5em'}}>{data.movieTitle}</td></tr>
+                            <>
+                                <tr><td onClick={e => loadTheaterList(data.movieNo)} style={{ padding: '0.5em' }}>{data.movieTitle}</td>
+                                    <td> {getAgeIcon(data.movieAge)}</td>
+                                </tr>
+                            </>
                         ))}
                     </table>
                 </div>
@@ -168,7 +268,7 @@ function BookingListPage() {
                         <tr><th className="title-wrapper">영화관</th></tr>
                         <span style={{ display: isTheaterShow ? 'block' : 'none' }}>
                             {cinemaData.map((data) => (
-                                <tr><td onClick={e => saveCinema(data)} style={{padding:'0.5em'}}>{data}</td></tr>
+                                <tr><td onClick={e => saveCinema(data)} style={{ padding: '0.5em' }}>{data}</td></tr>
                             ))}
                         </span>
                     </table>
@@ -177,12 +277,14 @@ function BookingListPage() {
                 <div className="col-1 book-wrapper">
                     <table className="book-table text-center">
                         <tr><th className="title-wrapper">날짜</th></tr>
-                        <tr><td style={{ fontWeight: 'bold', fontSize: '40px', color:'rgb(121,120,114)'}}>{calendarMonth}</td></tr>
+                        <tr><td style={{ fontWeight: 'bold', fontSize: '40px', color: 'rgb(121,120,114)' }}>{calendarMonth}</td></tr>
                         {weekDays.map((day, index) => (
                             <tr>
                                 <td key={index}
-                                    style={{ color: day.weekDayIndex === 0 ? 'rgb(173,39,39)' : day.weekDayIndex === 6 ? 'rgb(60,108,153)' : 'black', 
-                                    whiteSpace: 'pre-wrap', padding:'0.3em', fontSize:'15px' }}
+                                    style={{
+                                        color: day.weekDayIndex === 0 ? 'rgb(173,39,39)' : day.weekDayIndex === 6 ? 'rgb(60,108,153)' : 'black',
+                                        whiteSpace: 'pre-wrap', padding: '0.3em', fontSize: '15px'
+                                    }}
                                     onClick={e => loadSchedule(day.fullDate)}>
                                     {day.date}
                                 </td>
@@ -191,27 +293,32 @@ function BookingListPage() {
                     </table>
                 </div>
 
-                <div className="col-1 book-wrapper2">
+                <div className="col-2 book-wrapper2">
                     <table className="book-table">
                         <tr><th className="title-wrapper">시간</th></tr>
-                        {results.map((result) => (
-                            <tr key={result.movieNo}>
-                            <td>
-                                {timeOptions.filter(option => option.time === result.startTime).map((option) => (
-                                    <>
-                                    <button onClick={e=>selectedSchedule(result.movieScheduleNo)} className="btn btn-secondary btn-sm"
-                                        disabled={!option.available}>
-                                        {result.startTime}
-                                    </button>
-                                    <span
-                                        key={option.time}
-                                        style={{ color: option.available ? '' : 'rgb(121,120,114)', fontSize:'13px' }}>
-                                    {option.available ? '' : '  예매불가'}
-                                    </span>
-                                    </>
-                              ))}
-                            </td>
-                        </tr>
+
+                        {theaterData.map((data) => (
+                            <tr key={data.theaterNo}>
+                                <td>{data.theaterName}</td>
+                                {uniqueResults.filter(result => result.theaterName === data.theaterName).map((filteredResult) => (
+                                    <tr key={`${filteredResult.theaterNo}-${filteredResult.movieScheduleNo}-${filteredResult.startTime}`}>
+                                        <td>
+                                            <>
+                                                <button key={filteredResult.movieScheduleNo}
+                                                    onClick={e => selectedSchedule(filteredResult.movieScheduleNo)} className="btn btn-secondary btn-sm"
+                                                    disabled={!filteredTimeOptions.available}
+                                                >
+                                                    {filteredResult.startTime}
+                                                </button>
+                                                <span
+                                                    style={{ color: filteredTimeOptions.available ? '' : 'rgb(121,120,114)', fontSize: '13px' }}>
+                                                    {filteredTimeOptions.available ? '' : '예매불가'}
+                                                </span>
+                                            </>
+                                        </td>
+                                    </tr>
+                                ))}
+                            </tr>
                         ))}
                     </table>
                 </div>
@@ -223,7 +330,7 @@ function BookingListPage() {
                          onClick={e => moveToSeat(scheduleNo)}   >
                         좌석선택
                     </button> */}
-                    
+
                 </div>
             </div>
 
