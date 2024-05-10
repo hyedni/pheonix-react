@@ -2,8 +2,9 @@ import { useCallback, useEffect, useState, useRef, useMemo } from "react";
 import axios from "../../utils/CustomAxios";
 import StoreMenu from "../StoreMenu";
 import Notification from "./Notification";
-import { useParams } from "react-router";
+import { Navigate, useNavigate, useParams } from "react-router";
 import { Link } from 'react-router-dom';
+import { loginIdState } from '../../utils/RecoilData';
 
 //디자인 임포트
 import './Store.css';
@@ -16,10 +17,7 @@ import { Modal } from "bootstrap";
 
 //이미지 임포트
 import nutritionFacts from "../image/bg_nutritionFacts.png";
-
- ///////////////////////////////////////////////////////////////////////////////////////
-//로그인 작동하면 주석 풀기
-//import { loginIdState } from "../../utils/RecoilData";
+import { useRecoilState } from "recoil";
 
 
 const StoreDetailList = () => {
@@ -29,9 +27,11 @@ const StoreDetailList = () => {
     const [products, setProducts] = useState({});
     const [imagePreview] = useState(null);
     //회원 아이디
-    //const { userId } = useRecoilState(loginIdState);
+    const [ userId ] = useRecoilState(loginIdState);
     //상품 수량 정보
     const [itemQty, setItemQty] = useState(1);
+    const navigate = useNavigate();
+
     //장바구니 담기
 
     // 방법1 - useEffect
@@ -49,9 +49,9 @@ const StoreDetailList = () => {
     // 방법2 - useMemo
     const addCart = useMemo(()=>{
         return {
-                cartUserId :  "testuser4",//userId,
-                cartProductNo : productNo,
-                cartQty : itemQty
+            cartUserId : userId,
+            cartProductNo : productNo,
+            cartQty : itemQty
         }
     }, [itemQty]);
 
@@ -73,28 +73,27 @@ const StoreDetailList = () => {
     //장바구니 담기
     const AddItemToCart = useCallback((e)=>{
 
-        ///////////////////////////////////////////////////////////////////////////////////////
-        //로그인 작동하면 주석 풀기
-        // if(loginIdState === null) {
-        //     const choice = window.confirm("로그인 상태가 아닙니다. \n로그인 페이지로 이동하시겠습니까?");
-        //     if (choice === true) {
-        //         return navigate('/login'); //로그인 페이지로 리다이렉트
-        //     }
-        // }
-        // else {
-        //     const choice = window.confirm("장바구니에 상품이 담겼습니다. \n장바구니로 이동하시겠습니까?");
-        //     if(choice === true) {
-        //         return navigate('/cart');
-        //     }
-        // }
-
-
-        // console.log(addCart);
+        if(userId === null) {
+            const choice = window.confirm("로그인 상태가 아닙니다. \n로그인 페이지로 이동하시겠습니까?");
+            if (choice === true) {
+                navigate('/login'); //로그인 페이지로 리다이렉트
+            }
+        }
+        console.log("하는 중");
         axios({
             url: "/cart/add/",
             method: "post",
             data: addCart
-        })
+        }).then(() => {
+            const choice = window.confirm("장바구니에 상품이 담겼습니다. \n장바구니로 이동하시겠습니까?");
+            if (choice === true) {
+                navigate('/cart');
+            } 
+        }).catch(error => {
+            console.error("Error adding item to cart:", error);
+            // Handle error if necessary
+        });
+
     }, [addCart]);
 
     //ref
@@ -196,7 +195,7 @@ const StoreDetailList = () => {
 
                                 <div className="row mt-4">
                                     <div className="col-3">
-                                        <Link to={`/cart`} className='btn btn-primary w-100' onClick={e=>(AddItemToCart())}><FaShoppingCart /></Link>
+                                        <Link className='btn btn-primary w-100' onClick={e=>(AddItemToCart())}><FaShoppingCart /></Link>
                                     </div>
                                     <div className="col-3">
                                         <Link to={`/gift/${products.productNo}`} className='btn btn-dark w-100'>선물하기</Link>
