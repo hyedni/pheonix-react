@@ -70,10 +70,11 @@ function Join() {
         formData.append(key, user[key]);
         console.log(user);
       }
-      
+
       if (file) {
         formData.append('attach', file); // 파일 추가
       }
+      
       console.log(formData);
       try {
         // 서버로 데이터 전송
@@ -89,6 +90,8 @@ function Join() {
     } else {
       alert("' * '표시는 무조건 작성해야함");
     }
+
+
 
   };
 

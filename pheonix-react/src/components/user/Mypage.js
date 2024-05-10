@@ -2,11 +2,13 @@ import { useRecoilState } from "recoil";
 import { useCallback, useEffect, useState } from 'react';
 import axios from "axios";
 import { loginIdState } from "../utils/RecoilData";
+import './join.css';
 
 function Mypage() {
 
     const [user, setUser] = useState([]);
     const [loginId, setLoginId] = useRecoilState(loginIdState);
+    const [imagePreview] = useState(null);
 
     useEffect(() => {
         loadData();
@@ -26,26 +28,75 @@ function Mypage() {
         }
     }, []);
 
+    // 함수 정의
+    function changeName() {
+        // 새 이름을 받는다 (예를 들어, 사용자에게 입력 받는다)
+        var newName = prompt("새로운 이름을 입력하세요:");
+
+        // 새 이름이 유효한지 확인한다
+        if (newName !== null && newName !== "") {
+            // 새 이름을 설정한다
+            setUser({ ...user, userName: newName });
+        }
+    }
     return (
         <>
-            <div className="row justify-content-center">
-                <div className="col-lg-8 title-head">
+            <div className="row justify-content-center mt-4">
+                <div className="col-lg-10 title-head">
                     <div className="card mb-3" key={user.userId}>
                         <div className="card-header">
-                            {user.userName}
-                        </div>
-                        <div className="card-body">
-                            <img src={user.profileImageUrl} alt="사용자 프로필" className="card-img-top" />
-                            <h5 className="card-title">{user.userId}</h5>
-                            <p className="card-text">등급: {user.userGrade}</p>
-                            <p className="card-text">포인트: {user.userPoint}</p>
+                            <div className="profile-header">
+                                <div className="profile-img-container">
+                                    <img className="profile-img" src={user.userImgLink} alt="프로필이미지" />
+                                </div>
+                                <div className="profile-info">
+                                    <div className="info-wrapper">
+                                        <h4 className="card-title" onClick={changeName}>{user.userName}</h4>
+                                        <p className="userId">{user.userId}</p>
+                                    </div>
+                                    <hr></hr>
+                                    <p className="card-text">등급: {user.userGrade}</p>
+                                    <p className="card-text">포인트: {user.userPoint}</p>
+                                </div>
+                            </div>
+                            <div className="profile-header">
+                                <h3>MY COUPON</h3>
+
+                                <h3>PHEONIX POINT</h3>
+                                <h3>자주가는 PHEONIX</h3>
+                            </div>
                         </div>
                     </div>
-
                 </div>
             </div>
 
+            <div className="row justify-content-center mt-1">
+                <div className="col-lg-10 title-head">
+                    <div className="card mb-3" key={user.userId}>
+                        <div className="row">
+                            <div className="col-md-3">
+                                <ul className="nav flex-column">
+                                    <li className="nav-item">
+                                        <a className="nav-link active" href="#">메뉴 항목 1</a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="#">메뉴 항목 2</a>
+                                    </li>
+                                    <li className="nav-item">
+                                        <a className="nav-link" href="#">메뉴 항목 3</a>
+                                    </li>
+                                </ul>
+                            </div>
+                            {/* <!-- 다른 컬럼 추가 가능 --> */}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            
+
         </>
+
     )
 }
 
