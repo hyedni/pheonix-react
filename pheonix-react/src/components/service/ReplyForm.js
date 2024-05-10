@@ -36,7 +36,7 @@ const ReplyForm = () => {
             setWriteTitle(value);
         } else if (name === "writeContent") {
             setWriteContent(value);
-        } else if (name === "personalNo") { // personalNo 변경사항 처리
+        } else if (name === "personalNo") { // personalNo 변경사항g 처리
             setPersonalNo(value);
         }
     };
