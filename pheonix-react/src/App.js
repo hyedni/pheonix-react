@@ -40,7 +40,7 @@ import Bunsil from './components/service/Bunsil';
 
 
 
-import NonUser from './components/user/nonUser'; 
+import NonUser from './components/user/NonUser'; 
 
 import AddTheater from './components/admin/AddTheater';
 
