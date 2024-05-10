@@ -1,12 +1,14 @@
 .book-wrapper {
     border: 1px solid rgb(212,211,201);
+    border-radius: 3px;
     border-right: none;
-    background-color: rgb(242, 240, 229);
+    background-color: rgb(242, 240, 235);
 }
 
 .book-wrapper2 {
     border: 1px solid  rgb(212,211,201);
-    background-color: rgb(242, 240, 229);
+    background-color: rgb(242, 240, 235);
+    border-radius: 3px;
 }
 
 .book-table {
@@ -19,4 +21,6 @@
     text-align: center;
     padding-top: 15px;
     padding-bottom: 15px;
+    border-bottom: 1.5px solid rgb(212,211,201);
+    font-weight: bolder;
 }

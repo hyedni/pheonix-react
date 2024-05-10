@@ -202,9 +202,9 @@ function MovieEdit() {
                         </>
                     )}
 
+                    <hr />
                 </div>
             </div>
-            <hr />
 
             <div className='row'>
                 <div className='offset-2 col-lg-8'>
