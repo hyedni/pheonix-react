@@ -164,51 +164,7 @@ function BookingListPage() {
     const [selectedDate, setSelectedDate] = useState('');
     const [times, setTimes] = useState([]);
     const [timeOptions, setTimeOptions] = useState([]);
-
-    useEffect(() => {
-        checkTimes();
-    }, [times, selectedDate]);
-
-    // 시간 데이터 배열에 대한 검사 수행
-    const checkTimes = () => {
-        const currentDate = new Date().toISOString().split('T')[0];
-        const now = new Date();
-        const currentTime = `${now.getHours()}:${now.getMinutes()}`;
-        const currentHourMinute = currentTime.split(':');
-        const currentTimeMinutes = parseInt(currentHourMinute[0], 10) * 60 + parseInt(currentHourMinute[1], 10);
-
-        if (selectedDate === currentDate) { // 오늘 날짜와 같은 경우
-            const timeResults = times.map(time => {
-                // 해당 시간이 포함된 스케줄에서 상영관 번호를 찾습니다.
-                const matchingResult = results.find(result => result.startTime === time);
-                const theaterNo = matchingResult ? matchingResult.theaterName : null; // 상영관 이름 가져오기
-
-                const eventHourMinute = time.split(':');
-                const eventTimeMinutes = parseInt(eventHourMinute[0], 10) * 60 + parseInt(eventHourMinute[1], 10);
-
-                return {
-                    time,
-                    available: eventTimeMinutes > currentTimeMinutes,
-                    theaterNo: theaterNo // 상영관 이름 추가
-                };
-            });
-            setTimeOptions(timeResults);
-        } else {
-            const timeResults = times.map(time => {
-                // 해당 시간이 포함된 스케줄에서 상영관 번호를 찾습니다.
-                const matchingResult = results.find(result => result.startTime === time);
-                const theaterNo = matchingResult ? matchingResult.theaterName : null; // 상영관 이름 가져오기
-
-                return {
-                    time,
-                    available: true,
-                    theaterNo: theaterNo // 상영관 이름 추가
-                };
-            });
-            setTimeOptions(timeResults);
-        }
-    };
-
+   
     const filterUniqueResults = useCallback(() => {
         // 각 상영관별 고유한 `startTime` 값을 가진 항목만 남기도록 `Map`을 사용하여 필터링
         const filteredResults = new Map();
@@ -223,28 +179,28 @@ function BookingListPage() {
 
     const uniqueResults = filterUniqueResults();
 
-    const [filteredTimeOptions, setFilteredTimeOptions] = useState([]);
-
-    // 옵션 필터링 함수 정의
-    const filterTimeOptions = useCallback(() => {
-        const options = uniqueResults.map(result => {
-            // 해당 시간에 대한 옵션 찾기
-            const optionsForTime = timeOptions.filter(option => option.time === result.startTime);
-            // 옵션의 예매 가능 여부 확인
-            const available = optionsForTime.length > 0 ? optionsForTime[0].available : false;
-            return {
-                ...result,
-                available: available
-            };
-        });
-        setFilteredTimeOptions(options);
-    }, [uniqueResults, timeOptions]);
-
-    // 의존성이 변경될 때마다 함수 호출
+    // 시간 데이터 배열에 대한 검사 수행
+    const checkTimes = () => {
+        const currentDate = new Date().toISOString().split('T')[0];
+        const now = new Date();
+        const currentTimeMinutes = now.getHours() * 60 + now.getMinutes();
+    
+        const newTimeOptions = uniqueResults.reduce((acc, result) => {
+            const eventHourMinute = result.startTime.split(':');
+            const eventTimeMinutes = parseInt(eventHourMinute[0], 10) * 60 + parseInt(eventHourMinute[1], 10);
+            const available = selectedDate !== currentDate || eventTimeMinutes > currentTimeMinutes;
+            
+            const key = `${result.movieScheduleNo}-${result.startTime}`;
+            acc[key] = available; //객체에 저장된 모든 키와 예매 가능 여부가 담긴 객체가 반환
+            return acc;
+        }, {});
+        setTimeOptions(newTimeOptions);
+    };
+    
     useEffect(() => {
-        filterTimeOptions();
-    }, [filterTimeOptions]);
-
+        checkTimes();
+    }, [times, selectedDate]);
+ 
     return (
         <>
             <br />
@@ -300,24 +256,30 @@ function BookingListPage() {
                         {theaterData.map((data) => (
                             <tr key={data.theaterNo}>
                                 <td>{data.theaterName}</td>
-                                {uniqueResults.filter(result => result.theaterName === data.theaterName).map((filteredResult) => (
-                                    <tr key={`${filteredResult.theaterNo}-${filteredResult.movieScheduleNo}-${filteredResult.startTime}`}>
-                                        <td>
-                                            <>
-                                                <button key={filteredResult.movieScheduleNo}
-                                                    onClick={e => selectedSchedule(filteredResult.movieScheduleNo)} className="btn btn-secondary btn-sm"
-                                                    disabled={!filteredTimeOptions.available}
-                                                >
-                                                    {filteredResult.startTime}
-                                                </button>
-                                                <span
-                                                    style={{ color: filteredTimeOptions.available ? '' : 'rgb(121,120,114)', fontSize: '13px' }}>
-                                                    {filteredTimeOptions.available ? '' : '예매불가'}
-                                                </span>
-                                            </>
-                                        </td>
-                                    </tr>
-                                ))}
+                                {uniqueResults.filter(result => result.theaterName === data.theaterName).map((filteredResult) => {
+                                    const key = `${filteredResult.movieScheduleNo}-${filteredResult.startTime}`;
+                                    const isAvailable = timeOptions[key] ?? false; // 기본값을 false로 설정하여 예매불가 처리
+
+                                    return (
+                                        <tr key={key}>
+                                            <td>
+                                                <>
+                                                    <button
+                                                        onClick={e => selectedSchedule(filteredResult.movieScheduleNo)}
+                                                        className="btn btn-secondary btn-sm"
+                                                        disabled={!isAvailable}
+                                                    >
+                                                        {filteredResult.startTime}
+                                                    </button>
+                                                    <span
+                                                        style={{ color: isAvailable ? '' : 'rgb(121,120,114)', fontSize: '13px' }}>
+                                                        {isAvailable ? '' : '예매불가'}
+                                                    </span>
+                                                </>
+                                            </td>
+                                        </tr>
+                                    );
+                                })}
                             </tr>
                         ))}
                     </table>
