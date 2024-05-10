@@ -38,6 +38,11 @@ const seatsState = atom({
     default: [], // 초기 상태 값
   });
 
+// const btnPurchase = atom({
+//   key : 'btnPurchase',
+//   default: false
+// });
+
   //카카오페이
   const partnerOrderId = atom({
     key : 'partnerOrderId',
@@ -72,5 +77,6 @@ const seatsState = atom({
 
 //naming export는 여러 개 할 수 있다.
 export {countState, loginIdState, loginGradeState, isLoginState , seatsState
-    , partnerOrderId, partnerUserId, tid, vo, pgToken
+    , partnerOrderId, partnerUserId, tid, vo, pgToken, 
+    //btnPurchase
 };

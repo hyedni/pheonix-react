@@ -3,7 +3,7 @@ import axios from "../utils/CustomAxios";
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { partnerOrderId, partnerUserId, tid, vo, loginIdState } from './../utils/RecoilData';
+import { partnerOrderId, partnerUserId, tid, vo, loginIdState, btnPurchase } from './../utils/RecoilData';
 
 //아이콘 임포트
 import { FaGift } from "react-icons/fa";
@@ -36,6 +36,8 @@ const Cart = () => {
     const [checkedList, setCheckedLists] = useState([]);
 
     const [btnPurchase, setBtnPurchase] = useState(false);
+    //const [btnPurchase, setBtnPurchase] = useRecoilState(btnPurchase);
+
 
     const [cartPartnerOrderId, setCartPartnerOrderId] = useRecoilState(partnerOrderId);
     const [cartPartnerUserId, setCartPartnerUserId] = useRecoilState(partnerUserId);
@@ -132,7 +134,6 @@ const Cart = () => {
             pgToken,
             purchaseList
         };
-        //console.log(postData)
         try {
             const resp = await axios.post("/purchase/success", postData);
             // Assuming these are state-setting functions

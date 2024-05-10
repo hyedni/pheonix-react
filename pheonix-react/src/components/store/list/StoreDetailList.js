@@ -20,8 +20,6 @@ import nutritionFacts from "../image/bg_nutritionFacts.png";
 import { useRecoilState } from "recoil";
 
 
-
-
 const StoreDetailList = () => {
 
     //state

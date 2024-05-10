@@ -112,6 +112,7 @@ const StoreList = () => {
                     <div className="row">
                         {products.map(product => (
                             <div className="col-md-4 mb-4" key={product.productNo}>
+                                <Link to={`/productDetail/${product.productNo}`} className="text-dark text-decoration-none">
                                 <div className='mt-2'>
                                     <div className="img-thumbnail mt-3 image-wrapper list-img" style={{ height: "400px" }}>
                                         {!imagePreview && (
@@ -123,12 +124,11 @@ const StoreList = () => {
 
                                         <Link className='edit-button btn btn-secondary' onClick={e => (AddItemToCart(product.productNo))}><FaShoppingCart /></Link>
                                         <Link to={`/gift/${product.productNo}`} className='edit-button btn btn-secondary'><FaGift/></Link>
-                                        <Link to={`/purchase/${product.productNo}`} className='edit-button btn btn-secondary'><IoBagHandle /></Link>
+                                        <Link to={`/cart/`} className='edit-button btn btn-secondary'><IoBagHandle /></Link>
 
                                     </div>
 
                                 </div><br />
-                                <Link to={`/productDetail/${product.productNo}`} className="text-dark text-decoration-none">
                                     <input type="hidden" value={product.productNo} />
                                     <span style={{ fontSize: '25px' }} className='ms-2'>{product.productName}</span><br />
                                     <span className="ms-2">{product.productContent}</span><br />
