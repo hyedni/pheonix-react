@@ -119,10 +119,10 @@ const Lost = () => {
 
     return (
         <>
-             <div className="row justify-content-center">
+            <div className="row justify-content-center">
                 <div className="col-lg-8  content-head">
                     <div className="content-head-text">
-                       분실물 저장소예욤
+                        분실물 저장소예욤
                     </div>
                 </div>
             </div>
@@ -135,8 +135,14 @@ const Lost = () => {
             </div>
 
             <div className="row justify-content-center">
-                <div className="col-lg-8  content-head">
+                <div className="col-lg-8  content-center text-center">
+                    <NavLink to="/bunsil" className="btn btn-primary mt-3 mb-3">분실물 등록하기</NavLink>
+                </div>
+            </div>
 
+
+            <div className="row justify-content-center">
+                <div className="col-lg-8  content-head">
                     <div className="row">
                         {currentPosts.map((lost, index) => (
                             <div key={lost.lostNo} className="col-lg-4 mb-3">
@@ -150,7 +156,6 @@ const Lost = () => {
                                             </div>
                                         )}
                                         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
-                                            <button className="btn btn-outline-primary me-md-2" onClick={() => console.log("Edit button clicked")}>수정</button>
                                             <button className="btn btn-outline-danger" onClick={() => deleteLost(lost)}>삭제</button>
                                         </div>
                                     </div>
@@ -158,21 +163,17 @@ const Lost = () => {
                             </div>
                         ))}
                     </div>
-
                 </div>
             </div>
 
-                    <NavLink to="/bunsil" className="mt-3">등록하기</NavLink>
-                    <NavLink to="/personal" className="mt-3">이전</NavLink>
-              
-
-            
-                        <Pagination 
-                            currentPage={currentPage}
-                            totalPages={Math.ceil(losts.length / postsPerPage)}
-                            paginate={setCurrentPage}
-                        />
-
+            <div className="row justify-content-center">
+                <Pagination
+                    currentPage={currentPage}
+                    totalPages={Math.ceil(losts.length / postsPerPage)}
+                    paginate={setCurrentPage}
+                />
+                <NavLink to="/personal" className="btn btn-secondary btn-sm mt-1 mr-1">문의게시판으로 돌아가기</NavLink>
+            </div>
         </>
     );
 };
