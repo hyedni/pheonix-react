@@ -1,9 +1,9 @@
 import './Cart.css';
 import axios from "../utils/CustomAxios";
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { Link, Navigate } from 'react-router-dom';
+import { Link, Navigate, useNavigate } from 'react-router-dom';
 import { useRecoilState } from 'recoil';
-import { partnerOrderId, partnerUserId, tid, vo } from './../utils/RecoilData';
+import { partnerOrderId, partnerUserId, tid, vo, loginIdState } from './../utils/RecoilData';
 
 //아이콘 임포트
 import { FaGift } from "react-icons/fa";
@@ -29,9 +29,9 @@ const Cart = () => {
     const [infoSharingTermsChecked, setInfoSharingTermsChecked] = useState(false); // 개인정보 제공 및 위탁
     const [giftConChecked, setGiftConChecked] = useState(false); //기프티콘 구매 동의
 
-    //const { userId } = useRecoilState({});
+    const [ userId ] = useRecoilState(loginIdState);
     const [cartItems, setCartItems] = useState([]); //카트+상품 정보
-    const [userId] = useState('testuser4');
+    // const [userId] = useState('testuser4');
     const [imagePreview] = useState(null);
     const [checkedList, setCheckedLists] = useState([]);
 
@@ -41,6 +41,8 @@ const Cart = () => {
     const [cartPartnerUserId, setCartPartnerUserId] = useRecoilState(partnerUserId);
     const [cartTid, setCartTid] = useRecoilState(tid);
     const [cartVo, setCartVo] = useRecoilState(vo);
+
+    const navigate = useNavigate();
 
     const [purchaseList, setPurchaseList] = useState({
         no: "",
@@ -131,8 +133,18 @@ const Cart = () => {
             purchaseList
         };
         //console.log(postData)
-        const resp = await axios.post("/purchase/success", postData);
-        <Navigate to='/purchase/success-complete' />
+        try {
+            const resp = await axios.post("/purchase/success", postData);
+            // Assuming these are state-setting functions
+            setCartPartnerOrderId("");
+            setCartPartnerUserId("");
+            setCartTid("");
+            setCartVo(""); 
+            navigate('/purchase/success-complete');
+        } catch (error) {
+            console.error("Error processing purchase:", error);
+        }
+       
     });
 
     useEffect(()=> {

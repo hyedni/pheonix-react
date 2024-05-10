@@ -1,8 +1,10 @@
 // productType 별 리스트를 위한 점보트론
 import { useCallback, useEffect, useState, useMemo  } from "react";
 import axios from "../../utils/CustomAxios";
-import { useLocation } from "react-router";
+import { useLocation, useNavigate } from "react-router";
 import { Link } from 'react-router-dom';
+import { loginIdState } from '../../utils/RecoilData';
+import { useRecoilState } from "recoil";
 import { useParams } from "react-router";
 
 //아이콘 임포트
@@ -18,8 +20,9 @@ const StoreList = () => {
     //state
     const [products, setProducts] = useState([]);
     const [imagePreview] = useState(null);
-    //const { userId } = useRecoilState(loginIdState);
+    const [ userId ] = useRecoilState(loginIdState);
     const [itemQty] = useState(1);
+    const navigate = useNavigate();
     
     //location
     const location = useLocation();
@@ -73,31 +76,33 @@ const StoreList = () => {
     //장바구니 담기
     const AddItemToCart = useCallback((productNo)=>{
 
-        ///////////////////////////////////////////////////////////////////////////////////////
-        //로그인 작동하면 주석 풀기
-        // if(loginIdState === null) {
-        //     const choice = window.confirm("로그인 상태가 아닙니다. \n로그인 페이지로 이동하시겠습니까?");
-        //     if (choice === true) {
-        //         return navigate('/login'); //로그인 페이지로 리다이렉트
-        //     }
-        // }
-        // else {
-        //     const choice = window.confirm("장바구니에 상품이 담겼습니다. \n장바구니로 이동하시겠습니까?");
-        //     if(choice === true) {
-        //         return navigate('/cart');
-        //     }
-        // }
-
-        // console.log(addCart);
+        if (userId === null) {
+            const choice = window.confirm("로그인 상태가 아닙니다. \n로그인 페이지로 이동하시겠습니까?");
+            if (choice === true) {
+                navigate('/login'); // 로그인 페이지로 리다이렉트
+                return;
+            }
+        } 
         axios({
             url: "/cart/add/",
             method: "post",
             data: {
-                cartUserId :  "testuser4",//userId,
-                cartProductNo : productNo,
-                cartQty : itemQty
+                cartUserId: userId,
+                cartProductNo: productNo,
+                cartQty: itemQty
             }
-        })
+        }).then(() => {
+            const choice = window.confirm("장바구니에 상품이 담겼습니다. \n장바구니로 이동하시겠습니까?");
+            if (choice === true) {
+                navigate('/cart');
+            } 
+        }).catch(error => {
+            console.error("Error adding item to cart:", error);
+            // Handle error if necessary
+        });
+
+           
+        
     }, [products]);
 
     return (
@@ -116,7 +121,7 @@ const StoreList = () => {
                                             <img src={imagePreview} alt="Preview" />
                                         )}
 
-                                        <Link to={`/cart`} className='edit-button btn btn-secondary' onClick={e => (AddItemToCart(product.productNo))}><FaShoppingCart /></Link>
+                                        <Link className='edit-button btn btn-secondary' onClick={e => (AddItemToCart(product.productNo))}><FaShoppingCart /></Link>
                                         <Link to={`/gift/${product.productNo}`} className='edit-button btn btn-secondary'><FaGift/></Link>
                                         <Link to={`/purchase/${product.productNo}`} className='edit-button btn btn-secondary'><IoBagHandle /></Link>
 
