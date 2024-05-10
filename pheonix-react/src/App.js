@@ -48,6 +48,9 @@ import BookingListPage from './components/booking/BookingListPage';
 
 
 
+import MovieChart from './components/booking/MovieChart';
+import ReplyForm from './components/service/ReplyForm';
+import PersonalWrite from './components/service/PersonalWrite';
 
 
 function App() {
