@@ -137,7 +137,7 @@ function App() {
         <Route path='/productDetail/:productNo' element={<StoreDetailList />} />
         {isLogin &&
           <>
-            <Route path='/cart/:btnPurchase' element={<Cart />} />
+            <Route path='/cart' element={<Cart />} />
             <Route path='/gift' element={<Gift />} />
           </>
         }
