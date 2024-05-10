@@ -45,6 +45,8 @@ import NonUser from './components/user/nonUser';
 import AddTheater from './components/admin/AddTheater';
 
 import BookingListPage from './components/booking/BookingListPage';
+import BookingAdd from './components/booking/BookingAdd';
+
 
 
 
@@ -162,7 +164,11 @@ function App() {
        
         {/* 예매 */}
         <Route path='/booking' element={<BookingListPage />} />
+
+        <Route path='/bookingAdd' element={<BookingAdd />} />
+
         <Route path='/moviechart' element={<MovieChart />} />
+
 
 
       </Routes >
