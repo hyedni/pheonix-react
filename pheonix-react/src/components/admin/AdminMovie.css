@@ -8,6 +8,11 @@
     overflow: auto;
 }
 
+.movie-button:hover {
+    border-style: none;
+    font-weight: bold;
+}
+
 .item-wrapper img {
     max-width: 100%;  /* 너비를 부모 요소에 맞춤 */
     max-height: 100%; /* 높이를 부모 요소에 맞춤 */
