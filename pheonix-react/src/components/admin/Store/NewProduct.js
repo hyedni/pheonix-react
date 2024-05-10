@@ -43,7 +43,7 @@ function NewProduct() {
     const saveInput = useCallback(async () => {
         const formData = new FormData();
         // 'input' 객체의 각 키와 값을 FormData에 추가
-        console.log(input);
+        //console.log(input);
         for (const key in input) {
             formData.append(key, input[key]);
         }

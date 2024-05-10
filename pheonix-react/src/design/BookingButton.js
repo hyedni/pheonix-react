@@ -1,8 +1,13 @@
+import { useNavigate } from 'react-router';
 import './BookingButton.css';
 import { WiDirectionUp } from "react-icons/wi";
 
 const BookingButton = () => {
 
+    const navigate = useNavigate();
+    const moveToBook = () => {
+        navigate('/booking');
+    };
     const scrollToTop = () => {
         window.scrollTo({
             top: 0,
@@ -11,7 +16,7 @@ const BookingButton = () => {
     };
     return (
         <>
-            <button className="booking-button" onClick={() => alert('예매 페이지 링크 연결할거임~')}>
+            <button className="booking-button" onClick={moveToBook}>
                 예매하기
             </button>
             <button className="scroll-to-top" onClick={scrollToTop}>

@@ -16,9 +16,9 @@ root.render(
   <>
   <RecoilRoot>
   <HashRouter>
-  <React.StrictMode>
+  {/* <React.StrictMode> */}
     <App />
-  </React.StrictMode>
+  {/* </React.StrictMode> */}
   </HashRouter>
   </RecoilRoot>
   </>
