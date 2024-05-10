@@ -38,11 +38,13 @@ import Bunsil from './components/service/Bunsil';
 
 
 
-import NonUser from './components/user/NonUser'; 
+import NonUser from './components/user/nonUser'; 
 
 import AddTheater from './components/admin/AddTheater';
 
 import BookingListPage from './components/booking/BookingListPage';
+import ReplyForm from './components/service/ReplyForm';
+import PersonalWrite from './components/service/PersonalWrite';
 
 
 
@@ -146,6 +148,8 @@ function App() {
         <Route path='/personalDetail/:personalNo' element={<PersonalDetail/>}/>
         <Route path='/pagination' element={<Pagination/>}/>
         <Route path='/bunsil' element={<Bunsil/>}/>
+        <Route path='/replyform' element={<ReplyForm/>}/>
+        <Route path='/personalwrite' element={<PersonalWrite/>}/>
 
 
        
