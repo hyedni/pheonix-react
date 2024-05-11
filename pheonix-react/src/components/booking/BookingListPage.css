@@ -24,3 +24,12 @@
     border-bottom: 1.5px solid rgb(212,211,201);
     font-weight: bolder;
 }
+
+.result-wrapper {
+    margin-top: 5%;
+    margin-bottom: 5%;
+    border-top: 2px solid  rgb(212,211,201);
+    border-bottom: 2px solid  rgb(212,211,201);
+    text-align: center;
+    line-height: 3em;
+}
