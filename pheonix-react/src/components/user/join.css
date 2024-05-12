@@ -1,12 +1,12 @@
 .join-container {
     max-width: 500px;
     margin: 0 auto;
-    padding: 20px;
+    padding: 18px;
   }
   
   .join-form label {
     margin-bottom: 5px;
-    margin-top: 20px;
+    margin-top: 18px;
   }
   
   .join-form input[type="text"],
@@ -20,7 +20,7 @@
   }
   
   .join-form button {
-    padding: 8px 20px;
+    padding: 8px 18px;
     border: none;
     border-radius: 4px;
     cursor: pointer;
@@ -34,5 +34,43 @@
     color: red;
   }
 
+  .profile-img-container {
+    width: 150px; /* 이미지 컨테이너의 너비 */
+    height: 150px; /* 이미지 컨테이너의 높이 */
+    border-radius: 50%; /* 동그랗게 만들기 */
+    overflow: hidden; /*넘치는 이미지를 숨김 */
+}
+
+.profile-img {
+  width: 100%; /* 이미지의 너비를 100%로 설정하여 이미지를 컨테이너에 맞게 조정 */
+  height: 100%; /* 높이를 100%로 설정하여 이미지의 가로세로 비율 유지 */
+  object-fit: cover; /* 이미지를 잘리지 않고 비율을 유지하면서 컨테이너에 맞춤 */
+}
+
+.profile-header { 
+  margin-top: 1.5em;
+  display: flex; /* Flexbox 사용 */
+  align-items: center; /* 세로 중앙 정렬 */
+  
+}
+
+.profile-info {
+  width: 100%;
+  margin-left: 30px; /* 이름, 등급, 포인트와 프로필 이미지 사이 간격 설정 */
+  
+}
+.profile-header h3 {
+  margin-right: 30px;
+}
+
+.info-wrapper {
+  display: flex;
+  /* justify-content: space-between; */
+  align-items: center;
+}
+.userId {
+  margin-top: 5px;
+  margin-left: 10px; /* 원하는 만큼의 간격 설정 */
+}
   
   
