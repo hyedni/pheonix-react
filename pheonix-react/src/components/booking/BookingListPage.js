@@ -144,6 +144,7 @@ function BookingListPage() {
         setScheduleNo(num);
         const resp = await axios.get(`/booking/detail/${num}`);
         setScheduleDetail(resp.data);
+        scrollToBottom();
     }, [scheduleNo]);
 
     // 달력 
@@ -221,6 +222,13 @@ function BookingListPage() {
     useEffect(() => {
         checkTimes();
     }, [times, selectedDate]);
+
+    const scrollToBottom = () => {
+        window.scrollTo({
+            top: document.body.scrollHeight,
+            behavior: 'smooth'
+        });
+    };
 
     return (
         <>
@@ -336,7 +344,7 @@ function BookingListPage() {
                         </div>
 
                         {/* 선택된 상영스케줄 정보 */}
-                        <div className="container result-wrapper" style={{ display: isSelectedSchedule ? 'block' : 'none' }} >
+                        <div className="container result-wrapper" style={{ display: isSelectedSchedule ? 'block' : 'none'}} >
                             <div className="row" style={{ padding: '1em' }}>
                                 <div className="col">
                                     <div className="row">

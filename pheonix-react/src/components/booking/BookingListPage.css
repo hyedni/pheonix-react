@@ -32,4 +32,5 @@
     border-bottom: 2px solid  rgb(212,211,201);
     text-align: center;
     line-height: 3em;
+    overflow-y: auto;
 }
