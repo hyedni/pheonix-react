@@ -81,6 +81,7 @@ function BookingListPage() {
             movieNo: movieNo
         });
         setIsSelectedMovie(movieNo);
+        setisSelectedSchedule(false);
     }, [bookData]);
 
     const [isSelectedCinema, setIsSelectedCinema] = useState({
@@ -101,6 +102,7 @@ function BookingListPage() {
             isOk: true
         });
         setIsScheduleShow(false);
+        setisSelectedSchedule(false);
     }, [cinemaData]);
 
     const [theaterData, setTheaterData] = useState([]);
@@ -300,18 +302,22 @@ function BookingListPage() {
                                                                 <>
                                                                     <button
                                                                         onClick={e => selectedSchedule(filteredResult.movieScheduleNo)}
-                                                                        className="btn btn-secondary btn-sm"
+                                                                        className="btn btn-secondary btn-sm" 
                                                                         disabled={!isAvailable || filteredResult.remainingSeats === 0}
                                                                     >
                                                                         {filteredResult.startTime}
                                                                     </button>
-                                                                    <span style={{fontSize:'12px', color:'green'}}> {filteredResult.remainingSeats}석 /</span>
-                                                                    <span style={{fontSize:'12px', color:'gray'}}> 총{filteredResult.theaterTotalSeats}석</span>
-                                                                    <span
-                                                                        style={{ color: isAvailable ? '' : 'rgb(121,120,114)', fontSize: '12px' }}>
-                                                                        {isAvailable ? '' : '예매종료'}
+                                                                    <span style={{fontSize:'11px', color:'green'}}> {filteredResult.remainingSeats} /</span>
+                                                                    <span style={{fontSize:'11px', color:'gray'}}> {filteredResult.theaterTotalSeats}석</span>
+                                                                    <span style={{fontSize:'11px', color:'gray'}}>
+                                                                        {filteredResult.movieScheduleTimeDisc === '조조' ? ' 조조' : ''}
+                                                                        {filteredResult.movieScheduleTimeDisc === '심야' ? ' 심야' : ''}
                                                                     </span>
-                                                                    <span style={{color: filteredResult.remainingSeats === 0 ? 'rgb(173,39,39)' : '', fontSize: '12px' }}>
+                                                                    <span
+                                                                        style={{ color: isAvailable ? '' : 'rgb(121,120,114)', fontSize: '11px' }}>
+                                                                        {isAvailable ? '' : ' 예매종료'}
+                                                                    </span>
+                                                                    <span style={{color: filteredResult.remainingSeats === 0 ? 'rgb(173,39,39)' : '', fontSize: '11px' }}>
                                                                         {filteredResult.remainingSeats === 0 ? ' 매진' : ''}
                                                                     </span>
                                                                 </>
@@ -345,9 +351,8 @@ function BookingListPage() {
                                 </div>
                             </div>
                         </div>
+
                     </div>
-
-
 
                 </div>
             </div>
