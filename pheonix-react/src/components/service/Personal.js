@@ -1,15 +1,15 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from "../utils/CustomAxios";
 import { NavLink } from 'react-router-dom';
 import Pagination from './Pagination';
-import ReplyForm from './ReplyForm'; // 새로운 답변을 입력할 폼 컴포넌트 추가
-import PersonalWrite from './PersonalWrite';
+import WrapComments from './WrapComments';
 
 const Personal = () => {
     const [personals, setPersonals] = useState([]);
     const [currentPage, setCurrentPage] = useState(1);
     const [postsPerPage] = useState(10);
     const [selectedPersonal, setSelectedPersonal] = useState(null);
+
     useEffect(() => {
         axios.get("/personal/")
             .then(resp => {
@@ -34,7 +34,7 @@ const Personal = () => {
             });
     }
 
-    const handleReplyClick = (personal) => {
+    const handleTitleClick = (personal) => {
         setSelectedPersonal(personal);
     };
 
@@ -74,7 +74,6 @@ const Personal = () => {
                 </div>
             </div>
 
-
             <div className="row justify-content-center">
                 <div className="col-lg-8">
                     <table className="table text-center">
@@ -84,7 +83,6 @@ const Personal = () => {
                                 <th scope="col">제목</th>
                                 <th scope="col">글쓴이</th>
                                 <th scope="col">삭제</th>
-                                <th scope="col">답변</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -92,14 +90,11 @@ const Personal = () => {
                                 <tr key={item.personalNo}>
                                     <td>{item.personalNo}</td>
                                     <td>
-                                        <NavLink to={`/personaldetail/${item.personalNo}`} style={{ textDecoration: 'none', color: 'inherit' }}>{item.personalTitle}</NavLink>
+                                        <NavLink to={`/personaldetail/${item.personalNo}`} style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => handleTitleClick(item)}>{item.personalTitle}</NavLink>
                                     </td>
                                     <td>{item.personalId}</td>
                                     <td>
                                         <button className="btn btn-danger" onClick={() => deletePersonal(item)}>삭제</button>
-                                    </td>
-                                    <td>
-                                        <button className="btn btn-primary" onClick={() => handleReplyClick(item)}>답변</button>
                                     </td>
                                 </tr>
                             ))}
@@ -107,13 +102,11 @@ const Personal = () => {
                     </table>
 
                     <Pagination currentPage={currentPage} totalPages={Math.ceil(personals.length / postsPerPage)} paginate={paginate} />
-
                 </div>
             </div>
 
             <div className="row justify-content-end">
                 <div className="col-lg-2">
-                    {/* PersonalWrite 컴포넌트로 가는 네비게이션 링크 */}
                     <NavLink to="/personalwrite">
                         <button className="btn btn-success">글쓰기</button>
                     </NavLink>
@@ -123,7 +116,7 @@ const Personal = () => {
             {selectedPersonal && (
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
-                        <ReplyForm personalId={selectedPersonal.personalNo} />
+                        <WrapComments comments={selectedPersonal.comments} />
                     </div>
                 </div>
             )}
