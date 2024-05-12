@@ -98,10 +98,11 @@ function Htemplate() {
                             <li className="nav-item dropdown">
                                 <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">관리자</NavLink>
                                 <div className="dropdown-menu">
-                                    <NavLink className="dropdown-item" to="/adminCinema">영화관관리</NavLink>
-                                    <NavLink className="dropdown-item" to="/adminMovie">영화관리</NavLink>
-                                    <NavLink className="dropdown-item" to="/adminTheater">상영관관리</NavLink>
-                                    <NavLink className="dropdown-item" to="/adminStore">스토어관리</NavLink>
+                                    <NavLink className="dropdown-item" to="/adminCinema">영화관</NavLink>
+                                    <NavLink className="dropdown-item" to="/adminMovie">영화</NavLink>
+                                    <NavLink className="dropdown-item" to="/adminTheater">상영관</NavLink>
+                                    <NavLink className="dropdown-item" to="/movieSchedule">상영일정</NavLink>
+                                    <NavLink className="dropdown-item" to="/adminStore">스토어</NavLink>
                                     <NavLink className="dropdown-item" to="/movieRegister">회원관리</NavLink>
                                 </div>
                             </li>

@@ -53,6 +53,7 @@ import BookingAdd from './components/booking/BookingAdd';
 import MovieChart from './components/booking/MovieChart';
 import ReplyForm from './components/service/ReplyForm';
 import PersonalWrite from './components/service/PersonalWrite';
+import MovieSchedule from './components/admin/MovieSchedule';
 
 
 function App() {
@@ -103,6 +104,7 @@ function App() {
         <Route path='/adminCinema' element={<AdminCinema />} />
         <Route path='/adminStore' element={<AdminStore />} />
         <Route path='/adminTheater' element={<AdminTheater />} />
+        <Route path='/movieSchedule' element={<MovieSchedule/>}/>
 
         <Route path='/movieEdit/:movieNo' element={<MovieEdit />} />
         <Route path='/productEdit/:productNo' element={<ProductEdit />} />

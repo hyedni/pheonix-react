@@ -117,6 +117,7 @@ function BookingListPage() {
     }, []);
 
     const loadSchedule = useCallback(async (data) => {
+        setisSelectedSchedule(false);
         const updatedBookData = {
             ...bookData,
             startDate: data
@@ -225,11 +226,11 @@ function BookingListPage() {
         <>
             <br />
             <br />
+            <br />
 
             <div className="container">
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
-
                         <div className="row">
                             <div className="col book-wrapper">
                                 <table className="book-table">
@@ -315,7 +316,7 @@ function BookingListPage() {
                                                                     </span>
                                                                     <span
                                                                         style={{ color: isAvailable ? '' : 'rgb(121,120,114)', fontSize: '11px' }}>
-                                                                        {isAvailable ? '' : ' 예매종료'}
+                                                                        {isAvailable ? '' : ' 마감'}
                                                                     </span>
                                                                     <span style={{color: filteredResult.remainingSeats === 0 ? 'rgb(173,39,39)' : '', fontSize: '11px' }}>
                                                                         {filteredResult.remainingSeats === 0 ? ' 매진' : ''}
