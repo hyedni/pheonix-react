@@ -40,11 +40,13 @@ import Bunsil from './components/service/Bunsil';
 
 
 
-import NonUser from './components/user/nonUser'; 
+import NonUser from './components/user/NonUser'; 
 
 import AddTheater from './components/admin/AddTheater';
 
 import BookingListPage from './components/booking/BookingListPage';
+import BookingAdd from './components/booking/BookingAdd';
+
 
 
 
@@ -135,7 +137,7 @@ function App() {
         <Route path='/productDetail/:productNo' element={<StoreDetailList />} />
         {isLogin &&
           <>
-            <Route path='/cart/:btnPurchase' element={<Cart />} />
+            <Route path='/cart' element={<Cart />} />
             <Route path='/gift' element={<Gift />} />
           </>
         }
@@ -162,7 +164,11 @@ function App() {
        
         {/* 예매 */}
         <Route path='/booking' element={<BookingListPage />} />
+
+        <Route path='/bookingAdd' element={<BookingAdd />} />
+
         <Route path='/moviechart' element={<MovieChart />} />
+
 
 
       </Routes >
