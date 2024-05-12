@@ -1,12 +1,12 @@
-// PersonalDetail.js
-
 import React, { useCallback, useEffect, useState } from "react";
 import axios from "../utils/CustomAxios";
 import { useParams, Link } from "react-router-dom";
+import WrapComments from "./WrapComments";
 
 const PersonalDetail = () => {
-    const { personalNo } = useParams(); // 파라미터에서 번호 추출
+    const { personalNo } = useParams();
     const [personal, setPersonal] = useState({});
+    const [comments, setComments] = useState([]);
 
     useEffect(() => {
         loadData();
@@ -14,15 +14,25 @@ const PersonalDetail = () => {
 
     const loadData = useCallback(async () => {
         try {
-            if (!personalNo) return; // personalNo가 없으면 함수 종료
-            const resp = await axios.get("/personal/" + personalNo);
-            if (resp.data) {
-                setPersonal(resp.data);
+            if (!personalNo) return;
+            const personalResp = await axios.get("/personal/" + personalNo);
+            if (personalResp.data) {
+                setPersonal(personalResp.data);
+                setComments(personalResp.data.comments || []);
             }
         } catch (error) {
             console.error("Error loading data:", error);
         }
     }, [personalNo]);
+
+    const addComment = async (newComment) => {
+        try {
+            const commentResp = await axios.post(`/comments`, { content: newComment });
+            setComments([...comments, commentResp.data]);
+        } catch (error) {
+            console.error("Error adding comment:", error);
+        }
+    };
 
     return (
         <div className="container">
@@ -42,9 +52,13 @@ const PersonalDetail = () => {
                     </div>
                 </div>
             </div>
+            <div className="row justify-content-center">
+                <div className="col-lg-8">
+                    <WrapComments comments={comments} addComment={addComment} />
+                </div>
+            </div>
         </div>
     );
-    
 };
 
 export default PersonalDetail;

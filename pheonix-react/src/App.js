@@ -40,7 +40,7 @@ import Bunsil from './components/service/Bunsil';
 
 
 
-import NonUser from './components/user/NonUser'; 
+import NonUser from './components/user/nonUser'; 
 
 import AddTheater from './components/admin/AddTheater';
 
@@ -53,6 +53,8 @@ import BookingAdd from './components/booking/BookingAdd';
 import MovieChart from './components/booking/MovieChart';
 import ReplyForm from './components/service/ReplyForm';
 import PersonalWrite from './components/service/PersonalWrite';
+import CommentLists from './components/service/CommentLists';
+import Comment from './components/service/Comment';
 
 
 function App() {
@@ -159,6 +161,8 @@ function App() {
         <Route path='/bunsil' element={<Bunsil/>}/>
         <Route path='/replyform' element={<ReplyForm/>}/>
         <Route path='/personalwrite' element={<PersonalWrite/>}/>
+        <Route path='/commentlists' element={<CommentLists/>}/>
+        <Route path='wrapcomments' element={<Comment/>}/>
 
 
        
