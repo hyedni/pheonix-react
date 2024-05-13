@@ -13,11 +13,9 @@ import { AiFillLike } from "react-icons/ai";
 
 const ReviewList = () => {
 
-    const [userId] = useRecoilState(loginIdState);
+    const [ userId ] = useRecoilState(loginIdState);
     const { movieNo } = useParams();
     const [ reviewLists, setReviewLists ] = useState([]);
-    const [ likeVO, setLikeVO ] = useState([]);
-    const [ finalLists, setFinalListS] = useState([]);
 
     useEffect(() => {
         loadReviews();
@@ -28,6 +26,7 @@ const ReviewList = () => {
         try {
             axios.get(`/review/${movieNo}`).then(resp => {
                 setReviewLists(resp.data);
+                console.log(resp.data);
             })
         }
         catch (error) {
@@ -35,23 +34,22 @@ const ReviewList = () => {
         }
     }, [movieNo]);
 
-    //좋아요 개수 불러오기
-    const loadLikes = useCallback(()=>{
+    //좋아요
+    const clickLike = useCallback((target)=>{
         try {
-            const dataList = reviewLists.map(review => ({
+            const data = ({
                 userId : userId,
-                reviewNo : review.reviewNo
-            }));
-            axios.get("/review_like/checkAll"+ dataList).then(resp => {
-                setLikeVO(resp.data); //리뷰 번호 + 사용자 좋아요 여부 + 글에 대한 좋아요 개수
-                console.log(resp.data);
+                reviewNo : target
+            });
+            axios.get("/review_like/"+data).then(resp => {
+                // 해당 글에 대한 사용자의 좋아요 여부 값 변경
             })
-
         }
         catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
-    }, [reviewLists]);
+    }, []);
+
 
     return (
         <>
@@ -100,7 +98,14 @@ const ReviewList = () => {
                                         <div className="row">
                                             <div className="col center">
                                                 {new Date(review.reviewDate).toLocaleDateString()}
-                                                 | <AiFillLike/>
+                                                 | 
+                                                {review.state === 'false' ? (
+                                                    <AiFillLike onClick={()=>{clickLike(review.reviewNo)}} />
+                                                ):(
+                                                    <AiFillLike onClick={()=>{clickLike(review.reviewNo)}} style={{ color: 'red' }} />
+                                                )} 
+
+                                                 {review.count}
                                                  
                                             </div>
                                         </div>
