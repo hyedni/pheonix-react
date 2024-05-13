@@ -87,7 +87,7 @@ function MovieSchedule() {
             startTime: "",
             endTime: ""
         });
-    }, [insertData]);
+    }, [calRunningTime]);
 
     const [cinemas, setCinemas] = useState([]);
     const cinemaList = useCallback(async () => {
@@ -132,13 +132,16 @@ function MovieSchedule() {
         setInsertData({
             ...insertData,
             [e.target.name]: e.target.value,
-            endTime: endTimeValue
+            endTime: endTimeValue,
+            movieNo: movieNo
         });
         console.log(insertData);
     }, [insertData]);
 
+    const [movieNo, setMovieNo] = useState();
     const saveMovieNo = useCallback(async (e) => {
         await getRunningTime(e.target.value);
+        setMovieNo(e.target.value);
         setInsertData({
             ...insertData,
             movieNo: e.target.value,
@@ -220,7 +223,7 @@ function MovieSchedule() {
 
     const bsModalEdit = useRef();
     const openModalEdit = useCallback((target) => {
-        const modal = Modal.getInstance(bsModalEdit.current);
+        const modal = new Modal(bsModalEdit.current);
         modal.show();
         copy(target);
         insert();
@@ -297,9 +300,9 @@ function MovieSchedule() {
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
                         상영 일정 관리
-                        <span style={{ fontSize: '15px', fontWeight: 'normal', marginLeft: '10px' }}> 검색어를 입력하여 원하는 조건의 상영일정을 찾으세요! </span>
-                        <span style={{ marginLeft: '340px' }}><button className="btn btn-primary" onClick={e => openModal()}>일정등록</button></span>
+                        <span style={{ marginLeft: '10px' }}><button className="btn btn-primary" onClick={e => openModal()}>일정등록</button></span>
                         <span style={{ marginLeft: '10px' }}><button className="btn btn-dark" onClick={e => moveToStart(e)}>처음으로</button></span>
+                        <span style={{ fontSize: '15px', fontWeight: 'normal', marginLeft: '10px' }}> 검색어를 입력하여 원하는 조건의 상영일정을 찾으세요! </span>
                     </div>
                     <hr />
                 </div>
@@ -424,7 +427,7 @@ function MovieSchedule() {
                                     <div className="row">
                                         <div className="col">
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">상영일</label>
-                                            <input type="text" name="startDate" value={insertData.startDate} className="form-control" onChange={e => saveData(e)} />
+                                            <input type="text" name="startDate" value={insertData.startDate} className="form-control" onChange={e => saveData(e)} />    
                                         </div>
                                         <div className="col">
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">종료일</label>
