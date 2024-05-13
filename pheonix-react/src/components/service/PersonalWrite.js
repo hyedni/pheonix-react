@@ -1,11 +1,29 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback } from 'react';
 import axios from "../utils/CustomAxios";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { loginIdState, loginGradeState, isLoginState } from "../utils/RecoilData";
+
 
 const PersonalWrite = () => {
     const [personalId, setPersonalId] = useState("");
+    const [loginId, setLoginId] = useRecoilState(loginIdState);
+    const [user, setUser] = useState([]);
     const [personalTitle, setPersonalTitle] = useState("");
     const [personalContent, setPersonalContent] = useState("");
 
+
+    const loadData = useCallback(async () => {
+        try {
+            const resp = await axios.get("/personal", {
+                params: {
+                    userId: personalId
+                }
+            });
+            setUser(resp.data);
+        } catch (error) {
+            console.error('사용자 정보를 불러오는 중 오류가 발생했습니다:', error);
+        }
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
