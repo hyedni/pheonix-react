@@ -34,7 +34,7 @@ import { useCallback, useEffect } from "react";
 import PersonalDetail from './components/service/PersonalDetail';
 import Pagination from './components/service/Pagination';
 import Bunsil from './components/service/Bunsil';
-import NonUser from './components/user/NonUser'; 
+import NonUser from './components/user/nonUser'; 
 import AddTheater from './components/admin/AddTheater';
 import BookingListPage from './components/booking/BookingListPage';
 import BookingAdd from './components/booking/BookingAdd';
@@ -44,6 +44,7 @@ import PersonalWrite from './components/service/PersonalWrite';
 import MovieSchedule from './components/admin/MovieSchedule';
 import CommentLists from './components/service/CommentLists';
 import Comment from './components/service/Comment';
+import ReviewList from './components/review/ReviewList';
 
 
 function App() {
@@ -139,6 +140,9 @@ function App() {
         <Route path='/purchase/fail' element={<Fail />}/>
         <Route path='/purchase/cancel' element={<Cancel />}/>
         <Route path='/purchase/success-complete' element={<SuccessComplete />}/>
+
+        {/* 리뷰 게시판 */}
+        <Route path='/review/list' element={<ReviewList />} />
 
         {/* 게시판 */}
         <Route path='/lost' element={<Lost />} />
