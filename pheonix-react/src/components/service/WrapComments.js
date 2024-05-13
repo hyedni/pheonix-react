@@ -2,28 +2,21 @@ import React, { useState } from "react";
 import axios from "../utils/CustomAxios";
 import CommentLists from "./CommentLists";
 
-export default function WrapComments({ comments, addComment: addNewComment, editComment }) {
+export default function WrapComments({ comments, addComment }) {
     const [newComment, setNewComment] = useState("");
 
-    const addComment = async (newComment) => {
+    const handleAddComment = async () => {
         try {
-            const response = await axios.post(`/comments`, {
-                commentsContent: newComment.content,
-                commentsWriter: newComment.writer // 필드 이름을 commentsWriter로 수정
+            const response = await axios.post("/comments/", {
+                commentsContent: newComment,
+                commentsWriter: "작성자 이름"
             });
             console.log("New comment added:", response.data);
-            // 요청에 성공하면 새로운 댓글을 화면에 반영할 수 있도록 상태를 업데이트합니다.
-            addNewComment(response.data); // 기존의 addComment 함수로 전달
-            setNewComment(""); // 입력 필드 초기화
+            addComment(response.data);
+            setNewComment("");
         } catch (error) {
             console.error("Error adding comment:", error);
         }
-    };
-    
-
-    const handleAddComment = () => {
-        if (newComment.trim() === "") return;
-        addComment({ content: newComment, writer: "작성자 이름" }); // 작성자 이름 추가
     };
 
     return (
@@ -38,7 +31,7 @@ export default function WrapComments({ comments, addComment: addNewComment, edit
                 />
                 <button className="btn btn-outline-secondary" type="button" onClick={handleAddComment}>작성</button>
             </div>
-            <CommentLists commentLists={comments} editComment={editComment} />
+            <CommentLists comments={comments} />
         </div>
     );
 }

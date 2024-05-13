@@ -5,12 +5,12 @@ export default function Comment({ comment, editComment }) {
     const [editValue, setEditValue] = useState(comment.comments_content);
 
     const handleEditInput = () => {
-        editComment(comment.id, editValue);
+        editComment(comment.commentsId, editValue); // 수정된 부분
         setIsEditing(false);
     };
 
     return (
-        <li id={comment.id}>
+        <li id={comment.comments_id}>
             <span className="wrap-cmt">
                 <span className="cmt-user">{comment.comments_writer}</span>
                 {isEditing ? (
