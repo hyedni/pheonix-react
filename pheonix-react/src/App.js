@@ -7,7 +7,6 @@ import Join from './components/user/Join';
 import MovieEdit from './components/admin/MovieEdit';
 import Store from './components/store/Store';
 import Cart from './components/store/Cart';
-import Gift from './components/store/Gift';
 import NewMovie from './components/admin/NewMovie';
 import Personal from './components/service/Personal';
 import Lost from './components/service/Lost';
@@ -49,8 +48,10 @@ import MovieSchedule from './components/admin/MovieSchedule';
 import CommentLists from './components/service/CommentLists';
 import Comment from './components/service/Comment';
 import ReviewList from './components/review/ReviewList';
+import Purchase from './components/store/purchase/Purchase';
 import ReserveStats from './components/admin/ReserveStats';
 import MyPersonal from './components/user/MyPersonal';
+
 
 
 function App() {
@@ -144,7 +145,7 @@ function App() {
         {isLogin &&
           <>
             <Route path='/cart' element={<Cart />} />
-            <Route path='/gift' element={<Gift />} />
+            <Route path='/purchase/:productNo' element={<Purchase />} />
           </>
         }
 

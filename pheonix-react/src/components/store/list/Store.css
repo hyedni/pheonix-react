@@ -169,7 +169,7 @@ li {
 .list-img .delete-button,
 .list-img .btn {
   position: absolute;
-  top: 50%; /* 이미지 상단으로부터 50% 위치 */
+  top: 50%; /* 이미지 상단으로부터 50%t 위치 */
   transform: translateY(-50%); /* 세로 중앙 정렬 */
   width: 60px; /* 버튼 너비 설정 */
   height: 60px; /* 버튼 높이 설정 */
@@ -185,16 +185,13 @@ li {
 }
 
 .list-img .edit-button { /*구매하기 버튼*/
-  left: 39%; /* 첫 번째 버튼 왼쪽에서 15% 위치 */
+  left: 30%; /* 첫 번째 버튼 왼쪽에서 15% 위치 */
 }
 
 .list-img .btn:nth-child(2) {/*장바구니 버튼 */
-  left: 12%; /* 두 번째 버튼 왼쪽에서 50% 위치 */
+  left: 56%; /* 두 번째 버튼 왼쪽에서 50% 위치 */
 }
 
-.list-img .btn:nth-child(3) { /*선물하기 버튼*/
-  left: 66%; /* 세 번째 버튼 왼쪽에서 85% 위치 */
-}
 
 
 .list-img .btn svg {

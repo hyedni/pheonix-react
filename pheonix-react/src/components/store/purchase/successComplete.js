@@ -1,4 +1,5 @@
 import { Link } from 'react-router-dom';
+import PruchaseMenu from './../PurchaseMenu';
 
 const successComplete = () => {
 
@@ -7,6 +8,7 @@ const successComplete = () => {
 
     return (
         <>
+             <PruchaseMenu activeStep="4" />
             <div className="row justify-content-center" style={{marginTop: '100px'}}>
                 <div className="col-lg-8  content-head text-center">
                     <h2 style={{ fontWeight: 'bold', fontSize: '102px'}}>결제완료!</h2>
