@@ -16,6 +16,7 @@ import { FaArrowAltCircleLeft } from "react-icons/fa";
 import kakaopay from "./image/kakaopay.png";
 
 import PurchaseMenu from './PurchaseMenu';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
 
 
 const Cart = () => {
@@ -29,11 +30,13 @@ const Cart = () => {
     const [infoSharingTermsChecked, setInfoSharingTermsChecked] = useState(false); // 개인정보 제공 및 위탁
     const [giftConChecked, setGiftConChecked] = useState(false); //기프티콘 구매 동의
 
-    const [ userId ] = useRecoilState(loginIdState);
+    const [userId] = useRecoilState(loginIdState);
     const [cartItems, setCartItems] = useState([]); //카트+상품 정보
     // const [userId] = useState('testuser4');
     const [imagePreview] = useState(null);
     const [checkedList, setCheckedLists] = useState([]);
+
+    const [usagePoint, setUsagePoint] = useState(0);
 
     const [btnPurchase, setBtnPurchase] = useState(false);
     //const [btnPurchase, setBtnPurchase] = useRecoilState(btnPurchase);
@@ -96,11 +99,11 @@ const Cart = () => {
 
     useEffect(() => {
         const newPurchaseList = checkedList.map(item => ({
-          no: item.cartProductNo,
-          qty: item.cartQty
+            no: item.cartProductNo,
+            qty: item.cartQty
         }));
         setPurchaseList(newPurchaseList);
-      }, [checkedList]);
+    }, [checkedList]);
 
 
     //결제
@@ -115,17 +118,22 @@ const Cart = () => {
     }, [termsOfUseAllChecked]);
 
     const purchase = useCallback(async () => {
-        const resp = await axios.post("/purchase/", purchaseList);
+        const data = {
+            usedPoint: usagePoint,
+            vo: purchaseList
+        };
+        console.log(data);
+        const resp = await axios.post("/purchase/", data);
         //useState에 필요한 데이터 저장
         setCartPartnerOrderId(resp.data.partnerOrderId);
         setCartPartnerUserId(resp.data.partnerUserId);
         setCartTid(resp.data.tid);
         setCartVo(resp.data.vo);
         //새 창을 열고 결제 프로세스 시작
-        window.open(resp.data.nextRedirectPcUrl, "_blank", "width=400px, height=800px");        
+        window.open(resp.data.nextRedirectPcUrl, "_blank", "width=400px, height=800px");
     });
 
-    const purchaseApprove = useCallback(async (pgToken)=> {
+    const purchaseApprove = useCallback(async (pgToken) => {
         //console.log("결제 성공");
         const postData = {
             cartPartnerOrderId,
@@ -140,27 +148,27 @@ const Cart = () => {
             setCartPartnerOrderId("");
             setCartPartnerUserId("");
             setCartTid("");
-            setCartVo(""); 
+            setCartVo("");
             navigate('/purchase/success-complete');
         } catch (error) {
             console.error("Error processing purchase:", error);
         }
-       
+
     });
 
-    useEffect(()=> {
-        const handleMessage = (e)=> {
-            if(e.data.type && e.data.type === 'successComplete') {
+    useEffect(() => {
+        const handleMessage = (e) => {
+            if (e.data.type && e.data.type === 'successComplete') {
                 purchaseApprove(e.data.pgToken);
             }
         };
         window.addEventListener('message', handleMessage);
-        return ()=> {
+        return () => {
             window.removeEventListener('message', handleMessage);
         }
     }, [purchaseApprove]);
 
-   
+
 
     //callback
     const loadCartData = useCallback(() => {
@@ -259,8 +267,9 @@ const Cart = () => {
             const discount = Math.ceil((list.productPrice * list.productDiscount / 100) * list.cartQty) || 0;
             totalDiscountPrice += discount;
         });
+        totalDiscountPrice += parseInt(usagePoint);
         return totalDiscountPrice.toLocaleString();
-    }, [checkedList]);
+    }, [checkedList, usagePoint]);
     //선택된 상품의 총 결제 예정 금액
     const getTotalPriceOfCheckedItems = useMemo(() => {
         let totalPrice = 0;
@@ -269,8 +278,17 @@ const Cart = () => {
             const price = (list.productPrice - Math.ceil((list.productPrice * list.productDiscount / 100))) * list.cartQty || 0;
             totalPrice += price;
         });
-        return totalPrice.toLocaleString();
-    }, [checkedList]);
+        const totalPrice2 = totalPrice - parseInt(usagePoint);
+
+        if(totalPrice2 < 0) {
+            setUsagePoint(totalPrice);
+            totalPrice -= parseInt(usagePoint);
+            return totalPrice.toLocaleString();
+        }
+        else {
+            return totalPrice2.toLocaleString();
+        }
+    }, [checkedList, usagePoint]);
 
 
     //회원 정보 가져오기
@@ -278,10 +296,30 @@ const Cart = () => {
 
     const getUserInfo = useCallback(async () => {
         await axios.get(`/cart/user/${userId}`).then(resp => {
-            console.log(resp.data);
             setUserInfo(resp.data);
         });
     }, [userId]);
+
+    //포인트 기능
+    const payPoint = (e) => {
+        const inputPoint = e.target.value;
+        if (inputPoint < 1000) {
+            alert('1000포인트부터 사용 가능합니다.');
+            e.preventDefault(); // 기본 동작 중지
+            e.target.value = ''; // 입력 값을 비움
+        }
+        if (inputPoint > userInfo.userPoint) {
+            alert('포인트 사용 범위 초과');
+            e.preventDefault(); // 기본 동작 중지
+            e.target.value = ''; // 입력 값을 비움
+        } else {
+            setUsagePoint(e.target.value);
+        }
+    };
+
+    const useAllPoint = () => {
+        setUsagePoint(userInfo.userPoint);
+    };
 
     //이용약관 체크박스
     const handleAllCheck = () => { //체크박스 전체 선택
@@ -388,7 +426,7 @@ const Cart = () => {
                                                     <td className="font-large">{(Math.ceil((cartItem.productPrice - (cartItem.productPrice * cartItem.productDiscount / 100)) * cartItem.cartQty)).toLocaleString()}원</td>
                                                     <td>
                                                         <div className="action-buttons-container">
-                                                                <button className="delete-button btn btn-light" onClick={e => deleteProduct(cartItem)}>삭제</button>
+                                                            <button className="delete-button btn btn-light" onClick={e => deleteProduct(cartItem)}>삭제</button>
                                                         </div>
                                                     </td>
                                                 </tr>
@@ -503,7 +541,75 @@ const Cart = () => {
                                 </div>
                             </div>
 
-                            <div className="row justify-content-center">
+
+                            {/* 주문자 정보 확인 */}
+                            <div className="row justify-content-center mt-4">
+                                <div className="col-lg-8 content-body">
+                                    <h3 className="custom-heading me-4">주문자 정보 확인</h3>
+                                    <hr className="custom-hr" />
+                                    <div className='row'>
+                                        <div className='col-5'>
+                                            <span className="custom-span me-4">이름</span>
+                                            <span>{userInfo.userName}</span>
+                                        </div>
+                                        <div className='col-7'>
+                                            <span className="custom-span me-4">이메일</span>
+                                            <span>{userInfo.userEmail}</span>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>
+                            </div>
+
+                            {/* 포인트 결제 */}
+                            <div className="row justify-content-center mt-4">
+                                <div className="col-lg-8 content-body ">
+                                    <h3 className="custom-heading me-4">포인트</h3>
+                                    <hr className="custom-hr" />
+                                    <div className='row'>
+                                        <div className='col-5'>
+                                            <span className="custom-span me-4">보유 포인트</span>
+                                            <span>{(userInfo.userPoint).toLocaleString()}</span>
+                                        </div>
+                                        <div className='col-7'>
+                                            <div className='row align-items-center'>
+                                                <div className="input-group">
+                                                    <span className="custom-span me-4">사용할 포인트</span>
+                                                    <input
+                                                        type='number'
+                                                        name='usagePoint'
+                                                        onBlur={e => payPoint(e)}
+                                                        className='form-control w-50'
+                                                        max={userInfo.userPoint}
+                                                        value={usagePoint}
+                                                        onChange={e => setUsagePoint(e.target.value)}
+                                                    />
+                                                    <button className='btn btn-light' onClick={useAllPoint}>전체 사용</button>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <hr />
+                                </div>
+                            </div>
+
+                            {/* 결제 수단 */}
+                            <div className="row justify-content-center mt-4">
+                                <div className="col-lg-8 content-body">
+                                    <h3 className="custom-heading me-4">결제 수단</h3>
+                                    <hr className="custom-hr" />
+                                    <input type="radio" checked={true} />
+                                    <label htmlFor="option1">
+                                        <img style={{ width: '150px' }} src={kakaopay} alt="카카오페이" />
+                                    </label>
+                                    <hr />
+                                    <span className="custom-span-info">
+                                        ＊ 카카오페이는 신용카드 선할인과 카드사 포인트는 이용하실 수 없으며 신용카드별 청구 할인은 이용하실 수 있습니다.
+                                    </span>
+                                </div>
+                            </div>
+
+                            <div className="row justify-content-center mt-4">
                                 <div className="col-lg-8 content-body outline-design">
                                     <div className='row  botton-line header-line'>
                                         <div className='col-4 section-design'>
@@ -536,41 +642,6 @@ const Cart = () => {
                                             {getTotalPriceOfCheckedItems}원
                                         </div>
                                     </div>
-                                </div>
-                            </div>
-
-                            {/* 주문자 정보 확인 */}
-                            <div className="row justify-content-center mt-4">
-                                <div className="col-lg-8 content-body">
-                                    <h3 className="custom-heading me-4">주문자 정보 확인</h3>
-                                    <hr className="custom-hr" />
-                                    <div className='row'>
-                                        <div className='col'>
-                                            <span className="custom-span me-4">이름</span>
-                                            <span>{userInfo.userName}</span>
-                                        </div>
-                                        <div className='col'>
-                                            <span className="custom-span me-4">이메일</span>
-                                            <span>{userInfo.userEmail}</span>
-                                        </div>
-                                    </div>
-                                    <hr />
-                                </div>
-                            </div>
-
-                            {/* 결제 수단 */}
-                            <div className="row justify-content-center mt-4">
-                                <div className="col-lg-8 content-body">
-                                    <h3 className="custom-heading me-4">결제 수단</h3>
-                                    <hr className="custom-hr" />
-                                    <input type="radio" checked={true} />
-                                    <label htmlFor="option1">
-                                        <img style={{ width: '150px' }} src={kakaopay} alt="카카오페이" />
-                                    </label>
-                                    <hr />
-                                    <span className="custom-span-info">
-                                        ＊ 카카오페이는 신용카드 선할인과 카드사 포인트는 이용하실 수 없으며 신용카드별 청구 할인은 이용하실 수 있습니다.
-                                    </span>
                                 </div>
                             </div>
 
