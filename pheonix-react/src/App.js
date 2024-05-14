@@ -34,7 +34,10 @@ import { useCallback, useEffect } from "react";
 import PersonalDetail from './components/service/PersonalDetail';
 import Pagination from './components/service/Pagination';
 import Bunsil from './components/service/Bunsil';
-import NonUser from './components/user/nonUser'; 
+
+
+
+
 import AddTheater from './components/admin/AddTheater';
 import BookingListPage from './components/booking/BookingListPage';
 import BookingAdd from './components/booking/BookingAdd';
@@ -124,8 +127,12 @@ function App() {
 
         <Route path='/login' element={<Login />} />
         <Route path='/join' element={<Join />} />
+
+
+
         <Route path='/nonUser' element={<NonUser />} />
         <Route path='mypersonal' element={<MyPersonal/>}/>
+
 
         {isLogin &&
           <Route path='/mypage' element={<Mypage />} />
