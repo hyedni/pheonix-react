@@ -1,12 +1,13 @@
-// PersonalDetail.js
-
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "../utils/CustomAxios";
 import { useParams, Link } from "react-router-dom";
 
-const PersonalDetail = () => {
-    const { personalNo } = useParams(); // 파라미터에서 번호 추출
+export default function PersonalDetail() {
+    const { personalNo } = useParams();
     const [personal, setPersonal] = useState({});
+    const [comments, setComments] = useState([]);
+    const [newComment, setNewComment] = useState("");
+    const [writerName, setWriterName] = useState("");
 
     useEffect(() => {
         loadData();
@@ -14,16 +15,55 @@ const PersonalDetail = () => {
 
     const loadData = useCallback(async () => {
         try {
-            if (!personalNo) return; // personalNo가 없으면 함수 종료
-            const resp = await axios.get("/personal/" + personalNo);
-            if (resp.data) {
-                setPersonal(resp.data);
+            if (!personalNo) return;
+
+            const personalResp = await axios.get(`/personal/${personalNo}`);
+            if (personalResp.data) {
+                setPersonal(personalResp.data);
+                setComments(personalResp.data.comments || []);
             }
+
+            listComments();
         } catch (error) {
-            console.error("Error loading data:", error);
+            console.error("데이터를 불러오는 중 오류 발생:", error);
         }
     }, [personalNo]);
 
+    const handleAddComment = async () => {
+        try {
+            const response = await axios.post("/comments/", {
+                personalNo: personalNo,
+                commentsContent: newComment,
+                commentsWriter: writerName
+            });
+            console.log("새 댓글이 추가되었습니다:", response.data);
+            setNewComment("");
+            loadData();
+        } catch (error) {
+            console.error("댓글 추가 중 오류 발생:", error);
+        }
+    }
+
+    const handleDeleteComment = async (commentId) => {
+        try {
+            const response = await axios.delete(`/comments/${commentId}`);
+            console.log("댓글이 삭제되었습니다:", response.data);
+            loadData();
+        } catch (error) {
+            console.error("댓글 삭제 중 오류 발생:", error);
+        }
+    }
+
+    const listComments = async () => {
+        try {
+            const response = await axios.get(`/comments/?personalNo=${personalNo}`);
+            console.log("댓글 목록:", response.data);
+            setComments(response.data);
+        } catch (error) {
+            console.error("댓글 목록을 불러오는 중 오류 발생:", error);
+        }
+    }
+    
     return (
         <div className="container">
             <div className="row justify-content-center">
@@ -34,17 +74,54 @@ const PersonalDetail = () => {
                             <p className="card-text text-muted">작성자: {personal.personalId}</p>
                         </div>
                         <div className="card-body">
-                            <p className="card-text">{personal.personalContent}</p>
+                            <p className="card-text" style={{ width: "100%" }}>{personal.personalContent}</p>
                         </div>
                         <div className="card-footer">
-                            <Link to="/personal" className="btn btn-primary">목록으로 돌아가기</Link>
+                            <Link to="/personal" className="btn btn-primary btn-sm">목록으로 돌아가기</Link>
                         </div>
+                    </div>
+                </div>
+            </div>
+
+            <div className="row justify-content-center mt-4">
+                <div className="col-lg-8">
+                    <div className="input-group mb-3">
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="댓글을 입력하세요..."
+                            value={newComment}
+                            onChange={(e) => setNewComment(e.target.value)}
+                        />
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="작성자 이름을 입력하세요..."
+                            value={writerName}
+                            onChange={(e) => setWriterName(e.target.value)}
+                        />
+                        <button className="btn btn-outline-secondary" type="button" onClick={handleAddComment}>작성</button>
+                    </div>
+                </div>
+            </div>
+
+            <div className="row justify-content-center mt-4">
+                <div className="col-lg-8">
+                    <div className="comment-lists">
+                        {comments.map(comment => (
+                            <div key={comment.commentsId} className="card mb-3">
+                                <div className="card-body">
+                                    <p className="card-text">{comment.commentsContent}</p>
+                                </div>
+                                <div className="card-footer text-muted d-flex justify-content-between align-items-center">
+                                    <span>작성자: {comment.commentsWriter}</span>
+                                    <button className="btn btn-danger btn-sm" onClick={() => handleDeleteComment(comment.commentsId)}>삭제</button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
         </div>
     );
-    
-};
-
-export default PersonalDetail;
+}

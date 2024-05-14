@@ -9,6 +9,7 @@ import { loginGradeState, loginIdState } from '../utils/RecoilData';
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
 import 'react-datepicker/dist/react-datepicker.css';
+import ReviewList from '../review/ReviewList';
 
 
 function MovieEdit() {
@@ -202,9 +203,9 @@ function MovieEdit() {
                         </>
                     )}
 
+                    <hr />
                 </div>
             </div>
-            <hr />
 
             <div className='row'>
                 <div className='offset-2 col-lg-8'>
@@ -293,17 +294,17 @@ function MovieEdit() {
                                             <div className="row mt-3">
                                                 <div className="col-3">현재상영여부</div>
                                                 <div className="col-9 input-content ">
-                                                    {movie.movieOn === 'Y' && 
+                                                    {movie.movieOn === 'Y' &&
                                                         <span>
                                                             상영중
                                                         </span>
                                                     }
-                                                    {movie.movieOn === 'N' && 
+                                                    {movie.movieOn === 'N' &&
                                                         <span>
                                                             개봉 전
                                                         </span>
                                                     }
-                                                     {movie.movieOn === 'X' && 
+                                                    {movie.movieOn === 'X' &&
                                                         <span>
                                                             상영종료
                                                         </span>
@@ -323,6 +324,8 @@ function MovieEdit() {
                                                 <div className="col-3">줄거리</div>
                                                 <div className="col-9 input-content " style={{ whiteSpace: 'pre-wrap' }}>{movie.movieSummary}</div>
                                             </div>
+
+
                                         </>
                                     ) : (
                                         <>
@@ -479,10 +482,16 @@ function MovieEdit() {
                                 </div>
                             </div>
                         </div>
+
+
                     </div>
+
+                    
                 </div>
             </div>
-
+            {/* 리뷰 게시판 */}
+            <ReviewList />
+                    
         </>
     );
 }

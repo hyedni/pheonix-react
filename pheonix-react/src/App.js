@@ -27,12 +27,10 @@ import Success from './components/store/purchase/success';
 import Fail from './components/store/purchase/fail';
 import Cancel from './components/store/purchase/cancel';
 import SuccessComplete from './components/store/purchase/successComplete';
-
 import { isLoginState, loginIdState, loginGradeState } from "./components/utils/RecoilData";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from "./components/utils/CustomAxios";
 import { useCallback, useEffect } from "react";
-
 import PersonalDetail from './components/service/PersonalDetail';
 import Pagination from './components/service/Pagination';
 import Bunsil from './components/service/Bunsil';
@@ -40,19 +38,16 @@ import Bunsil from './components/service/Bunsil';
 
 
 
-import NonUser from './components/user/NonUser'; 
-
 import AddTheater from './components/admin/AddTheater';
-
 import BookingListPage from './components/booking/BookingListPage';
 import BookingAdd from './components/booking/BookingAdd';
-
-
-
-
 import MovieChart from './components/booking/MovieChart';
 import ReplyForm from './components/service/ReplyForm';
 import PersonalWrite from './components/service/PersonalWrite';
+import MovieSchedule from './components/admin/MovieSchedule';
+import CommentLists from './components/service/CommentLists';
+import Comment from './components/service/Comment';
+import ReviewList from './components/review/ReviewList';
 
 
 function App() {
@@ -89,6 +84,10 @@ function App() {
     }
   }, []);
 
+  
+
+
+
   return (
 
     <>
@@ -103,6 +102,7 @@ function App() {
         <Route path='/adminCinema' element={<AdminCinema />} />
         <Route path='/adminStore' element={<AdminStore />} />
         <Route path='/adminTheater' element={<AdminTheater />} />
+        <Route path='/movieSchedule' element={<MovieSchedule/>}/>
 
         <Route path='/movieEdit/:movieNo' element={<MovieEdit />} />
         <Route path='/productEdit/:productNo' element={<ProductEdit />} />
@@ -126,7 +126,7 @@ function App() {
 
         <Route path='/login' element={<Login />} />
         <Route path='/join' element={<Join />} />
-        <Route path='/nonUser' element={<NonUser />} />
+
 
         {isLogin &&
           <Route path='/mypage' element={<Mypage />} />
@@ -137,7 +137,7 @@ function App() {
         <Route path='/productDetail/:productNo' element={<StoreDetailList />} />
         {isLogin &&
           <>
-            <Route path='/cart/:btnPurchase' element={<Cart />} />
+            <Route path='/cart' element={<Cart />} />
             <Route path='/gift' element={<Gift />} />
           </>
         }
@@ -147,6 +147,9 @@ function App() {
         <Route path='/purchase/fail' element={<Fail />}/>
         <Route path='/purchase/cancel' element={<Cancel />}/>
         <Route path='/purchase/success-complete' element={<SuccessComplete />}/>
+
+        {/* 리뷰 게시판 */}
+        <Route path='/review/list' element={<ReviewList />} />
 
         {/* 게시판 */}
         <Route path='/lost' element={<Lost />} />
@@ -159,6 +162,8 @@ function App() {
         <Route path='/bunsil' element={<Bunsil/>}/>
         <Route path='/replyform' element={<ReplyForm/>}/>
         <Route path='/personalwrite' element={<PersonalWrite/>}/>
+        <Route path='/commentlists' element={<CommentLists/>}/>
+        <Route path='wrapcomments' element={<Comment/>}/>
 
 
        
