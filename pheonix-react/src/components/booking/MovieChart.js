@@ -1,14 +1,14 @@
-import './AdminMovie.css';
+import '../admin/AdminMovie.css';
 import { useCallback, useEffect, useRef, useState } from 'react';
 import axios from "../utils/CustomAxios";
-import { Link, useLinkClickHandler } from 'react-router-dom';
+import { Link, useLinkClickHandler, useNavigate, useNavigation } from 'react-router-dom';
 import { TbNumber12Small } from "react-icons/tb";
 import { TbNumber15Small } from "react-icons/tb";
 import { TbNumber19Small } from "react-icons/tb";
 import { FaCirclePlus } from "react-icons/fa6";
 
 
-function AdminMovie() {
+function MovieChart() {
     const [movies, setMovies] = useState([]);
     const [input, setInput] = useState({
         movieTitle: '',
@@ -27,6 +27,11 @@ function AdminMovie() {
         movieActor: ''
     });
 
+    const navigate = useNavigate();
+    const moveToDetail = (movieNo) => {
+        navigate(`/movieEdit/${movieNo}`);
+    };
+
     //관람등급 아이콘
     const getAgeIcon = (movieAge) => {
         switch (movieAge) {
@@ -40,26 +45,51 @@ function AdminMovie() {
                 return <span style={{ fontSize: '15px', color: 'white', fontWeight: 'bold', backgroundColor: 'green', borderRadius: '10px', width: '10px', padding: '5px' }}>all</span>;
         }
     };
-    //첨부파일관련
-    const [file, setFile] = useState(null);
-    const [imagePreview, setImagePreview] = useState(null);
 
+
+    //예매율
+
+    const today = new Date();
+    function toChar() {
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); 
+        const day = String(today.getDate()).padStart(2, '0'); 
+        const formattedDate = `${year}-${month}-${day}`;
+        return formattedDate;
+    }
+
+    const [reserveData, setReserveData] = useState({});
+    const getRate = useCallback(async (movieNo, reserveStatsDate) => {
+        const resp = await axios.post("/movie/stats", { movieNo, reserveStatsDate });
+        // setReserveData(resp.data);
+        return resp.data;
+    }, []);
+
+    //리스트
     const loadList = useCallback(async () => {
-        const resp = await axios.get("/movie/all");
-        setMovies(resp.data);
+        const date = toChar();
+        const resp = await axios.get("/movie/");
+        const moviesData = resp.data;
+        for (const movie of moviesData) {
+            const result = await getRate(movie.movieNo, date);
+            const rate = result.reserveStatsRate; 
+            movie.rate =rate; 
+        }
+        setMovies(moviesData);
+        setIsClicked(false);
     }, [movies]);
 
     useEffect(() => {
         loadList();
     }, []);
 
-    //삭제
-    const deleteMovie = useCallback(async (target) => {
-        const choice = window.confirm("삭제하려는 영화가 맞으신가요? 정말 삭제하시겠습니까?");
-        if (choice === false) return;
+    const [isClicked, setIsClicked] = useState(false);
 
-        const resp = await axios.delete("/movie/" + target.movieNo);
-        loadList();
+    const loadOnList = useCallback(async () => {
+        const resp = await axios.get("/movie/on");
+        const moviesData = resp.data;
+        setMovies(resp.data);
+        setIsClicked(true);
     }, [movies]);
 
     return (
@@ -70,13 +100,18 @@ function AdminMovie() {
             <div className="row justify-content-center">
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
-                        영화 관리
-                        <Link to="/newMovie" className="ms-3">
-                            <FaCirclePlus style={{ marginBottom: '10px', color:'rgb(240, 86, 86)' }} />
-                        </Link>
-
-                    <hr />
+                        무비차트
+                        {isClicked ? (
+                            <>
+                                <button className='btn movie-button' onClick={e => loadList()}>현재 상영작만 보기</button>
+                            </>
+                        ) : (
+                            <>
+                                <button className='btn movie-button' onClick={e => loadOnList()}>상영 예정작 보기</button>
+                            </>
+                        )}
                     </div>
+                    <hr />
                 </div>
             </div>
 
@@ -94,11 +129,11 @@ function AdminMovie() {
                                 <hr />
                                 <div className='image-wrapper'>
                                     <img src={movie.movieImgLink} className='img-thumbnail' />
-                                    <Link to={`/movieEdit/${movie.movieNo}`} className='edit-button btn btn-secondary'>
-                                        조회/수정
+                                    <Link to="/booking" className='edit-button btn btn-primary'>
+                                        예매하기
                                     </Link>
-                                    <button onClick={e => deleteMovie(movie)} className='delete-button btn btn-primary' style={{ margin: '0px' }}>
-                                        바로삭제
+                                    <button onClick={e => moveToDetail(movie.movieNo)} className='delete-button btn btn-secondary' style={{ margin: '0px' }}>
+                                        상세정보
                                     </button>
                                 </div>
                                 <hr />
@@ -111,7 +146,7 @@ function AdminMovie() {
                                     </div>
                                 </div>
                                 <div className='d-flex justify-content-between mb-2'>
-                                    <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 0.00%</span>
+                                    <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 {movie.rate}%</span>
                                 </div>
                             </div>
                         ))}
@@ -123,4 +158,4 @@ function AdminMovie() {
     );
 }
 
-export default AdminMovie;
+export default MovieChart;
