@@ -45,6 +45,7 @@ import MovieSchedule from './components/admin/MovieSchedule';
 import CommentLists from './components/service/CommentLists';
 import Comment from './components/service/Comment';
 import ReviewList from './components/review/ReviewList';
+import ReserveStats from './components/admin/ReserveStats';
 
 
 function App() {
@@ -96,6 +97,7 @@ function App() {
         <Route path='/adminStore' element={<AdminStore />} />
         <Route path='/adminTheater' element={<AdminTheater />} />
         <Route path='/movieSchedule' element={<MovieSchedule/>}/>
+        <Route path='/reserveStats' element={<ReserveStats/>}/>
 
         <Route path='/movieEdit/:movieNo' element={<MovieEdit />} />
         <Route path='/productEdit/:productNo' element={<ProductEdit />} />
