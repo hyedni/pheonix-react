@@ -25,11 +25,11 @@ import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
 import Mypage from './components/user/Mypage';
 
-import { isLoginState, loginIdState, loginGradeState } from "./components/utils/RecoilData";
+import { isLoginState, loginIdState, loginGradeState, isNonUserState } from "./components/utils/RecoilData";
 import { useRecoilState, useRecoilValue } from 'recoil';
 import axios from "./components/utils/CustomAxios";
 import { useCallback, useEffect } from "react";
-import NonUser from './components/user/NonUser'; 
+import NonUser from './components/user/NonUser';
 import BookingListPage from './components/booking/BookingListPage';
 
 
@@ -41,6 +41,8 @@ function App() {
   const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
 
   const isLogin = useRecoilValue(isLoginState);
+
+  const isNonUser = useRecoilValue(isNonUserState);
 
   //effect
   useEffect(() => {
@@ -67,9 +69,6 @@ function App() {
       window.localStorage.setItem("refreshToken", resp.data.refreshToken);
     }
   }, []);
-
-  
-
 
 
   return (
@@ -125,10 +124,14 @@ function App() {
         <Route path='/lost' element={<Lost />} />
         <Route path='/writepost' element={<WritePost />} />
         <Route path='/personal' element={<Personal />} />
-        <Route path='/chatbot' element={<Chatbot/>}/>
-       
+        <Route path='/chatbot' element={<Chatbot />} />
+
         {/* 예매 */}
-        <Route path='/booking' element={<BookingListPage />} />
+        {/* 로그인한 사용자만 접근할 수 있는 경로 */}
+        {isLogin &&
+          <Route path='/booking' element={<BookingListPage />} />
+        }
+
 
       </Routes >
 

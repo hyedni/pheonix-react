@@ -6,18 +6,18 @@ import axios from "../utils/CustomAxios";
 import { useNavigate } from "react-router";
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loginIdState, loginGradeState, isLoginState } from "../utils/RecoilData";
+import { loginIdState, loginGradeState, isLoginState, isNonUserState } from "../utils/RecoilData";
 
 function NonUser() {
-    // const [isNonLogin, setIsNonUserLogin] = useRecoilState(isNonLoginState);
-    const [nonUser, setNonUser] = useState({
-        "nonUserEmail": "",
-        "nonUserBirth": "",
-        "nonUserPw": "",
-        "nonUserPwCheck":"",
-        "nonUserCertCode": ""
-    });
+    const [isNonUserEmail, setIsNonUserEmail] = useRecoilState(isNonUserState);
 
+    const [nonUser, setNonUser] = useState({
+          "nonUserEmail": "",
+          "nonUserBirth": "",
+          "nonUserPw": "",
+          "nonUserPwCheck":"",
+          "nonUserCertCode": ""
+  });
     const [isValid, setIsValid] = useState({
         nonUserEmail: true,
         nonUserBirth: true,
@@ -32,6 +32,7 @@ function NonUser() {
 
     //navigator
     const navigator = useNavigate();
+
     // 값 입력 함수
     const handleInputBlur = useCallback((e) => {
         const { name, value } = e.target;
@@ -52,9 +53,9 @@ function NonUser() {
         const response = await axios.post('/user/nonUserJoin', nonUser);
         console.log("가입 성공:", response.data);
         // 추가 작업 수행 (예: 사용자에게 성공 메시지 표시)
-
+        //setIsNonUserEmail(response.data.nonUser);
         //예매페이지로 이동
-        navigator("/bookingPage");
+        navigator("/booking");
       } catch (error) {
         console.error("가입 실패:", error);
         // 추가 작업 수행 (예: 사용자에게 오류 메시지 표시)
@@ -135,7 +136,7 @@ function NonUser() {
     try {
       const response = await axios.post('/user/nonUserCheck',
        { nonUserCertEmail: nonUser.nonUserEmail, nonUserCertCode: nonUser.nonUserCertCode });
-
+      
       console.log('응답 데이터:', response.data);
 
       // 여기서 인증에 성공했을 때 setIsCertified 상태를 true로 설정합니다.
@@ -149,6 +150,7 @@ function NonUser() {
   // 사용자 입력 변경 시 양식 유효성 다시 확인
   useEffect(() => {
     setIsFormValid(validateForm());
+    sessionStorage.setItem("nonUser", JSON.stringify(nonUser));
   }, [nonUser]);
 
 
