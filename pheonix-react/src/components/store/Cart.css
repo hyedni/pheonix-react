@@ -43,7 +43,6 @@ th {
 .action-buttons-container {
     display: flex;
     /* justify-content: center; 가로 방향 가운데 정렬 */
-    margin-top: 10px;
     justify-content: center;
 }
 
@@ -55,7 +54,6 @@ th {
 }
 
 .delete-button {
-    margin-top: 20px;
     text-align: right;
     margin-left: 5px; /* 추가된 부분 */
     align-items: center; /* 세로 방향 가운데 정렬 */

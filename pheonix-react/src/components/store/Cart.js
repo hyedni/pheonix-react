@@ -388,12 +388,7 @@ const Cart = () => {
                                                     <td className="font-large">{(Math.ceil((cartItem.productPrice - (cartItem.productPrice * cartItem.productDiscount / 100)) * cartItem.cartQty)).toLocaleString()}원</td>
                                                     <td>
                                                         <div className="action-buttons-container">
-                                                            <div className="edit-buttons">
-                                                                <Link to={`/purchase/${cartItem.productNo}`} className='edit-button btn btn-outline-dark mt-2'><IoBagHandle />구매하기</Link>
-                                                            </div>
-                                                            <div className="delete-button-container">
                                                                 <button className="delete-button btn btn-light" onClick={e => deleteProduct(cartItem)}>삭제</button>
-                                                            </div>
                                                         </div>
                                                     </td>
                                                 </tr>
