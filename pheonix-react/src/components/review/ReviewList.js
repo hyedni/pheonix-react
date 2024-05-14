@@ -13,6 +13,7 @@ import { AiFillLike } from "react-icons/ai";
 
 //디자인 임포트
 import './review.css';
+import Pagination from "../service/Pagination";
 
 const ReviewList = () => {
 
@@ -20,16 +21,20 @@ const ReviewList = () => {
     const { movieNo } = useParams();
     const [reviewLists, setReviewLists] = useState([]);
 
+    //페이징
+    const [currentPage, setCurrentPage] = useState(1);
+    const [reviewPerPage] = useState(6);
+    const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
     useEffect(() => {
         loadReviews();
-    }, []);
+    }, [userId]);//axios 순서 때문에..
 
     //리뷰 글 불러오기
-    const loadReviews = useCallback(() => {
+    const loadReviews = useCallback(async () => {
         try {
-            axios.get(`/review/${movieNo}`).then(resp => {
+            await axios.get(`/review/${movieNo}`).then(resp => {
                 setReviewLists(resp.data);
-                console.log(resp.data);
             })
         }
         catch (error) {
@@ -38,20 +43,20 @@ const ReviewList = () => {
     }, [movieNo]);
 
     //좋아요
-    const clickLike = useCallback((target) => {
+    const clickLike = useCallback(async (target) => {
+        const data = {
+            userId,
+            reviewNo: target
+        };
         try {
-            const data = ({
-                userId: userId,
-                reviewNo: target
-            });
-            axios.get("/review_like/" + data).then(resp => {
-                // 해당 글에 대한 사용자의 좋아요 여부 값 변경
+            await axios.get("/review_like/", { params: data }).then(resp => {
+               
             })
         }
         catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
-    }, []);
+    }, [userId]);
     const [sortBy, setSortBy] = useState('latest');
 
     const handleSortChange = (sortByValue) => {
@@ -119,15 +124,16 @@ const ReviewList = () => {
                                                         <div className="col-sm-9">
                                                             {new Date(review.reviewDate).toLocaleDateString()}
                                                             |
-                                                            {review.state === 'false' ? (
+                                                            {review.state === false ? (
                                                                 <AiFillLike onClick={() => { clickLike(review.reviewNo) }} />
                                                             ) : (
                                                                 <AiFillLike onClick={() => { clickLike(review.reviewNo) }} style={{ color: 'red' }} />
-                                                            )}
+                                                            )}  
 
                                                             {review.count}
 
                                                         </div>
+
                                                     </div>
                                                 </div>
                                             </>
@@ -182,6 +188,8 @@ const ReviewList = () => {
 
                         )}
                     </div>
+
+                    <Pagination currentPage={currentPage} totalPages={Math.ceil(reviewLists.length / reviewPerPage)} paginate={paginate} />
                 </div>
             </div>
         </>
