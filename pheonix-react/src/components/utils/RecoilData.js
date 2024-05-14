@@ -19,6 +19,7 @@ const loginGradeState = atom({
     default : ''
 });
 
+
 //atom으로 생성한 데이터를 조합하여 무언가를 계산할 수 있다(selector)
 const isLoginState = selector({
     key : 'loginState',//식별자
@@ -33,10 +34,28 @@ const isLoginState = selector({
     }
 });
 
+//로그인과 관련된 저장소 설정
+const nonUserEmailState = atom({
+    key : 'nonUserEmailState',
+    default : ''
+});
+
+const isNonUserState = selector({
+    key : 'nonUserState',//식별자
+    get : (state)=>{//state를 불러와서 새로운 값을 계산해서 반환하는 함수
+        //미리 만든 state 중에 loginIdState에 해당하는 값을 주세요
+        const nonUserEmail = state.get(nonUserEmailState);
+
+        return nonUserEmail && nonUserEmail.length >0;
+    }
+});
+
+
+
 const seatsState = atom({
     key: 'seatsState', // 고유한 key
     default: [], // 초기 상태 값
-  });
+});
 
 // const btnPurchase = atom({
 //   key : 'btnPurchase',
@@ -80,3 +99,4 @@ export {countState, loginIdState, loginGradeState, isLoginState , seatsState
     , partnerOrderId, partnerUserId, tid, vo, pgToken, 
     //btnPurchase
 };
+

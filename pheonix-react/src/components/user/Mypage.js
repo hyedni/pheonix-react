@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from 'react';
 import axios from "axios";
 import { loginIdState } from "../utils/RecoilData";
 import './join.css';
+import Sidebar from "./Sidebar";
 
 function Mypage() {
 
@@ -59,41 +60,29 @@ function Mypage() {
                                     <p className="card-text">포인트: {user.userPoint}</p>
                                 </div>
                             </div>
-                            <div className="profile-header">
-                                <h3>MY COUPON</h3>
 
-                                <h3>PHEONIX POINT</h3>
-                                <h3>자주가는 PHEONIX</h3>
+
+                            <div className="profile-header d-flex justify-content-center"> {/* 가운데 정렬 */}
+                               {/* 텍스트 가운데 정렬 */}
+                                    <h3>MY COUPON</h3>
+                                    <h3>PHEONIX POINT</h3>
+                                    <h3>자주가는 PHEONIX</h3>
+
                             </div>
+
+
                         </div>
                     </div>
                 </div>
             </div>
 
-            <div className="row justify-content-center mt-1">
-                <div className="col-lg-10 title-head">
-                    <div className="card mb-3" key={user.userId}>
-                        <div className="row">
-                            <div className="col-md-3">
-                                <ul className="nav flex-column">
-                                    <li className="nav-item">
-                                        <a className="nav-link active" href="#">메뉴 항목 1</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="#">메뉴 항목 2</a>
-                                    </li>
-                                    <li className="nav-item">
-                                        <a className="nav-link" href="#">메뉴 항목 3</a>
-                                    </li>
-                                </ul>
-                            </div>
-                            {/* <!-- 다른 컬럼 추가 가능 --> */}
-                        </div>
-                    </div>
+            <div className="row justify-content-center mt-2">
+                <div className="col-lg-10">
+                    <Sidebar />
                 </div>
             </div>
 
-            
+
 
         </>
 

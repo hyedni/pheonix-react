@@ -22,6 +22,10 @@ import SeatDetails from './components/admin/SeatsTypes/SeatDetails';
 import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
 import Mypage from './components/user/Mypage';
+import { isLoginState, loginIdState, loginGradeState, isNonUserState } from "./components/utils/RecoilData";
+import { useRecoilState, useRecoilValue } from 'recoil';
+import axios from "./components/utils/CustomAxios";
+import { useCallback, useEffect } from "react";
 import Success from './components/store/purchase/success';
 import Fail from './components/store/purchase/fail';
 import Cancel from './components/store/purchase/cancel';
@@ -33,7 +37,7 @@ import { useCallback, useEffect } from "react";
 import PersonalDetail from './components/service/PersonalDetail';
 import Pagination from './components/service/Pagination';
 import Bunsil from './components/service/Bunsil';
-import NonUser from './components/user/nonUser'; 
+import NonUser from './components/user/NonUser'; 
 import AddTheater from './components/admin/AddTheater';
 import BookingListPage from './components/booking/BookingListPage';
 import BookingAdd from './components/booking/BookingAdd';
@@ -45,6 +49,9 @@ import CommentLists from './components/service/CommentLists';
 import Comment from './components/service/Comment';
 import ReviewList from './components/review/ReviewList';
 import Purchase from './components/store/purchase/Purchase';
+import ReserveStats from './components/admin/ReserveStats';
+import MyPersonal from './components/user/MyPersonal';
+
 
 
 function App() {
@@ -54,6 +61,8 @@ function App() {
   const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
 
   const isLogin = useRecoilValue(isLoginState);
+
+  const isNonUser = useRecoilValue(isNonUserState);
 
   //effect
   useEffect(() => {
@@ -80,7 +89,6 @@ function App() {
       window.localStorage.setItem("refreshToken", resp.data.refreshToken);
     }
   }, []);
-
   return (
 
     <>
@@ -96,6 +104,7 @@ function App() {
         <Route path='/adminStore' element={<AdminStore />} />
         <Route path='/adminTheater' element={<AdminTheater />} />
         <Route path='/movieSchedule' element={<MovieSchedule/>}/>
+        <Route path='/reserveStats' element={<ReserveStats/>}/>
 
         <Route path='/movieEdit/:movieNo' element={<MovieEdit />} />
         <Route path='/productEdit/:productNo' element={<ProductEdit />} />
@@ -119,7 +128,12 @@ function App() {
 
         <Route path='/login' element={<Login />} />
         <Route path='/join' element={<Join />} />
+
+
+
         <Route path='/nonUser' element={<NonUser />} />
+        <Route path='mypersonal' element={<MyPersonal/>}/>
+
 
         {isLogin &&
           <Route path='/mypage' element={<Mypage />} />
@@ -158,10 +172,12 @@ function App() {
         <Route path='/commentlists' element={<CommentLists/>}/>
         <Route path='wrapcomments' element={<Comment/>}/>
 
-
-       
         {/* 예매 */}
-        <Route path='/booking' element={<BookingListPage />} />
+        {/* 로그인한 사용자만 접근할 수 있는 경로 */}
+        {isLogin &&
+          <Route path='/booking' element={<BookingListPage />} />
+        }
+
 
         <Route path='/bookingAdd' element={<BookingAdd />} />
 

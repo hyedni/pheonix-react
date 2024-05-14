@@ -47,29 +47,33 @@ const Personal = () => {
     return (
         <div className="container">
             <div className="row justify-content-center">
-                <div className="col-lg-8 content-head">
-                    <div className="content-head-text">
-                        1:1 문의게시판
+                <div className="col-lg-8">
+                    <div className="content-head">
+                        <div className="content-head-text">
+                            1:1 문의게시판
+                        </div>
                     </div>
                 </div>
             </div>
             <div className="row justify-content-center">
-                <div className="col-lg-8 content-body">
-                    <div className="content-body-text">
-                        문의게시판이다람쥐
+                <div className="col-lg-8">
+                    <div className="content-body">
+                        <div className="content-body-text">
+                            문의게시판이다람쥐
+                        </div>
                     </div>
                 </div>
             </div>
-
+            
             <div className="row justify-content-end">
-                <div className="col-lg-2">
-                    <NavLink to="/lost">
-                        <img src="/image/bunsil.png" alt="분실물" />
-                    </NavLink>
-                </div>
                 <div className="col-lg-2">
                     <NavLink to="/chatbot">
                         <img src="/image/chatbot.png" alt="Chatbot" />
+                    </NavLink>
+                </div>
+                <div className="col-lg-2">
+                    <NavLink to="/lost">
+                        <img src="/image/bunsil.png" alt="분실물" />
                     </NavLink>
                 </div>
             </div>
