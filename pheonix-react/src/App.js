@@ -23,6 +23,10 @@ import SeatDetails from './components/admin/SeatsTypes/SeatDetails';
 import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
 import Mypage from './components/user/Mypage';
+import { isLoginState, loginIdState, loginGradeState, isNonUserState } from "./components/utils/RecoilData";
+import { useRecoilState, useRecoilValue } from 'recoil';
+import axios from "./components/utils/CustomAxios";
+import { useCallback, useEffect } from "react";
 import Success from './components/store/purchase/success';
 import Fail from './components/store/purchase/fail';
 import Cancel from './components/store/purchase/cancel';
@@ -57,6 +61,8 @@ function App() {
 
   const isLogin = useRecoilValue(isLoginState);
 
+  const isNonUser = useRecoilValue(isNonUserState);
+
   //effect
   useEffect(() => {
     refreshLogin();
@@ -82,8 +88,6 @@ function App() {
       window.localStorage.setItem("refreshToken", resp.data.refreshToken);
     }
   }, []);
-
-  
   return (
 
     <>
@@ -167,10 +171,12 @@ function App() {
         <Route path='/commentlists' element={<CommentLists/>}/>
         <Route path='wrapcomments' element={<Comment/>}/>
 
-
-       
         {/* 예매 */}
-        <Route path='/booking' element={<BookingListPage />} />
+        {/* 로그인한 사용자만 접근할 수 있는 경로 */}
+        {isLogin &&
+          <Route path='/booking' element={<BookingListPage />} />
+        }
+
 
         <Route path='/bookingAdd' element={<BookingAdd />} />
 
