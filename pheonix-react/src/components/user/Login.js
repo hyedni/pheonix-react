@@ -64,7 +64,6 @@ function Login() {
             // refreshToken을 localStorage에 저장합니다.
             window.localStorage.setItem("refreshToken", resp.data.refreshToken);
 
-            // 강제 페이지 이동을 하고자 한다면 여기에 코드를 추가합니다.
             navigator("/");
 
         } catch (error) {
