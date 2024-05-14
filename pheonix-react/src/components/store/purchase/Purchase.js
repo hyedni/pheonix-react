@@ -15,6 +15,7 @@ import { LuCircleEqual } from "react-icons/lu";
 import { FaArrowAltCircleLeft } from "react-icons/fa";
 
 import kakaopay from "../image/kakaopay.png";
+import { Link } from "react-router-dom";
 
 const Purchase = () => {
 
@@ -355,7 +356,7 @@ const Purchase = () => {
                 <div className="col-lg-8 content-body me-4">
                     <div className='row'>
                         <div className="col-3">
-                            <button className='btn btn-outline-dark w-100 btn-lg'><FaArrowAltCircleLeft /> 스토어가기</button>
+                            <Link to={`/store/package`} className='btn btn-outline-dark w-100 btn-lg'><FaArrowAltCircleLeft /> 스토어가기</Link>
                         </div>
                         <div className="col-9">
                             <button className='btn btn-dark w-100 btn-lg' onClick={() => isValidToPay()}>결제하기</button>
