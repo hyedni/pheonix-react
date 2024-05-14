@@ -123,7 +123,7 @@ const StoreList = () => {
                                         )}
 
                                         <Link className='edit-button btn btn-secondary' onClick={e => (AddItemToCart(product.productNo))}><FaShoppingCart /></Link>
-                                        <Link to={`/cart/`} className='edit-button btn btn-secondary'><IoBagHandle /></Link>
+                                        <Link to={`/purchase/${product.productNo}`} className='edit-button btn btn-secondary'><IoBagHandle /></Link>
 
                                     </div>
 

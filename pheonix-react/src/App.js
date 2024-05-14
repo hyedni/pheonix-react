@@ -44,6 +44,7 @@ import MovieSchedule from './components/admin/MovieSchedule';
 import CommentLists from './components/service/CommentLists';
 import Comment from './components/service/Comment';
 import ReviewList from './components/review/ReviewList';
+import Purchase from './components/store/purchase/Purchase';
 
 
 function App() {
@@ -130,6 +131,7 @@ function App() {
         {isLogin &&
           <>
             <Route path='/cart' element={<Cart />} />
+            <Route path='/purchase/:productNo' element={<Purchase />} />
           </>
         }
 
