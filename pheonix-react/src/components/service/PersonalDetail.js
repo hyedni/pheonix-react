@@ -7,6 +7,7 @@ export default function PersonalDetail() {
     const [personal, setPersonal] = useState({});
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
+    const [writerName, setWriterName] = useState("");
 
     useEffect(() => {
         loadData();
@@ -15,94 +16,54 @@ export default function PersonalDetail() {
     const loadData = useCallback(async () => {
         try {
             if (!personalNo) return;
+
             const personalResp = await axios.get(`/personal/${personalNo}`);
             if (personalResp.data) {
                 setPersonal(personalResp.data);
                 setComments(personalResp.data.comments || []);
             }
+
+            listComments();
         } catch (error) {
-            console.error("Error loading personal data:", error);
+            console.error("데이터를 불러오는 중 오류 발생:", error);
         }
     }, [personalNo]);
 
     const handleAddComment = async () => {
         try {
             const response = await axios.post("/comments/", {
+                personalNo: personalNo,
                 commentsContent: newComment,
-                commentsWriter: "작성자 이름"
+                commentsWriter: writerName
             });
-            console.log("New comment added:", response.data);
+            console.log("새 댓글이 추가되었습니다:", response.data);
             setNewComment("");
-            // 댓글이 추가되면 해당 개인 정보를 다시 로드하여 업데이트된 댓글을 표시할 수 있도록 함
             loadData();
         } catch (error) {
-            console.error("Error adding comment:", error);
+            console.error("댓글 추가 중 오류 발생:", error);
         }
     }
 
-    const deleteComment = async (comment) => {
+    const handleDeleteComment = async (commentId) => {
         try {
-            const response = await axios.delete(`/comments/${comment.commentsId}`);
-            console.log("Comment deleted:", response.data);
-            // 댓글이 삭제되면 해당 개인 정보를 다시 로드하여 업데이트된 댓글을 표시할 수 있도록 함
+            const response = await axios.delete(`/comments/${commentId}`);
+            console.log("댓글이 삭제되었습니다:", response.data);
             loadData();
         } catch (error) {
-            console.error("Error deleting comment:", error);
+            console.error("댓글 삭제 중 오류 발생:", error);
         }
     }
 
-    const Comment = ({ comment }) => {
-        const [isEditing, setIsEditing] = useState(false);
-        const [editValue, setEditValue] = useState(comment.comments_content);
-
-        const handleEditInput = async () => {
-            try {
-                const response = await axios.put(`/comments/${comment.commentsId}`, {
-                    commentsContent: editValue
-                });
-                console.log("Comment edited:", response.data);
-                setIsEditing(false);
-                // 댓글이 수정되면 해당 개인 정보를 다시 로드하여 업데이트된 댓글을 표시할 수 있도록 함
-                loadData();
-            } catch (error) {
-                console.error("Error editing comment:", error);
-            }
-        };
-
-        return (
-            <li id={comment.commentsId}>
-                <span className="wrap-cmt">
-                    <span className="cmt-user">{comment.comments_writer}</span>
-                    {isEditing ? (
-                        <input
-                            type="text"
-                            className="form-control"
-                            value={editValue}
-                            onChange={(e) => setEditValue(e.target.value)}
-                            onKeyDown={(e) => (e.key === 'Enter' ? handleEditInput() : null)}
-                        />
-                    ) : (
-                        <span className="cmt-cont">{comment.comments_content}</span>
-                    )}
-                </span>
-                <span className="wrap-btn">
-                    <button
-                        className="btn btn-edit"
-                        onClick={() => setIsEditing(!isEditing)}
-                    >
-                        {isEditing ? "저장" : "수정"}
-                    </button>
-                    <button
-                        className="btn btn-danger btn-sm"
-                        onClick={() => deleteComment(comment)}
-                    >
-                        삭제
-                    </button>
-                </span>
-            </li>
-        );
+    const listComments = async () => {
+        try {
+            const response = await axios.get(`/comments/?personalNo=${personalNo}`);
+            console.log("댓글 목록:", response.data);
+            setComments(response.data);
+        } catch (error) {
+            console.error("댓글 목록을 불러오는 중 오류 발생:", error);
+        }
     }
-
+    
     return (
         <div className="container">
             <div className="row justify-content-center">
@@ -113,15 +74,16 @@ export default function PersonalDetail() {
                             <p className="card-text text-muted">작성자: {personal.personalId}</p>
                         </div>
                         <div className="card-body">
-                            <p className="card-text">{personal.personalContent}</p>
+                            <p className="card-text" style={{ width: "100%" }}>{personal.personalContent}</p>
                         </div>
                         <div className="card-footer">
-                            <Link to="/personal" className="btn btn-primary">목록으로 돌아가기</Link>
+                            <Link to="/personal" className="btn btn-primary btn-sm">목록으로 돌아가기</Link>
                         </div>
                     </div>
                 </div>
             </div>
-            <div className="row justify-content-center">
+
+            <div className="row justify-content-center mt-4">
                 <div className="col-lg-8">
                     <div className="input-group mb-3">
                         <input
@@ -131,51 +93,35 @@ export default function PersonalDetail() {
                             value={newComment}
                             onChange={(e) => setNewComment(e.target.value)}
                         />
+                        <input
+                            type="text"
+                            className="form-control"
+                            placeholder="작성자 이름을 입력하세요..."
+                            value={writerName}
+                            onChange={(e) => setWriterName(e.target.value)}
+                        />
                         <button className="btn btn-outline-secondary" type="button" onClick={handleAddComment}>작성</button>
                     </div>
                 </div>
             </div>
-            <div className="row justify-content-center">
+
+            <div className="row justify-content-center mt-4">
                 <div className="col-lg-8">
                     <div className="comment-lists">
-                        <ul>
-                            {comments.map(comment => (
-                                <Comment key={comment.commentsId} comment={comment} />
-                            ))}
-                        </ul>
+                        {comments.map(comment => (
+                            <div key={comment.commentsId} className="card mb-3">
+                                <div className="card-body">
+                                    <p className="card-text">{comment.commentsContent}</p>
+                                </div>
+                                <div className="card-footer text-muted d-flex justify-content-between align-items-center">
+                                    <span>작성자: {comment.commentsWriter}</span>
+                                    <button className="btn btn-danger btn-sm" onClick={() => handleDeleteComment(comment.commentsId)}>삭제</button>
+                                </div>
+                            </div>
+                        ))}
                     </div>
                 </div>
             </div>
-            <div className='row mt-4'>
-                <div className='col'>
-                    <table className='table'>
-                        <thead className='text-center'>
-                            <tr>
-                                <th>번호</th>
-                                <th>작성자</th>
-                                <th>내용</th>
-                                <th>관리</th>
-                            </tr>
-                        </thead>
-                        <tbody className='text-center'>
-                            {comments.map(comment => (
-                                <tr key={comment.commentsId}>
-                                    <td>{comment.commentsId}</td>
-                                    <td>{comment.commentsWriter}</td>
-                                    <td>{comment.commentsContent}</td>
-                                    <td>
-                                        <button className='btn btn-danger btn-sm'
-                                            onClick={e => deleteComment(comment)}>
-                                            삭제
-                                        </button>
-                                    </td>
-                                </tr>
-                            ))}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-
         </div>
     );
-};
+}
