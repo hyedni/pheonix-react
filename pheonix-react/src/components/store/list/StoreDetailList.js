@@ -195,10 +195,10 @@ const StoreDetailList = () => {
 
                                 <div className="row mt-4">
                                     <div className="col-3">
-                                        <Link className='btn btn-primary w-100' onClick={e=>(AddItemToCart())}><FaShoppingCart /></Link>
+                                        
                                     </div>
                                     <div className="col-3">
-                                        <Link to={`/gift/${products.productNo}`} className='btn btn-dark w-100'>선물하기</Link>
+                                        <Link className='btn btn-primary w-100' onClick={e=>(AddItemToCart())}><FaShoppingCart /></Link>
                                     </div>
                                     <div className="col-6">
                                         <Link to={`/purchase/${products.productNo}`} className='btn btn-dark w-100'>구매하기</Link>

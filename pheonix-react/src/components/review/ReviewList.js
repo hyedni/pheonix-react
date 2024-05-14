@@ -50,13 +50,15 @@ const ReviewList = () => {
         };
         try {
             await axios.get("/review_like/", { params: data }).then(resp => {
-               
+               loadReviews();
             })
         }
         catch (error) {
             console.error("API 호출 중 오류 발생:", error);
         }
     }, [userId]);
+
+    //정렬
     const [sortBy, setSortBy] = useState('latest');
 
     const handleSortChange = (sortByValue) => {

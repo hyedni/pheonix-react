@@ -35,28 +35,13 @@ const PruchaseMenu = (props) => {
                         <li>
                             <IoIosArrowForward className='icon' />
                         </li>
-                        <li className={activeStep === "2" ? "activeColor" : ""}>
-                            <div className='row'>
-                                <div className='col-3'>
-                                    <IoBagHandle className="icon" />
-                                </div>
-                                <div className='col-9'>
-
-                                    <span>STEP 02</span><br />
-                                    <strong>정보입력</strong>
-                                </div>
-                            </div>
-                        </li>
-                        <li>
-                            <IoIosArrowForward className='icon' />
-                        </li>
                         <li className={activeStep === "3" ? "activeColor" : ""}>
                             <div className='row'>
                                 <div className='col-3'>
                                     <MdPayment className="icon" />
                                 </div>
                                 <div className='col-9'>
-                                    <span>STEP 03</span><br />
+                                    <span>STEP 02</span><br />
                                     <strong>결제하기</strong>
                                 </div>
                             </div>
@@ -70,7 +55,7 @@ const PruchaseMenu = (props) => {
                                     <IoReceipt className="icon" />
                                 </div>
                                 <div className='col-9'>
-                                    <span>STEP 04</span><br />
+                                    <span>STEP 03</span><br />
                                     <strong>결제완료</strong>
                                 </div>
                             </div>

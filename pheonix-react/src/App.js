@@ -7,7 +7,6 @@ import Join from './components/user/Join';
 import MovieEdit from './components/admin/MovieEdit';
 import Store from './components/store/Store';
 import Cart from './components/store/Cart';
-import Gift from './components/store/Gift';
 import NewMovie from './components/admin/NewMovie';
 import Personal from './components/service/Personal';
 import Lost from './components/service/Lost';
@@ -131,7 +130,6 @@ function App() {
         {isLogin &&
           <>
             <Route path='/cart' element={<Cart />} />
-            <Route path='/gift' element={<Gift />} />
           </>
         }
 
