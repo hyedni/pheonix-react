@@ -19,6 +19,18 @@ const loginGradeState = atom({
     default : ''
 });
 
+const nonUserLoginState = atom({
+    key: 'nonLoginEmailState',
+    default : ''
+});
+const isNonUserLogin = atom({
+    key: 'nonUserLoginState',
+    get: (state)=>{
+        const nonLoginEmail = state.get(nonUserLoginState);
+        return nonLoginEmail && nonLoginEmail.length > 0;
+    }
+})
+
 //atom으로 생성한 데이터를 조합하여 무언가를 계산할 수 있다(selector)
 const isLoginState = selector({
     key : 'loginState',//식별자

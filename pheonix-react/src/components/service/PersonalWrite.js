@@ -1,35 +1,40 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import axios from "../utils/CustomAxios";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loginIdState, loginGradeState, isLoginState } from "../utils/RecoilData";
 
 
 const PersonalWrite = () => {
-    const [personalId, setPersonalId] = useState("");
     const [loginId, setLoginId] = useRecoilState(loginIdState);
     const [user, setUser] = useState([]);
     const [personalTitle, setPersonalTitle] = useState("");
     const [personalContent, setPersonalContent] = useState("");
 
 
+    useEffect(() => { 
+   loadData(); 
+    }, [loginId]);
+
     const loadData = useCallback(async () => {
         try {
-            const resp = await axios.get("/personal", {
+            const resp = await axios.get("/personal/", {
                 params: {
-                    userId: personalId
+                    userId: loginId
                 }
             });
             setUser(resp.data);
+            console.log(loginId);
         } catch (error) {
             console.error('사용자 정보를 불러오는 중 오류가 발생했습니다:', error);
         }
-    }, []);
+    }, [loginId]);
+    
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         const data = {
-            personalId: personalId,
+            personalId: loginId,
             personalTitle: personalTitle,
             personalContent: personalContent
         };
@@ -47,9 +52,7 @@ const PersonalWrite = () => {
 
     const handleInputChange = (event) => {
         const { name, value } = event.target;
-        if (name === "personalId") {
-            setPersonalId(value);
-        } else if (name === "personalTitle") {
+        if (name === "personalTitle") {
             setPersonalTitle(value);
         } else if (name === "personalContent") {
             setPersonalContent(value);
@@ -62,10 +65,6 @@ const PersonalWrite = () => {
                 <div className="col-lg-8">
                     <h2 className="mt-4 mb-4">글쓰기</h2>
                     <form onSubmit={handleSubmit}>
-                        <div className="form-group">
-                            <label htmlFor="personalId">아이디</label>
-                            <input type="text" className="form-control" id="personalId" name="personalId" value={personalId} onChange={handleInputChange} />
-                        </div>
                         <div className="form-group">
                             <label htmlFor="personalTitle">제목</label>
                             <input type="text" className="form-control" id="personalTitle" name="personalTitle" value={personalTitle} onChange={handleInputChange} />
