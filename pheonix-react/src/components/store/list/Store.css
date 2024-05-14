@@ -169,7 +169,7 @@ li {
 .list-img .delete-button,
 .list-img .btn {
   position: absolute;
-  top: 50%; /* 이미지 상단으로부터 50% 위치 */
+  top: 50%; /* 이미지 상단으로부터 50%t 위치 */
   transform: translateY(-50%); /* 세로 중앙 정렬 */
   width: 60px; /* 버튼 너비 설정 */
   height: 60px; /* 버튼 높이 설정 */

@@ -379,8 +379,8 @@ const Cart = () => {
                                                     </td>
                                                     <td>
 
-                                                        <div class="custom-qty-container">
-                                                            <input type='number' class="qty-value form-control" name='cartQty' value={cartItem.cartQty} onChange={e => { changeQty(e, cartItem) }} min={1} ></input>
+                                                        <div className="custom-qty-container">
+                                                            <input type='number' className="qty-value form-control" name='cartQty' value={cartItem.cartQty} onChange={e => { changeQty(e, cartItem) }} min={1} ></input>
                                                             <button className='qty-buttons btn btn-light' onClick={() => saveEditQty(cartItem)}>변경</button>
                                                         </div>
 
@@ -389,7 +389,6 @@ const Cart = () => {
                                                     <td>
                                                         <div className="action-buttons-container">
                                                             <div className="edit-buttons">
-                                                                <Link to={`/gift/${cartItem.productNo}`} className='edit-button btn btn-outline-dark'><FaGift />선물하기</Link>
                                                                 <Link to={`/purchase/${cartItem.productNo}`} className='edit-button btn btn-outline-dark mt-2'><IoBagHandle />구매하기</Link>
                                                             </div>
                                                             <div className="delete-button-container">
