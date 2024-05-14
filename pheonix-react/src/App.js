@@ -45,6 +45,7 @@ import MovieSchedule from './components/admin/MovieSchedule';
 import CommentLists from './components/service/CommentLists';
 import Comment from './components/service/Comment';
 import ReviewList from './components/review/ReviewList';
+import MyPersonal from './components/user/MyPersonal';
 
 
 function App() {
@@ -124,6 +125,7 @@ function App() {
         <Route path='/login' element={<Login />} />
         <Route path='/join' element={<Join />} />
         <Route path='/nonUser' element={<NonUser />} />
+        <Route path='mypersonal' element={<MyPersonal/>}/>
 
         {isLogin &&
           <Route path='/mypage' element={<Mypage />} />
