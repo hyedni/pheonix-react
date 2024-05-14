@@ -1,11 +1,12 @@
 import { useNavigate } from "react-router";
 import axios from "../utils/CustomAxios";
 import './BookingListPage.css';
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { TbNumber12Small } from "react-icons/tb";
 import { TbNumber15Small } from "react-icons/tb";
 import { TbNumber19Small } from "react-icons/tb";
 import React, { Fragment } from 'react';
+import { Modal } from "bootstrap";
 
 function BookingListPage() {
 
@@ -16,6 +17,7 @@ function BookingListPage() {
 
     //일정 PK번호 넘기기
     const moveToSeat = (scheduleNo) => {
+        console.log(scheduleNo);
         navigate(`/주소/${scheduleNo}`)
     };
 
@@ -66,8 +68,18 @@ function BookingListPage() {
         }
     };
 
+    const bsModal = useRef();
+    const openModal = useCallback(() => {
+        const modal = new Modal(bsModal.current);
+        modal.show();
+    }, [bsModal]);
+    const closeModal = useCallback(() => {
+        const modal = Modal.getInstance(bsModal.current);
+        modal.hide();
+    }, [bsModal]);
+
     const [isSelectedMovie, setIsSelectedMovie] = useState('');
-    const loadTheaterList = useCallback(async (movieNo) => {
+    const loadTheaterList = useCallback(async (movieNo, movieAge) => {
         const resp = await axios.get(`/booking/theater/${movieNo}`);
         setCinemaData(resp.data);
         setIsTheaterShow(true);
@@ -82,6 +94,10 @@ function BookingListPage() {
         });
         setIsSelectedMovie(movieNo);
         setisSelectedSchedule(false);
+        console.log(movieAge);
+        if (movieAge === '청소년관람불가') {
+            openModal();
+        }
     }, [bookData]);
 
     const [isSelectedCinema, setIsSelectedCinema] = useState({
@@ -246,7 +262,7 @@ function BookingListPage() {
                                     {movieData.map((data) => (
                                         <>
                                             <tr style={{ height: '50px' }}>
-                                                <td onClick={e => loadTheaterList(data.movieNo)}
+                                                <td onClick={e => loadTheaterList(data.movieNo, data.movieAge)}
                                                     style={{ padding: '0.5em', fontSize: '15px', verticalAlign: 'middle', fontWeight: isSelectedMovie === data.movieNo ? 'bolder' : '', cursor: 'pointer' }}>
                                                     {getAgeIcon(data.movieAge)}  &nbsp; {data.movieTitle}
                                                 </td>
@@ -285,7 +301,7 @@ function BookingListPage() {
                                                 }} onClick={e => loadSchedule(day.fullDate)}>
                                                 {day.date}
                                             </td>
-                                        </tr> 
+                                        </tr>
                                     ))}
                                 </table>
                             </div>
@@ -311,14 +327,14 @@ function BookingListPage() {
                                                                 <>
                                                                     <button
                                                                         onClick={e => selectedSchedule(filteredResult.movieScheduleNo)}
-                                                                        className="btn btn-secondary btn-sm" 
+                                                                        className="btn btn-secondary btn-sm"
                                                                         disabled={!isAvailable || filteredResult.remainingSeats === 0}
                                                                     >
                                                                         {filteredResult.startTime}
                                                                     </button>
-                                                                    <span style={{fontSize:'11px', color:'green'}}> {filteredResult.remainingSeats} /</span>
-                                                                    <span style={{fontSize:'11px', color:'gray'}}> {filteredResult.theaterTotalSeats}석</span>
-                                                                    <span style={{fontSize:'11px', color:'gray'}}>
+                                                                    <span style={{ fontSize: '11px', color: 'green' }}> {filteredResult.remainingSeats} /</span>
+                                                                    <span style={{ fontSize: '11px', color: 'gray' }}> {filteredResult.theaterTotalSeats}석</span>
+                                                                    <span style={{ fontSize: '11px', color: 'gray' }}>
                                                                         {filteredResult.movieScheduleTimeDisc === '조조' ? ' 조조' : ''}
                                                                         {filteredResult.movieScheduleTimeDisc === '심야' ? ' 심야' : ''}
                                                                     </span>
@@ -326,7 +342,7 @@ function BookingListPage() {
                                                                         style={{ color: isAvailable ? '' : 'rgb(121,120,114)', fontSize: '11px' }}>
                                                                         {isAvailable ? '' : ' 마감'}
                                                                     </span>
-                                                                    <span style={{color: filteredResult.remainingSeats === 0 ? 'rgb(173,39,39)' : '', fontSize: '11px' }}>
+                                                                    <span style={{ color: filteredResult.remainingSeats === 0 ? 'rgb(173,39,39)' : '', fontSize: '11px' }}>
                                                                         {filteredResult.remainingSeats === 0 ? ' 매진' : ''}
                                                                     </span>
                                                                 </>
@@ -344,31 +360,51 @@ function BookingListPage() {
                         </div>
 
                         {/* 선택된 상영스케줄 정보 */}
-                        <div className="container result-wrapper" style={{ display: isSelectedSchedule ? 'block' : 'none'}} >
+                        <div className="container result-wrapper" style={{ display: isSelectedSchedule ? 'block' : 'none' }} >
                             <div className="row" style={{ padding: '1em' }}>
                                 <div className="col">
                                     <div className="row">
-                                        <div className="col" style={{fontWeight:'bolder'}}> {scheduleDetail.movieTitle} </div>
+                                        <div className="col" style={{ fontWeight: 'bolder' }}> {scheduleDetail.movieTitle} </div>
                                         <div className="col"> {scheduleDetail.cinemaName}  </div>
                                         <div className="col"> {scheduleDetail.theaterName} </div>
                                         <div className="col"> {scheduleDetail.startDate}  </div>
                                         <div className="col"> {scheduleDetail.startTime} - {scheduleDetail.endTime} </div>
                                         <div className="col d-flex justify-content-end">
-                                        <button className="btn btn-dark w-100 p-2">좌석선택</button>
+                                            <button className="btn btn-dark w-100 p-2" onClick={e => moveToSeat(scheduleDetail.movieScheduleNo)}>좌석선택</button>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
 
-                    </div>
 
+                        {/* Modal */}
+                        <div ref={bsModal} 
+                        style={{top: '30%' }}
+                        className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                            <div className="modal-dialog odal-dialog-centered">
+                                <div className="modal-content">
+                                    <div className="modal-header" style={{ backgroundColor: 'red', color: 'white' }}>
+                                        <h1 className="modal-title fs-5" id="staticBackdropLabel" style={{ fontWeight: 'bold' }}>잠깐!</h1>
+                                        <button type="button" className="btn-close" aria-label="Close"
+                                            onClick={e => closeModal()}></button>
+                                    </div>
+
+                                    <div className="modal-body">
+                                        <div>
+                                            관람등급이 <span style={{fontWeight:'bold'}}>'청소년관람불가'</span>인 영화를 선택하셨습니다. <br/>
+                                            상영관 입장시 직원이 신분증 제시를 요청할 수 있습니다.
+                                        </div>
+                                    </div>
+                                    
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
                 </div>
             </div>
-
-
-            <br />
-            <br />
 
         </>
     );

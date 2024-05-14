@@ -8,7 +8,7 @@ import { TbNumber19Small } from "react-icons/tb";
 import { FaCirclePlus } from "react-icons/fa6";
 
 
-function MovieChart () {
+function MovieChart() {
     const [movies, setMovies] = useState([]);
     const [input, setInput] = useState({
         movieTitle: '',
@@ -26,7 +26,7 @@ function MovieChart () {
         movieDirector: '',
         movieActor: ''
     });
-    
+
     const navigate = useNavigate();
     const moveToDetail = (movieNo) => {
         navigate(`/movieEdit/${movieNo}`);
@@ -46,9 +46,36 @@ function MovieChart () {
         }
     };
 
+
+    //예매율
+
+    const today = new Date();
+    function toChar() {
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0'); 
+        const day = String(today.getDate()).padStart(2, '0'); 
+        const formattedDate = `${year}-${month}-${day}`;
+        return formattedDate;
+    }
+
+    const [reserveData, setReserveData] = useState({});
+    const getRate = useCallback(async (movieNo, reserveStatsDate) => {
+        const resp = await axios.post("/movie/stats", { movieNo, reserveStatsDate });
+        // setReserveData(resp.data);
+        return resp.data;
+    }, []);
+
+    //리스트
     const loadList = useCallback(async () => {
+        const date = toChar();
         const resp = await axios.get("/movie/");
-        setMovies(resp.data);
+        const moviesData = resp.data;
+        for (const movie of moviesData) {
+            const result = await getRate(movie.movieNo, date);
+            const rate = result.reserveStatsRate; 
+            movie.rate =rate; 
+        }
+        setMovies(moviesData);
         setIsClicked(false);
     }, [movies]);
 
@@ -60,6 +87,7 @@ function MovieChart () {
 
     const loadOnList = useCallback(async () => {
         const resp = await axios.get("/movie/on");
+        const moviesData = resp.data;
         setMovies(resp.data);
         setIsClicked(true);
     }, [movies]);
@@ -75,11 +103,11 @@ function MovieChart () {
                         무비차트
                         {isClicked ? (
                             <>
-                               <button className='btn movie-button' onClick={e=> loadList()}>현재 상영작만 보기</button>
+                                <button className='btn movie-button' onClick={e => loadList()}>현재 상영작만 보기</button>
                             </>
                         ) : (
                             <>
-                                <button className='btn movie-button' onClick={e=> loadOnList()}>상영 예정작 보기</button>
+                                <button className='btn movie-button' onClick={e => loadOnList()}>상영 예정작 보기</button>
                             </>
                         )}
                     </div>
@@ -104,7 +132,7 @@ function MovieChart () {
                                     <Link to="/booking" className='edit-button btn btn-primary'>
                                         예매하기
                                     </Link>
-                                    <button onClick={e=>moveToDetail(movie.movieNo)} className='delete-button btn btn-secondary'  style={{ margin: '0px' }}>
+                                    <button onClick={e => moveToDetail(movie.movieNo)} className='delete-button btn btn-secondary' style={{ margin: '0px' }}>
                                         상세정보
                                     </button>
                                 </div>
@@ -118,7 +146,7 @@ function MovieChart () {
                                     </div>
                                 </div>
                                 <div className='d-flex justify-content-between mb-2'>
-                                    <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 0.00%</span>
+                                    <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 {movie.rate}%</span>
                                 </div>
                             </div>
                         ))}

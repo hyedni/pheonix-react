@@ -107,7 +107,7 @@ function Htemplate() {
                                 </div>
                             </li>
                             <li className='nav-item dropdown'>
-                                <NavLink className="nav-link fs-5" to="/movieRegister">통계</NavLink>
+                                <NavLink className="nav-link fs-5" to="/reserveStats">통계</NavLink>
                             </li>
                         </ul>
                         {/* <form className="d-flex">
