@@ -64,14 +64,14 @@ const Personal = () => {
                     </div>
                 </div>
             </div>
-            
-            <div className="row justify-content-end">
-                <div className="col-lg-2">
+
+            <div className="row justify-content-center">
+                <div className="col-lg-2 mb-3">
                     <NavLink to="/chatbot">
                         <img src="/image/chatbot.png" alt="Chatbot" />
                     </NavLink>
                 </div>
-                <div className="col-lg-2">
+                <div className="col-lg-2 mb-3">
                     <NavLink to="/lost">
                         <img src="/image/bunsil.png" alt="분실물" />
                     </NavLink>
@@ -105,17 +105,17 @@ const Personal = () => {
                         </tbody>
                     </table>
 
+                    <div className="row justify-content-end">
+                        <div className="col-lg-2">
+                            <NavLink to="/personalwrite">
+                                <button className="btn btn-success">글쓰기</button>
+                            </NavLink>
+                        </div>
+                    </div>
                     <Pagination currentPage={currentPage} totalPages={Math.ceil(personals.length / postsPerPage)} paginate={paginate} />
                 </div>
             </div>
 
-            <div className="row justify-content-end">
-                <div className="col-lg-2">
-                    <NavLink to="/personalwrite">
-                        <button className="btn btn-success">글쓰기</button>
-                    </NavLink>
-                </div>
-            </div>
 
             {selectedPersonal && (
                 <div className="row justify-content-center">
