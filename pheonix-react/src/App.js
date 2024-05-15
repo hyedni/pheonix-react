@@ -58,7 +58,7 @@ function App() {
 
   const isLogin = useRecoilValue(isLoginState);
 
-  // const isNonUser = useRecoilValue(isNonUserState);
+  const isNonUser = useRecoilValue(isNonUserState);
 
   //effect
   useEffect(() => {

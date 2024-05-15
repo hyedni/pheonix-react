@@ -6,10 +6,10 @@ import axios from "axios";
 import { useNavigate } from "react-router";
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
-// import { loginIdState, loginGradeState, isLoginState, isNonUserState } from "../utils/RecoilData";
+import { loginIdState, loginGradeState, isLoginState, isNonUserState } from "../utils/RecoilData";
 
 function NonUser() {
-    // const [isNonUserEmail, setIsNonUserEmail] = useRecoilState(isNonUserState);
+    const [isNonUserEmail, setIsNonUserEmail] = useRecoilState(isNonUserState);
 
     const [nonUser, setNonUser] = useState({
           "nonUserEmail": "",
