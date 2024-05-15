@@ -30,10 +30,6 @@ import Success from './components/store/purchase/success';
 import Fail from './components/store/purchase/fail';
 import Cancel from './components/store/purchase/cancel';
 import SuccessComplete from './components/store/purchase/successComplete';
-import { isLoginState, loginIdState, loginGradeState } from "./components/utils/RecoilData";
-import { useRecoilState, useRecoilValue } from 'recoil';
-import axios from "./components/utils/CustomAxios";
-import { useCallback, useEffect } from "react";
 import PersonalDetail from './components/service/PersonalDetail';
 import Pagination from './components/service/Pagination';
 import Bunsil from './components/service/Bunsil';
@@ -62,7 +58,7 @@ function App() {
 
   const isLogin = useRecoilValue(isLoginState);
 
-  const isNonUser = useRecoilValue(isNonUserState);
+  // const isNonUser = useRecoilValue(isNonUserState);
 
   //effect
   useEffect(() => {

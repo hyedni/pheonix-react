@@ -169,3 +169,7 @@
     width: 70%; /* 아이콘 크기 설정 */
     height: auto; /* 비율 유지 */
 }
+
+.calendar-width {
+    width: 100%;
+}

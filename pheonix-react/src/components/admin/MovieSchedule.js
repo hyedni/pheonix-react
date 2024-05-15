@@ -3,7 +3,9 @@ import Pagination from "../service/Pagination";
 import axios from "../utils/CustomAxios";
 import { useCallback, useEffect, useState, useRef } from 'react';
 import { Modal } from "bootstrap";
-
+import { FaArrowRotateLeft } from "react-icons/fa6";
+import moment from 'moment';
+import DatePicker from 'react-datepicker';
 
 
 function MovieSchedule() {
@@ -44,6 +46,7 @@ function MovieSchedule() {
 
     const changeInput = useCallback((e) => {
         setInput({
+            ...input,
             [e.target.name]: e.target.value
         });
     }, [input]);
@@ -117,6 +120,25 @@ function MovieSchedule() {
         theaterList(target);
     }, [theaters]);
 
+    //datePicker
+    const [startDate, setStartDate] = useState(new Date());
+
+    const changeStartDate = (target) => {
+        const startDate = moment(target).format("YYYY-MM-DD");
+        setInsertData({
+            ...insertData,
+            startDate: startDate
+        })
+    };
+
+    const changeEndDate = (target) => {
+        const endDate = moment(target).format("YYYY-MM-DD");
+        setInsertData({
+            ...insertData,
+            endDate: endDate
+        })
+    };
+
     const saveData = useCallback((e) => {
         if (e.target.name === "theaterNo") {
             const no = e.target.value;
@@ -132,7 +154,7 @@ function MovieSchedule() {
         setInsertData({
             ...insertData,
             [e.target.name]: e.target.value,
-            endTime: endTimeValue,
+            endTime: endTimeValue === 'NaN:NaN' ? '' : endTimeValue,
             movieNo: movieNo
         });
         console.log(insertData);
@@ -268,6 +290,22 @@ function MovieSchedule() {
 
     }, [editData]);
 
+    const changeEditStartDate = (target) => {
+        const startDate = moment(target).format("YYYY-MM-DD");
+        setEditData({
+            ...editData,
+            startDate: startDate
+        })
+    };
+
+    const changeEditEndDate = (target) => {
+        const endDate = moment(target).format("YYYY-MM-DD");
+        setEditData({
+            ...editData,
+            endDate: endDate
+        })
+    };
+
     //수정
     const saveEditSchedule = useCallback(async () => {
         await axios.patch("/movieSchedule/", editData);
@@ -300,9 +338,9 @@ function MovieSchedule() {
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
                         상영 일정 관리
-                        <span style={{ marginLeft: '10px' }}><button className="btn btn-primary" onClick={e => openModal()}>일정등록</button></span>
-                        <span style={{ marginLeft: '10px' }}><button className="btn btn-dark" onClick={e => moveToStart(e)}>처음으로</button></span>
-                        <span style={{ fontSize: '15px', fontWeight: 'normal', marginLeft: '10px' }}> 검색어를 입력하여 원하는 조건의 상영일정을 찾으세요! </span>
+                        <span style={{ marginLeft: '10px' }}><button className="btn btn-primary" onClick={e => openModal()}>등록</button></span>
+                        <span style={{ marginLeft: '10px' }}><button className="btn btn-dark" onClick={e => moveToStart(e)}><FaArrowRotateLeft /></button></span>
+                        <span style={{ fontSize: '15px', fontWeight: 'normal', marginLeft: '10px' }}>  원하는 조건의 상영일정을 검색하세요 </span>
                     </div>
                     <hr />
                 </div>
@@ -426,12 +464,18 @@ function MovieSchedule() {
 
                                     <div className="row">
                                         <div className="col">
-                                            <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">상영일</label>
-                                            <input type="text" name="startDate" value={insertData.startDate} className="form-control" onChange={e => saveData(e)} />    
+                                            <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">상영일</label> <br/>
+                                            <DatePicker
+                                                        selected={startDate}
+                                                        value={insertData.startDate} onChange={e => changeStartDate(e)} className="form-control calendar-width"
+                                                    />
                                         </div>
                                         <div className="col">
-                                            <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">종료일</label>
-                                            <input type="text" name="endDate" value={insertData.endDate} className="form-control" onChange={e => saveData(e)} />
+                                            <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">종료일</label><br/>
+                                            <DatePicker
+                                                        selected={startDate}
+                                                        value={insertData.endDate} onChange={e => changeEndDate(e)} className="form-control calendar-width"
+                                                    />
                                         </div>
                                     </div>
 
@@ -450,7 +494,7 @@ function MovieSchedule() {
                                     <div className="row">
                                         <div className="col">
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">좌석수</label>
-                                            <input type="number" name="remainingSeats" value={insertData.remainingSeats} className="form-control" onChange={e => saveData(e)} />
+                                            <input type="number" readOnly name="remainingSeats" value={insertData.remainingSeats} className="form-control" onChange={e => saveData(e)} />
                                         </div>
                                         <div className="col">
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">요일유형</label>
@@ -516,12 +560,18 @@ function MovieSchedule() {
 
                                     <div className="row">
                                         <div className="col">
-                                            <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">상영일</label>
-                                            <input type="text" name="startDate" value={editData.startDate} className="form-control" onChange={e => saveEditData(e)} />
+                                            <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">상영일</label><br/>
+                                            <DatePicker
+                                                        selected={startDate}
+                                                        value={editData.startDate} onChange={e => changeEditStartDate(e)} className="form-control calendar-width"
+                                                    />
                                         </div>
                                         <div className="col">
-                                            <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">종료일</label>
-                                            <input type="text" name="endDate" value={editData.endDate} className="form-control" onChange={e => saveEditData(e)} />
+                                            <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">종료일</label><br/>
+                                            <DatePicker
+                                                        selected={startDate}
+                                                        value={editData.endDate} onChange={e => changeEditEndDate(e)} className="form-control calendar-width"
+                                                    />
                                         </div>
                                     </div>
 
@@ -539,7 +589,7 @@ function MovieSchedule() {
                                     <div className="row">
                                         <div className="col">
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">좌석수</label>
-                                            <input type="number" name="remainingSeats" value={editData.remainingSeats} className="form-control" onChange={e => saveEditData(e)} />
+                                            <input type="number" readOnly name="remainingSeats" value={editData.remainingSeats} className="form-control" onChange={e => saveEditData(e)} />
                                         </div>
                                         <div className="col">
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">요일유형</label>
