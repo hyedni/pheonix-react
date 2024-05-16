@@ -100,7 +100,6 @@ function App() {
         {loginGrade === '관리자' &&
         <>
           <Route path='/adminMovie' element={<AdminMovie />} />
-          <Route path='/adminCinema' element={<AdminCinema />} />
           <Route path='/adminStore' element={<AdminStore />} />
           <Route path='/adminTheater' element={<AdminTheater />} />
           <Route path='/movieSchedule' element={<MovieSchedule/>}/>
@@ -114,6 +113,7 @@ function App() {
           <Route path='/seatDetails' element={<SeatDetails/>} />
         </>
         }
+        <Route path='/adminCinema' element={<AdminCinema />} />
 
         {/* 회원 */}
 

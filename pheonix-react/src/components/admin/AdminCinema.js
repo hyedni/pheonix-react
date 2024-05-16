@@ -17,7 +17,7 @@ function AdminCinema() {
 
     const [cinemas, setCinemas] = useState([]);
     const [region, setRegion] = useState({
-        cinemaNo: ''
+        cinemaNo: 1
     });
     //수정용백업
     const [backup, setBackup] = useState({});
@@ -165,10 +165,31 @@ function AdminCinema() {
 
     //삭제
     const deleteCinema = useCallback(async (target) => {
+        console.log(target.cinemaNo);
+        const resp1 = await axios.get(`/cinema/theaterCnt/${target.cinemaNo}`);
+
         const choice = window.confirm("삭제하려는 상영관이 맞으신가요? 정말 삭제하시겠습니까?");
         if (choice === false) return;
+
+        if (resp1.data !== 0) {
+            window.alert("선택하신 영화관에 상영관이 존재하여 삭제할 수 없습니다.");
+            return;
+        }
         await axios.delete("/cinema/" + target.cinemaNo);
         loadList();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        setDetailCinema({
+            cinemaNo: 1,
+            cinemaName: 'pnix강남점',
+            cinemaTotalTheater: 5,
+            cinemaRegion: '서울',
+            cinemaPost: '123456',
+            cinemaAddress1: '서울시 강남구 언주로 123',
+            cinemaAddress2: '1층',
+            cinemaManager: '김대리',
+            cinemaManagerCall: '01012345678',
+            cinemaCall: '02-1234-5678'
+        });
     }, [cinemas]);
 
     return (
