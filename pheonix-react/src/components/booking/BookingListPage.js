@@ -8,6 +8,8 @@ import { TbNumber19Small } from "react-icons/tb";
 import React, { Fragment } from 'react';
 import { Modal } from "bootstrap";
 
+
+
 function BookingListPage() {
 
     const [isTheaterShow, setIsTheaterShow] = useState(false);
@@ -252,7 +254,7 @@ function BookingListPage() {
             <br />
             <br />
 
-            <div className="container">
+            <div className="container mb-5">
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
                         <div className="row">
@@ -385,7 +387,7 @@ function BookingListPage() {
                             <div className="modal-dialog odal-dialog-centered">
                                 <div className="modal-content">
                                     <div className="modal-header" style={{ backgroundColor: 'red', color: 'white' }}>
-                                        <h1 className="modal-title fs-5" id="staticBackdropLabel" style={{ fontWeight: 'bold' }}>잠깐!</h1>
+                                        <h1 className="modal-title fs-5" id="staticBackdropLabel" style={{ fontWeight: 'bold', color:'black'}}>잠깐!</h1>
                                         <button type="button" className="btn-close" aria-label="Close"
                                             onClick={e => closeModal()}></button>
                                     </div>
@@ -393,7 +395,7 @@ function BookingListPage() {
                                     <div className="modal-body">
                                         <div>
                                             관람등급이 <span style={{fontWeight:'bold'}}>'청소년관람불가'</span>인 영화를 선택하셨습니다. <br/>
-                                            상영관 입장시 직원이 신분증 제시를 요청할 수 있습니다.
+                                            상영관 입장시 신분증을 준비 해 주세요.
                                         </div>
                                     </div>
                                     

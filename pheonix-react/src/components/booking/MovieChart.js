@@ -146,7 +146,15 @@ function MovieChart() {
                                     </div>
                                 </div>
                                 <div className='d-flex justify-content-between mb-2'>
-                                    <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 {movie.rate}%</span>
+                                    {isClicked ? (
+                                        <>
+                                            <span style={{ fontWeight: 'bold', color: 'gray' }}></span>
+                                        </>
+                                    ) : (
+                                        <>
+                                            <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 {movie.rate.toFixed(2)}%</span>
+                                        </>
+                                    )}
                                 </div>
                             </div>
                         ))}

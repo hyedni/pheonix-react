@@ -25,8 +25,8 @@ function ReserveStats() {
         const processedData = resp.data.map(item => ({
             label: item.movieTitle,
             data: item.reserveStatsRate,
-            backgroundColor: ["#ffeb9b", "#b5f2ff", "#c5f2ba","#ffcccb", "#b0e0e6", "#f0ffff", "#d3d3d3"], // 예제에서는 고정된 색상 사용
-            borderColor: ["#ffeb9b", "#b5f2ff", "#c5f2ba","#ffcccb", "#b0e0e6", "#f0ffff", "#d3d3d3"] // 예제에서는 고정된 색상 사용
+            backgroundColor: ["#ffeb9b", "#b5f2ff", "#c5f2ba","#ffcccb", "#b0e0e6", "#f0ffff", "#d3d3d3"], 
+            borderColor: ["#ffeb9b", "#b5f2ff", "#c5f2ba","#ffcccb", "#b0e0e6", "#f0ffff", "#d3d3d3"] 
         }));
         setChartData(processedData);
     }, []);
@@ -43,8 +43,8 @@ function ReserveStats() {
         datasets: [
             {
                 data: chartData.map(item => item.data),
-                backgroundColor: ["#ffeb9b", "#b5f2ff", "#c5f2ba","#ffcccb", "#b0e0e6", "#f0ffff", "#d3d3d3"], // 예제에서는 고정된 색상 사용
-                borderColor: ["#ffeb9b", "#b5f2ff", "#c5f2ba","#ffcccb", "#b0e0e6", "#f0ffff", "#d3d3d3"] // 예제에서는 고정된 색상 사용
+                backgroundColor: ["#ffeb9b", "#b5f2ff", "#c5f2ba","#ffcccb", "#b0e0e6", "#f0ffff", "#d3d3d3"], 
+                borderColor: ["#ffeb9b", "#b5f2ff", "#c5f2ba","#ffcccb", "#b0e0e6", "#f0ffff", "#d3d3d3"] 
             },
         ],
     };
@@ -87,7 +87,7 @@ function ReserveStats() {
                     </div>
                     <div className='row mt-3 mb-3'>
                         <div className='col'>
-                            <div className='text-end'>집계일시: {toChar()}</div>
+                            <div className='text-end'>집계일시: {toChar()} 00시 </div>
                         </div>
                     </div>
                     <table className='table table-hover table-rate mb-5'>
@@ -107,7 +107,7 @@ function ReserveStats() {
                                     <td>{data.movieTitle}</td>
                                     <td>{data.movieOpenDate}</td>
                                     <td>{data.reserveStatsMovie}명</td>
-                                    <td>{data.reserveStatsRate}%</td>
+                                    <td>{data.reserveStatsRate.toFixed(2)}%</td>
                                 </tr>
                             ))}
                         </tbody>

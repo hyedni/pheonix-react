@@ -84,21 +84,21 @@ function MovieEdit() {
         loadList();
     }, [movie]);
 
-    const openDate = moment(movie.movieOpenDate).format("YYYY-MM-DD");
-    const closeDate = moment(movie.movieCloseDate).format("YYYY-MM-DD");
 
-    //DatePicker관련
-    const [startDate, setStartDate] = useState(moment().format("YYYY-MM-DD"));
-    const [endDate, setEndDate] = useState(moment().format("YYYY-MM-DD"));
-    const changeDate = (dates) => {
-        const [start, end] = dates;
-        const openDate = moment(start).format("YYYY-MM-DD");
-        const closeDate = moment(end).format("YYYY-MM-DD");
-        setStartDate(start);
-        setEndDate(end);
+    const [date, setDate] = useState(new Date());
+
+    const changeOpenDate = (target) => {
+        const openDate = moment(target).format("YYYY-MM-DD");
         setMovie({
             ...movie,
-            movieOpenDate: openDate,
+            movieOpenDate: openDate
+        })
+    };
+
+    const changeCloseDate = (target) => {
+        const closeDate = moment(target).format("YYYY-MM-DD");
+        setMovie({
+            ...movie,
             movieCloseDate: closeDate
         })
     };
@@ -124,6 +124,7 @@ function MovieEdit() {
         movieYear: null,
         movieRunningTime: null
     });
+
     const ok = useMemo(() => {
         return result.movieYear && result.movieRunningTime;
     }, [result]);
@@ -190,7 +191,7 @@ function MovieEdit() {
                                     <div className="title-head-text">
                                         영화 정보 수정
                                         <button className='btn btn-primary ms-3' onClick={e => cancelEditMenu()} style={{ fontWeight: 'bold' }}>되돌리기</button>
-                                        <button className='btn btn-dark ms-3' onClick={e => saveEditMovie(movie)} style={{ fontWeight: 'bold' }} disabled={ok !== true}> 수정완료 </button>
+                                        <button className='btn btn-dark ms-3' onClick={e => saveEditMovie(movie)} style={{ fontWeight: 'bold' }} disabled={ok === false}> 수정완료 </button>
                                     </div>
                                 </>
                             )}
@@ -313,7 +314,23 @@ function MovieEdit() {
                                             </div>
                                             <div className="row mt-3">
                                                 <div className="col-3">자막/더빙</div>
-                                                <div className="col-9 input-content ">{movie.movieTranslation}</div>
+                                                <div className="col-9 input-content ">
+                                                    {movie.movieTranslation === 'Y' &&
+                                                        <span>
+                                                            자막
+                                                        </span>
+                                                    }
+                                                    {movie.movieTranslation === 'N' &&
+                                                        <span>
+                                                            더빙
+                                                        </span>
+                                                    }
+                                                    {movie.movieTranslation === 'K' &&
+                                                        <span>
+                                                            일반(한국영화)
+                                                        </span>
+                                                    }
+                                                </div>
                                             </div>
                                             <div className="row mt-3">
                                                 <div className="col-3">출력화면유형</div>
@@ -353,8 +370,8 @@ function MovieEdit() {
                                                 <div className="col-3">러닝타임</div>
                                                 <div className='col-9'>
                                                     <input className={`form-control 
-                                                        ${result.movieYear === true ? 'is-valid' : ''}
-                                                        ${result.movieYear === false ? 'is-invalid' : ''}
+                                                        ${result.movieRunningTime === true ? 'is-valid' : ''}
+                                                        ${result.movieRunningTime === false ? 'is-invalid' : ''}
                                                         `}
                                                         type="number" name='movieRunningTime' style={{ width: '100%', textAlign: 'center' }}
                                                         value={movie.movieRunningTime} onChange={e => changeMovie(e)} onBlur={changeResult} />
@@ -386,33 +403,23 @@ function MovieEdit() {
                                                 </div>
                                             </div>
 
-                                            <div className='row mt-3'>
-                                                <div className="col-3">상영기간 선택</div>
-                                                <div className='col-9'>
-                                                    <DatePicker className='datePicker'
-                                                        dateFormat='yyyy.MM.dd'
-                                                        selected={startDate}
-                                                        onChange={changeDate}
-                                                        startDate={startDate}
-                                                        endDate={endDate}
-                                                        minDate={new Date()}
-                                                        selectsRange
-                                                        shouldCloseOnSelect
-                                                    />
-                                                </div>
-                                            </div>
                                             <div className="row mt-3">
                                                 <div className="col-3">개봉일</div>
                                                 <div className='col-9'>
-                                                    <input type="text" name="movieOpenDate" value={openDate === "Invalid date" ? "선택하세요" : openDate} onChange={e => changeMovie(e)} className="form-control"
-                                                        style={{ width: '100%', textAlign: 'center' }} />
+                                                    <DatePicker
+                                                        selected={date}
+                                                        value={movie.movieOpenDate} onChange={e => changeOpenDate(e)} className="form-control calendar-width"
+                                                    />
+
                                                 </div>
                                             </div>
                                             <div className="row mt-3">
                                                 <div className="col-3">상영종료일</div>
                                                 <div className='col-9'>
-                                                    <input type="text" name="movieCloseDate" value={closeDate === "Invalid date" ? "선택하세요" : closeDate} onChange={e => changeMovie(e)} className="form-control"
-                                                        style={{ width: '100%', textAlign: 'center' }} />
+                                                    <DatePicker
+                                                        selected={date}
+                                                        value={movie.movieCloseDate} onChange={e => changeCloseDate(e)} className="form-control"
+                                                    />
                                                 </div>
                                             </div>
                                             <div className="row mt-3">
@@ -486,12 +493,12 @@ function MovieEdit() {
 
                     </div>
 
-                    
+
                 </div>
             </div>
             {/* 리뷰 게시판 */}
             <ReviewList />
-                    
+
         </>
     );
 }
