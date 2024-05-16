@@ -9,14 +9,6 @@ import { useRecoilState, useRecoilValue } from "recoil";
 
 function NonUser() {
 
-// NonUser 컴포넌트에서 useState 추가
-const [isBookingAuthorized, setIsBookingAuthorized] = useState(false);
-
-// 예매 버튼 클릭 시 상태 변경
-const handleBookingAuthorize = () => {
-  setIsBookingAuthorized(true);
-};
-
     const [nonUser, setNonUser] = useState({
           "nonUserEmail": "",
           "nonUserBirth": "",

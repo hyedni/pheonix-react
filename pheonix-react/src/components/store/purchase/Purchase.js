@@ -32,7 +32,6 @@ const Purchase = () => {
 
     const [usagePoint, setUsagePoint] = useState(0);
 
-    const [cartItems, setCartItems] = useState([]); //카트+상품 정보
     // const [userId] = useState('testuser4');
     const [imagePreview] = useState(null);
     const [product, setProduct] = useState({});

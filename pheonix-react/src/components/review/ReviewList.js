@@ -26,6 +26,12 @@ const ReviewList = () => {
     const [reviewPerPage] = useState(6);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
+    const paginatedreviewList = useMemo(() => {
+        const lastIndex = currentPage * mystorePerPage;
+        const firstIndex = lastIndex - mystorePerPage;
+        return myPurchaseList.slice(firstIndex, lastIndex);
+    }, [reviewLists, currentPage, reviewPerPage]);
+
     useEffect(() => {
         loadReviews();
     }, [userId]);//axios 순서 때문에..
@@ -89,7 +95,7 @@ const ReviewList = () => {
                 <div className='col-lg-8 content-body'>
                     <div className="row">
                         <div className="col-md-1"></div>
-                        {reviewLists.length === 0 ? ( //리뷰가 있/없 판단
+                        {paginatedreviewList.length === 0 ? ( //리뷰가 있/없 판단
                             <>
                                 <h1>리뷰가 아직 없어요</h1>
                             </>
@@ -116,7 +122,7 @@ const ReviewList = () => {
                                                                 )}
                                                                 {review.userNick === null ? review.userId : review.userNick}
                                                             </span>
-                                                            <p>{review.reviewContent}</p>
+                                                            <p className="reviewContent">{review.reviewContent}</p>
                                                         </div>
                                                     </div>
                                                     <div className="row">
@@ -138,6 +144,7 @@ const ReviewList = () => {
 
                                                     </div>
                                                 </div>
+                                                <Pagination currentPage={currentPage} totalPages={Math.ceil(reviewLists.length / reviewPerPage)} paginate={paginate} />
                                             </>
                                         ))
                                 ) : (
@@ -181,6 +188,7 @@ const ReviewList = () => {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <Pagination currentPage={currentPage} totalPages={Math.ceil(reviewLists.length / reviewPerPage)} paginate={paginate} />
                                             </>
                                         ))
                                 )}
@@ -190,8 +198,6 @@ const ReviewList = () => {
 
                         )}
                     </div>
-
-                    <Pagination currentPage={currentPage} totalPages={Math.ceil(reviewLists.length / reviewPerPage)} paginate={paginate} />
                 </div>
             </div>
         </>

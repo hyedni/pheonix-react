@@ -47,6 +47,7 @@ import ReviewList from './components/review/ReviewList';
 import Purchase from './components/store/purchase/Purchase';
 import ReserveStats from './components/admin/ReserveStats';
 import MyPersonal from './components/user/MyPersonal';
+import MyStore from './components/user/appliance/MyStore';
 
 
 
@@ -62,12 +63,12 @@ function App() {
   const isLogin = useRecoilValue(isLoginState);
   const isNonLogin = useRecoilValue(isNonLoginState);
 
-
   //effect
   useEffect(() => {
     refreshLogin();
     nonLogin();
   }, []);//최초 1회
+
 
   //call back
   const refreshLogin = useCallback(async () => {
@@ -88,7 +89,7 @@ function App() {
       axios.defaults.headers.common["Authorization"] = resp.data.accessToken;
       window.localStorage.setItem("refreshToken", resp.data.refreshToken);
     }
-  }, []);
+  }, [loginId]);
 
 
   //비회원 토큰 확인
@@ -115,8 +116,6 @@ function App() {
   }, []);
 
 
-
-
   return (
 
     <>
@@ -125,32 +124,25 @@ function App() {
 
       <Routes>
         {/* 공용공간 에티켓을 만듭시다** 분리하여 route 작성해주세요 */}
+
         {/* 관리자 */}
-
-        <Route path='/adminMovie' element={<AdminMovie />} />
-        <Route path='/adminCinema' element={<AdminCinema />} />
-        <Route path='/adminStore' element={<AdminStore />} />
-        <Route path='/adminTheater' element={<AdminTheater />} />
-        <Route path='/movieSchedule' element={<MovieSchedule/>}/>
-        <Route path='/reserveStats' element={<ReserveStats/>}/>
-
-        <Route path='/movieEdit/:movieNo' element={<MovieEdit />} />
-        <Route path='/productEdit/:productNo' element={<ProductEdit />} />
-
-        <Route path='/newMovie' element={<NewMovie />} />
-        <Route path='/newProduct' element={<NewProduct />} />
-
-
-        {/* 좌석 + 상영관등록 */}
-        {isLogin &&
+        {loginGrade === '관리자' &&
         <>
-          
-          
-          </>
+          <Route path='/adminMovie' element={<AdminMovie />} />
+          <Route path='/adminCinema' element={<AdminCinema />} />
+          <Route path='/adminStore' element={<AdminStore />} />
+          <Route path='/adminTheater' element={<AdminTheater />} />
+          <Route path='/movieSchedule' element={<MovieSchedule/>}/>
+          <Route path='/reserveStats' element={<ReserveStats/>}/>
+          <Route path='/movieEdit/:movieNo' element={<MovieEdit />} />
+          <Route path='/productEdit/:productNo' element={<ProductEdit />} />
+          <Route path='/newMovie' element={<NewMovie />} />
+          <Route path='/newProduct' element={<NewProduct />} />
+          <Route path='/addTheater' element={<AddTheater/>} />
+          <Route path='/seatStatus' element={<SeatStatus />} />
+          <Route path='/seatDetails' element={<SeatDetails/>} />
+        </>
         }
-        <Route path='/addTheater' element={<AddTheater/>} />
-        <Route path='/seatStatus' element={<SeatStatus />} />
-        <Route path='/seatDetails' element={<SeatDetails/>} />
 
         {/* 회원 */}
 
@@ -160,12 +152,14 @@ function App() {
 
 
         <Route path='/nonUser' element={<NonUser />} />
-        <Route path='mypersonal' element={<MyPersonal/>}/>
+        {/* <Route path='mypersonal' element={<MyPersonal/>}/> */}
+
 
 
         {isLogin &&
-          <Route path='/mypage' element={<Mypage />} />
-          
+
+          // <Route path='/mypage' element={<Mypage />} />
+          <Route path='/mypage/*' element={<Mypage />} />
         }
 
         {/* 스토어 */}
@@ -208,8 +202,11 @@ function App() {
           <Route path='/booking' element={<BookingListPage />} />
         }
         <Route path='/bookingAdd' element={<BookingAdd />} />
-
+        <Route path='/booking' element={<BookingListPage />} />
         <Route path='/moviechart' element={<MovieChart />} />
+
+
+
 
 
 
