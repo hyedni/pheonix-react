@@ -1,21 +1,52 @@
 import { useCallback, useState, useEffect } from "react";
 import axios from '../utils/CustomAxios';
+import { useLocation, useNavigate } from "react-router";
+import { useRecoilState } from "recoil";
+import { loginIdState } from "../utils/RecoilData";
 
 
 function BookingAdd() {
+
+    //로그인관련 데이터
+    const [loginId, setLoginId] = useRecoilState(loginIdState);
+    useEffect(() => {
+        console.log('loginId 상태 확인:', loginId);
+    }, [loginId]);
+
+    useEffect(() => {
+        if (loginId) {
+            setBookingStatus(prevStatus => ({
+                ...prevStatus,
+                userId: loginId
+            }));
+        }
+    }, [loginId]);
+
+
+
+
+    //새로고침 함수
+    const reloadPage = () => {
+        window.location.reload();
+    };
     //테이블렌더링을 위한 상태
     const [seatReservationStatus, setSeatReservationStatus] = useState([]);
 
     //좌석예약 데이터
     const [seatTypesReservation, setSeatTypesReservation] = useState([]);
 
+    const location = useLocation();
+    const scheduleNo = location.state.scheduleNo;
     //예매에 필요한데이터 상영일정번호 , 유저아이디 , 결제방법
+
+
     const [bookingStatus, setBookingStatus] = useState({
-        movieScheduleNo: 102,
-        userId: 'clwmqkd1',
+        movieScheduleNo: scheduleNo,
+        userId: loginId,
         paymentMethod: '현장결제'
     });
 
+    const navigate = useNavigate();
     //예매등록 전송버튼
     const addBooking = async () => {
         try {
@@ -27,8 +58,15 @@ function BookingAdd() {
             const response = await axios.post('/booking/bookingAdd', bookingVo);
             console.log("보내기성공 ");
             console.log(response.data);
+            navigate('/bookingComplete');
+
+
         } catch (error) {
             console.error('에러임임임 data:', error)
+            const errorMessage = error.response?.data || 'An error occurred';
+            
+            alert(errorMessage); // 사용자에게 에러 메시지 표시
+            reloadPage();
         }
     };
 
@@ -47,7 +85,7 @@ function BookingAdd() {
 
     //위 데이터가져오는 조회코드
     const loadData = useCallback(async () => {
-        const rrsspp = await axios.get("/booking/seatReservationStatus/102");
+        const rrsspp = await axios.get(`/booking/seatReservationStatus/${bookingStatus.movieScheduleNo}`);
         setSeatReservationStatus(rrsspp.data);
     }, []);
 
@@ -357,6 +395,15 @@ function BookingAdd() {
                                     addBooking();
                                 }
                             }>예매 임시버튼</button>
+                    </div>
+                    <div>
+                        <button type="button"
+                            onClick={
+                                () => {
+                                    reloadPage();
+                                }
+                            }>좌석 다시선택 , 새로고침</button>
+
                     </div>
 
                 </div>

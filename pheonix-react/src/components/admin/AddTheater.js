@@ -5,8 +5,11 @@ import SeatDetails from "./SeatsTypes/SeatDetails";
 import { useRecoilState } from "recoil";
 import { seatsState } from '../utils/RecoilData';
 import axios from '../utils/CustomAxios';
+import { useNavigate } from 'react-router-dom';
 
 function AddTheater() {
+
+    const navigate = useNavigate();
 
     const [seats, setSeats] = useRecoilState(seatsState);
     const [showDetails, setShowDetails] = useState(false);
@@ -48,6 +51,7 @@ function AddTheater() {
             };
             const response = await axios.post('/theater/', payload);
             console.log("전송완료 제발제발");
+            navigate('/theaterRegistrationComplete');
         } catch (error) {
             console.error('에러임  data:', error);
         }
