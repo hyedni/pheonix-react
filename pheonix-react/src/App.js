@@ -1,4 +1,4 @@
-import { Route, Routes } from 'react-router';
+import { Navigate, Route, Routes } from 'react-router';
 import AdminMovie from './components/admin/AdminMovie';
 import Footer from './design/Footer';
 import Htemplate from './design/Htemplate';
@@ -22,10 +22,10 @@ import SeatDetails from './components/admin/SeatsTypes/SeatDetails';
 import BookingButton from './design/BookingButton';
 import AdminTheater from './components/admin/AdminTheater';
 import Mypage from './components/user/Mypage';
-import { isLoginState, loginIdState, loginGradeState, isNonUserState } from "./components/utils/RecoilData";
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { isLoginState, loginIdState, loginGradeState, isNonLoginState, nonLoginIdState } from "./components/utils/RecoilData";
+import { useRecoilCallback, useRecoilState, useRecoilValue } from 'recoil';
 import axios from "./components/utils/CustomAxios";
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect, useState } from "react";
 import Success from './components/store/purchase/success';
 import Fail from './components/store/purchase/fail';
 import Cancel from './components/store/purchase/cancel';
@@ -56,13 +56,17 @@ function App() {
   const [loginId, setLoginId] = useRecoilState(loginIdState);
   const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
 
-  const isLogin = useRecoilValue(isLoginState);
+  const [nonLoginId, setNonLoginId] = useRecoilState(nonLoginIdState);
+ 
 
-  const isNonUser = useRecoilValue(isNonUserState);
+  const isLogin = useRecoilValue(isLoginState);
+  const isNonLogin = useRecoilValue(isNonLoginState);
+
 
   //effect
   useEffect(() => {
     refreshLogin();
+    nonLogin();
   }, []);//최초 1회
 
   //call back
@@ -85,6 +89,34 @@ function App() {
       window.localStorage.setItem("refreshToken", resp.data.refreshToken);
     }
   }, []);
+
+
+  //비회원 토큰 확인
+  const nonLogin = useCallback(async () => {
+    try {
+      // 비회원 정보 가져오기
+      const token = window.localStorage.getItem("token");
+      console.log(token);
+  
+      if (token !== null) {
+
+        axios.defaults.headers.common["NonUserAuth"] = token;
+        // 세션 스토리지에 비회원 정보 저장
+        const resp = await axios.post(`http://localhost:8080/user/token`); // 비회원 정보를 가져오는 비동기 함수
+
+        setNonLoginId(resp.data.nonUserId);
+        axios.defaults.headers.common["NonUserAuth"] = resp.data.token;
+        window.sessionStorage.setItem("token", resp.data.token);
+        console.log("비회원 정보가 세션 스토리지에 저장되었습니다.");
+      }
+    } catch (error) {
+      console.error("비회원 정보를 가져오는 도중 오류가 발생했습니다:", error);
+    }
+  }, []);
+
+
+
+
   return (
 
     <>
@@ -133,6 +165,7 @@ function App() {
 
         {isLogin &&
           <Route path='/mypage' element={<Mypage />} />
+          
         }
 
         {/* 스토어 */}
@@ -170,11 +203,10 @@ function App() {
 
         {/* 예매 */}
         {/* 로그인한 사용자만 접근할 수 있는 경로 */}
+        {/* <Route path='/booking' element={(isLogin || isBookingAuthorized) ? <BookingListPage /> : <Navigate to="/login" />} /> */}
         {isLogin &&
           <Route path='/booking' element={<BookingListPage />} />
         }
-
-
         <Route path='/bookingAdd' element={<BookingAdd />} />
 
         <Route path='/moviechart' element={<MovieChart />} />
