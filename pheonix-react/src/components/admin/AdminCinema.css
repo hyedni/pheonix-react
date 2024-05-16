@@ -53,6 +53,10 @@
     margin-bottom: 50px;
 }
 
+.inner-ul {
+    white-space: normal;
+} 
+
 .inner-ul li {
     border-right: 1px solid gray;
     flex: 0 0 9%;  
@@ -60,6 +64,13 @@
     box-sizing: border-box; 
     margin-bottom: 10px;  
     white-space: nowrap;  
+}
+
+@media (max-width: 768px) {
+    .inner-ul li {
+        flex: 1 0 100%; /* 페이지가 작아지면 li 요소가 세로로 나타나도록 설정 */
+        max-width: 100%; /* 페이지가 작아지면 li 요소의 최대 너비를 100%로 설정 */
+    }
 }
 
 .inner-ul li:hover {

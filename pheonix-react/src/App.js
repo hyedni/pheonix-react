@@ -93,32 +93,25 @@ function App() {
 
       <Routes>
         {/* 공용공간 에티켓을 만듭시다** 분리하여 route 작성해주세요 */}
+
         {/* 관리자 */}
-
-        <Route path='/adminMovie' element={<AdminMovie />} />
-        <Route path='/adminCinema' element={<AdminCinema />} />
-        <Route path='/adminStore' element={<AdminStore />} />
-        <Route path='/adminTheater' element={<AdminTheater />} />
-        <Route path='/movieSchedule' element={<MovieSchedule/>}/>
-        <Route path='/reserveStats' element={<ReserveStats/>}/>
-
-        <Route path='/movieEdit/:movieNo' element={<MovieEdit />} />
-        <Route path='/productEdit/:productNo' element={<ProductEdit />} />
-
-        <Route path='/newMovie' element={<NewMovie />} />
-        <Route path='/newProduct' element={<NewProduct />} />
-
-
-        {/* 좌석 + 상영관등록 */}
-        {isLogin &&
+        {loginGrade === '관리자' &&
         <>
-          
-          
-          </>
+          <Route path='/adminMovie' element={<AdminMovie />} />
+          <Route path='/adminCinema' element={<AdminCinema />} />
+          <Route path='/adminStore' element={<AdminStore />} />
+          <Route path='/adminTheater' element={<AdminTheater />} />
+          <Route path='/movieSchedule' element={<MovieSchedule/>}/>
+          <Route path='/reserveStats' element={<ReserveStats/>}/>
+          <Route path='/movieEdit/:movieNo' element={<MovieEdit />} />
+          <Route path='/productEdit/:productNo' element={<ProductEdit />} />
+          <Route path='/newMovie' element={<NewMovie />} />
+          <Route path='/newProduct' element={<NewProduct />} />
+          <Route path='/addTheater' element={<AddTheater/>} />
+          <Route path='/seatStatus' element={<SeatStatus />} />
+          <Route path='/seatDetails' element={<SeatDetails/>} />
+        </>
         }
-        <Route path='/addTheater' element={<AddTheater/>} />
-        <Route path='/seatStatus' element={<SeatStatus />} />
-        <Route path='/seatDetails' element={<SeatDetails/>} />
 
         {/* 회원 */}
 
@@ -171,13 +164,13 @@ function App() {
         {/* 예매 */}
         {/* 로그인한 사용자만 접근할 수 있는 경로 */}
         {isLogin &&
-          <Route path='/booking' element={<BookingListPage />} />
-        }
-
-
         <Route path='/bookingAdd' element={<BookingAdd />} />
-
+        }
+        <Route path='/booking' element={<BookingListPage />} />
         <Route path='/moviechart' element={<MovieChart />} />
+
+
+
 
 
 

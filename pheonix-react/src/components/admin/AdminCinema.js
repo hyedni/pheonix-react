@@ -133,7 +133,7 @@ function AdminCinema() {
             [e.target.name]: e.target.value
         });
     }, [input]);
-   
+
     //수정화면
     const editCinema = useCallback(() => {
         setBackup({ ...detailCinema });
@@ -158,7 +158,7 @@ function AdminCinema() {
 
     //수정취소
     const cancelEditCinema = useCallback(() => {
-        setDetailCinema({ ...backup});
+        setDetailCinema({ ...backup });
         setIsEdit({ edit: false });
         loadList();
     }, [backup]);
@@ -179,11 +179,23 @@ function AdminCinema() {
             {/* 페이지 제목 */}
             <div className="row justify-content-center">
                 <div className="col-lg-8  title-head">
-                    <div className="title-head-text">
-                        영화관 관리
-                        <span className='ms-3' onClick={e => openModal()}><FaCirclePlus style={{ marginBottom: '10px', color:'rgb(240, 86, 86)'}} /></span>
-                    </div>
-                <hr />
+                    {loginId && loginId.length > 0 && loginGrade === '관리자' ? (
+                        <>
+                            <div className="title-head-text">
+                                영화관 관리
+                                <span className='ms-3' onClick={e => openModal()}><FaCirclePlus style={{ marginBottom: '10px', color: 'rgb(240, 86, 86)' }} /></span>
+                            </div>
+                        </>
+                    ) : (
+                        <>
+                            <div className="title-head-text">
+                                영화관 관리
+                            </div>
+                        </>
+                    )}
+
+
+                    <hr />
                 </div>
             </div>
 
@@ -235,10 +247,13 @@ function AdminCinema() {
                         {isEdit.edit === false ? (
                             <>
                                 <tbody>
-                                    <tr>
-                                        <td style={{ fontWeight: 'bold' }}>관리번호</td>
-                                        <td>{detailCinema.cinemaNo}</td>
-                                    </tr>
+                                    {loginId && loginId.length > 0 && loginGrade === '관리자' &&
+                                        (
+                                            <tr>
+                                                <td style={{ fontWeight: 'bold' }}>관리번호</td>
+                                                <td>{detailCinema.cinemaNo}</td>
+                                            </tr>
+                                        )}
                                     <tr>
                                         <td style={{ fontWeight: 'bold' }}>영화관명</td>
                                         <td>{detailCinema.cinemaName}</td>
@@ -255,18 +270,7 @@ function AdminCinema() {
                                     </tr>
                                     <tr>
                                         <td style={{ fontWeight: 'bold' }}>책임자</td>
-                                        {/* 관리자일 경우만 책임자연락처 조회버튼 보이도록 수정 필요 */}
-                                        {isClicked === false ? (
-                                            <>
-                                                <td>{detailCinema.cinemaManager} &nbsp; &nbsp; <FaPhoneFlip onClick={showNum} /> click!</td>
-                                            </>
-                                        ) : (
-                                            <>
-                                                <td>{detailCinema.cinemaManager} &nbsp; &nbsp; <FaPhoneFlip onClick={showNum} /> click!
-                                                    &nbsp; &nbsp; {detailCinema.cinemaManagerCall}
-                                                </td>
-                                            </>
-                                        )}
+                                        <td>{detailCinema.cinemaManager} </td>
                                     </tr>
                                     <tr>
                                         <td style={{ fontWeight: 'bold' }}>영화관 연락처</td>
@@ -317,12 +321,12 @@ function AdminCinema() {
                                             className="form-control" onChange={e => changeCinemaInput(e)}>
                                         </input></td>
                                     </tr>
-                                    <tr>
+                                    {/* <tr>
                                         <td style={{ fontWeight: 'bold' }}>매니저 연락처</td>
                                         <td><input type="text" name="cinemaManagerCall" value={detailCinema.cinemaManagerCall}
                                             className="form-control" onChange={e => changeCinemaInput(e)}>
                                         </input></td>
-                                    </tr>
+                                    </tr> */}
                                     <tr>
                                         <td style={{ fontWeight: 'bold' }}>영화관 연락처</td>
                                         <td><input type="text" name="cinemaCall" value={detailCinema.cinemaCall}
@@ -338,17 +342,29 @@ function AdminCinema() {
 
             <div className='row mt-3 mb-3'>
                 <div className='offset-2 col-lg-8 d-flex justify-content-end' style={{ marginBottom: '30px' }}>
+
                     {isEdit.edit === false ? (
                         <>
-                            <button className='btn btn-dark' style={{ marginRight: '10px', fontWeight:'bold' }} onClick={e => editCinema()}>수정</button>
+                            {loginId && loginId.length > 0 && loginGrade === '관리자' &&
+                                (
+                                    <>
+                                        <button className='btn btn-dark' style={{ marginRight: '10px', fontWeight: 'bold' }} onClick={e => editCinema()}>수정</button>
+                                        <button className='btn btn-primary' style={{ marginRight: '10px', fontWeight: 'bold' }} onClick={e => deleteCinema(region)}>삭제</button>
+                                    </>
+                                )}
                         </>
                     ) : (
                         <>
-                            <button className='btn btn-secondary' style={{ marginRight: '10px', fontWeight:'bold' }} onClick={e => saveEditCinema(detailCinema)}>저장</button>
-                            <button className='btn btn-dark' style={{ marginRight: '10px', fontWeight:'bold' }} onClick={e => cancelEditCinema()}>취소</button>
+                            {loginId && loginId.length > 0 && loginGrade === '관리자' &&
+                                (
+                                    <>
+                                        <button className='btn btn-secondary' style={{ marginRight: '10px', fontWeight: 'bold' }} onClick={e => saveEditCinema(detailCinema)}>저장</button>
+                                        <button className='btn btn-dark' style={{ marginRight: '10px', fontWeight: 'bold' }} onClick={e => cancelEditCinema()}>취소</button>
+                                        <button className='btn btn-primary' style={{ marginRight: '10px', fontWeight: 'bold' }} onClick={e => deleteCinema(region)}>삭제</button>
+                                    </>
+                                )}
                         </>
                     )}
-                    <button className='btn btn-primary' style={{ marginRight: '10px', fontWeight:'bold' }} onClick={e => deleteCinema(region)}>삭제</button>
                 </div>
             </div>
 
@@ -357,7 +373,7 @@ function AdminCinema() {
                 <div className="modal-dialog">
                     <div className="modal-content">
                         <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="staticBackdropLabel" style={{fontWeight:'bold'}}>new 영화관 등록</h1>
+                            <h1 className="modal-title fs-5" id="staticBackdropLabel" style={{ fontWeight: 'bold' }}>new 영화관 등록</h1>
                             <button type="button" className="btn-close" aria-label="Close"
                                 onClick={e => cancelInput()}></button>
                         </div>
@@ -422,7 +438,7 @@ function AdminCinema() {
                                 </div>
                             </div>
 
-                            <div className="row">
+                            {/* <div className="row">
                                 <div className="col">
                                     <label>매니저 연락처</label>
                                     <input type="text" name="cinemaManagerCall"
@@ -430,7 +446,7 @@ function AdminCinema() {
                                         onChange={e => changeInput(e)}
                                         className="form-control" />
                                 </div>
-                            </div>
+                            </div> */}
                             <div className="row">
                                 <div className="col">
                                     <label>상영관 연락처</label>

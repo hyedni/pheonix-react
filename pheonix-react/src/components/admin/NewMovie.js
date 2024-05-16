@@ -21,12 +21,12 @@ function NewMovie() {
         movieYear: '',
         movieOpenDate: '',
         movieCloseDate: '',
-        movieAge: '전체관람가',
+        movieAge: '',
         movieOrigin: '',
-        movieOn: 'N',
+        movieOn: '',
         movieSummary: '',
-        movieTranslation: 'Y',
-        movieScreenType: '2D',
+        movieTranslation: '',
+        movieScreenType: '',
         movieDirector: '',
         movieActor: ''
     });
@@ -450,7 +450,7 @@ function NewMovie() {
                                         ${result.movieTranslation === true ? 'is-valid' : ''}
                                         ${result.movieTranslation === false ? 'is-invalid' : ''}
                                         `}
-                                        aria-label="Default select example" name="movieTranslation" value={input.movieTranslation} 
+                                        name="movieTranslation" value={input.movieTranslation} 
                                         onChange={e => changeInput(e)} onBlur={changeResult}>
                                         <option value="">선택하세요</option>
                                         <option value="Y">자막</option>
@@ -467,7 +467,7 @@ function NewMovie() {
                                         ${result.movieScreenType === true ? 'is-valid' : ''}
                                         ${result.movieScreenType === false ? 'is-invalid' : ''}
                                         `} 
-                                        aria-label="Default select example" name="movieScreenType" value={input.movieScreenType} 
+                                        name="movieScreenType" value={input.movieScreenType} 
                                         onChange={e => changeInput(e)} onBlur={changeResult}>
                                         <option value="">선택하세요</option>
                                         <option value="2D">2D</option>
