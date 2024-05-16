@@ -48,6 +48,7 @@ import Purchase from './components/store/purchase/Purchase';
 import ReserveStats from './components/admin/ReserveStats';
 import MyPersonal from './components/user/MyPersonal';
 import MyStore from './components/user/appliance/MyStore';
+import Main from './design/main';
 
 
 
@@ -92,6 +93,7 @@ function App() {
     <>
       <Htemplate />
       <BookingButton />
+      <Main />
 
       <Routes>
         {/* 공용공간 에티켓을 만듭시다** 분리하여 route 작성해주세요 */}

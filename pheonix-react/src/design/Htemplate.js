@@ -51,13 +51,13 @@ function Htemplate() {
                             <>
                                 <div className="w-100 d-flex justify-content-middle text-center">
                                     <NavLink to="/mypage" className="dropdown-item">
-                                        <IoPersonOutline style={{fontSize:'50px'}}/>
+                                        <IoPersonOutline style={{fontSize:'40px'}}/>
                                         <p>my phoenix</p>
                                     </NavLink>
                                 </div>
                                 <div className="w-100 d-flex justify-content-middle text-center">
                                     <NavLink onClick={logout} className="dropdown-item">
-                                        <FiLogOut style={{fontSize:'50px'}} />
+                                        <FiLogOut style={{fontSize:'40px'}} />
                                         <p>로그아웃</p>
                                     </NavLink>
                                 </div>
@@ -66,21 +66,21 @@ function Htemplate() {
                             <>
                                 <div className="d-flex justify-content-middle w-100 text-center">
                                     <NavLink to="/login" className="dropdown-item">
-                                        <LuLogIn style={{fontSize:'50px'}}/>
+                                        <LuLogIn style={{fontSize:'40px'}}/>
                                         <p>로그인</p>
                                     </NavLink>
                                 </div>
                                 <div className="w-100 d-flex justify-content-middle text-center">
                                     <NavLink to="/join" className="dropdown-item">
-                                        <FiUserPlus style={{fontSize:'50px'}}/>
+                                        <FiUserPlus style={{fontSize:'40px'}}/>
                                         <p>회원가입</p>
                                     </NavLink>
                                 </div>
                             </>
                         )}
-                        <div className="w-100 d-flex justify-content-middle ms-1 text-center">
+                        <div className="w-100 d-flex justify-content-middle text-center">
                             <NavLink className="dropdown-item" to="/personal">
-                                <RiCustomerService2Line style={{fontSize:'50px'}}/>
+                                <RiCustomerService2Line style={{fontSize:'40px'}}/>
                                 <p>고객센터</p>
                             </NavLink>
                         </div>
