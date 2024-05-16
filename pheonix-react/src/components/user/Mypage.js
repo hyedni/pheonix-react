@@ -1,9 +1,16 @@
 import { useRecoilState } from "recoil";
-import { useCallback, useEffect, useState } from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import axios from "axios";
 import { loginIdState } from "../utils/RecoilData";
 import './join.css';
 import Sidebar from "./Sidebar";
+import { Route, Routes, useLocation } from "react-router";
+
+//하위 페이지 임포트
+import MyPersonal from "./MyPersonal";
+import MyStore from "./appliance/MyStore";
+import InfoPheonix from "./appliance/InfoPheonix";
+import InfoPoint from "./appliance/InfoPoint";
 
 function Mypage() {
 
@@ -40,10 +47,33 @@ function Mypage() {
             setUser({ ...user, userName: newName });
         }
     }
+
+
+    //예림
+    //location
+    const location = useLocation();
+
+    //선택한 메뉴에 따라 띄워줄 내용이 다르도록 설정
+    const menuType = useMemo(()=>{
+        if(location.pathname === "/mypage/mypersonal") {
+            return "문의";
+        }
+        else if(location.pathname === "/mypage/myStore") {
+            return "상품";
+        }
+        else if(location.pathname === "/mypage/infoPheonix") {
+            return "피닉스이용안내";
+        }
+        else if(location.pathname === "/mypage/infoPoint") {
+            return "포인트이용안내";
+        }
+    }, [location]);
+
     return (
         <>
-            <div className="row justify-content-center mt-4">
-                <div className="col-lg-10 title-head">
+            {/* 회원 정보 */}
+            <div className="row justify-content-center">
+                <div className="col-lg-10 content-body">
                     <div className="card mb-3" key={user.userId}>
                         <div className="card-header">
                             <div className="profile-header">
@@ -76,9 +106,22 @@ function Mypage() {
                 </div>
             </div>
 
-            <div className="row justify-content-center mt-2">
-                <div className="col-lg-10">
-                    <Sidebar />
+            <div className="row justify-content-center">
+                <div className="col-lg-10 content-body">
+                    <div className="row">
+                        <Sidebar />
+                        <div className="col-8">
+                            {/* 마이페이지에서 이동할 페이지 담기 (원래는 App.js에 담는 애들) */}
+                            <Routes>
+                                <Route path='/myPersonal' element={<MyPersonal/>} />
+                                <Route path='/myStore' element={<MyStore/>} />
+                                <Route path="/infoPheonix" element={<InfoPheonix />}/>
+                                <Route path="/infoPoint" element={<InfoPoint />} />
+
+                            </Routes>
+                        </div>
+                    </div>
+                    
                 </div>
             </div>
 
