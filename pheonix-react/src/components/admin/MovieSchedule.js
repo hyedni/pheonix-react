@@ -38,9 +38,9 @@ function MovieSchedule() {
 
     const cancelInput = useCallback(() => {
         setInput({
-            cinemaName: '',
-            movieTitle: '',
-            startDate: ''
+            cinemaName: null,
+            movieTitle: null,
+            startDate: null
         });
     }, [input]);
 
@@ -49,11 +49,21 @@ function MovieSchedule() {
             ...input,
             [e.target.name]: e.target.value
         });
+        setShowInput({
+            ...showInput,
+            [e.target.name]: e.target.value
+        });
     }, [input]);
 
+    const [showInput, setShowInput] = useState({});
     const search = useCallback(() => {
         loadList({ ...input });
         cancelInput();
+        setShowInput({
+            cinemaName: '',
+            movieTitle: '',
+            startDate: ''
+        });
     }, [input]);
 
     const [movies, setMovies] = useState([]);
@@ -375,15 +385,15 @@ function MovieSchedule() {
                     <div className="row mt-3 mb-5">
                         <div className="col">
                             <label>영화관</label>
-                            <input className="form-control" name='cinemaName' value={input.cinemaName} onChange={e => changeInput(e)} />
+                            <input className="form-control" name='cinemaName' value={showInput.cinemaName} onChange={e => changeInput(e)} />
                         </div>
                         <div className="col">
                             <label>영화</label>
-                            <input className="form-control" name='movieTitle' value={input.movieTitle} onChange={e => changeInput(e)} />
+                            <input className="form-control" name='movieTitle' value={showInput.movieTitle} onChange={e => changeInput(e)} />
                         </div>
                         <div className="col">
                             <label>상영일</label>
-                            <input className="form-control" name='startDate' value={input.startDate} onChange={e => changeInput(e)} />
+                            <input className="form-control" name='startDate' value={showInput.startDate} onChange={e => changeInput(e)} />
                         </div>
                         <div className="col">
                             <button className="mt-4 btn btn-dark w-100" onClick={e => search(e)}>검색하기</button>
