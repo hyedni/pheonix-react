@@ -168,7 +168,7 @@ function AdminCinema() {
         console.log(target.cinemaNo);
         const resp1 = await axios.get(`/cinema/theaterCnt/${target.cinemaNo}`);
 
-        const choice = window.confirm("삭제하려는 상영관이 맞으신가요? 정말 삭제하시겠습니까?");
+        const choice = window.confirm("삭제하려는 영화관이 맞으신가요? 정말 삭제하시겠습니까?");
         if (choice === false) return;
 
         if (resp1.data !== 0) {
