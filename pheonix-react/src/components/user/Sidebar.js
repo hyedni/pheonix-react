@@ -7,7 +7,7 @@ function Sidebar() {
 
 
     return (
-        <div className="col-4">
+        <div className="col-3">
 
             <ul className="nav flex-column">
                 {/* 헤더 */}

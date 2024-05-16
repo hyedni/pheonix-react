@@ -107,10 +107,16 @@ function Mypage() {
             </div>
 
             <div className="row justify-content-center">
+                <div className="col-lg-10">
+                    <hr/>   
+                </div>
+            </div>
+
+            <div className="row justify-content-center">
                 <div className="col-lg-10 content-body">
                     <div className="row">
                         <Sidebar />
-                        <div className="col-8">
+                        <div className="col-9">
                             {/* 마이페이지에서 이동할 페이지 담기 (원래는 App.js에 담는 애들) */}
                             <Routes>
                                 <Route path='/myPersonal' element={<MyPersonal/>} />
