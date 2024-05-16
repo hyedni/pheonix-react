@@ -116,7 +116,7 @@ const ReviewList = () => {
                                                                 )}
                                                                 {review.userNick === null ? review.userId : review.userNick}
                                                             </span>
-                                                            <p>{review.reviewContent}</p>
+                                                            <p className="reviewContent">{review.reviewContent}</p>
                                                         </div>
                                                     </div>
                                                     <div className="row">
