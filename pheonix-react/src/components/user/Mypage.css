@@ -1,0 +1,18 @@
+.phoenix-side-title {
+    font-weight: bold;
+    font-size: 24px;
+    color: black;
+}
+
+.phoenix-side-mid {
+    font-weight: bold;
+    font-size: 20px;
+    color: rgb(68, 68, 68);
+}
+
+.nav-link {
+    text-decoration: none;
+    color: #333 !important; /* 원하는 색상으로 수정하세요 */
+    padding: 3px 10px  !important;
+    margin-left: 10px;
+}

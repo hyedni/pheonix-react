@@ -110,9 +110,7 @@ function AdminMovie() {
                                         <span style={{ fontWeight: 'bold', color: 'red' }}>{movie.movieOn === 'Y' ? '절찬상영중' : ''} </span>
                                     </div>
                                 </div>
-                                <div className='d-flex justify-content-between mb-2'>
-                                    <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 0.00%</span>
-                                </div>
+                         
                             </div>
                         ))}
                     </div>
