@@ -3,6 +3,11 @@ import axios from "../components/utils/CustomAxios";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isLoginState, loginIdState, loginGradeState } from "../components/utils/RecoilData";
 import { useCallback, useMemo } from "react";
+import { RiCustomerService2Line } from "react-icons/ri";
+import { FiLogOut } from "react-icons/fi";
+import { IoPersonOutline } from "react-icons/io5";
+import { LuLogIn } from "react-icons/lu";
+import { FiUserPlus } from "react-icons/fi";
 
 
 
@@ -31,37 +36,53 @@ function Htemplate() {
             <div className='container-fluid'>
                 <div className='row' style={{ display: 'flex' }}>
                     <div className='offset-1 col-2'>
-                        <img src={"/image/phoenixLogo.png"} style={{ width: '300px', maxWidth: '100%', height: 'auto' }}></img>
+                        <NavLink to="/">
+                            <img src={"/image/phoenixLogo.png"} style={{ width: '300px', maxWidth: '100%', height: '150px' }}></img>
+                        </NavLink>
                     </div>
                     <div className='col-2 d-flex justify-content-start align-items-end'>
                         <p style={{ writingMode: 'initial', transform: 'none' }}>C U L T U R E P L E X</p>
                     </div>
 
-                    <div className='offset-1 col-4 d-flex justify-content-end align-items-end'>
+                    <div className='offset-3 col-3 d-flex justify-content-end align-items-end'>
 
                         {/* isLogin에 따라 조건부 렌더링 */}
                         {isLogin ? (
                             <>
                                 <div className="w-100 d-flex justify-content-middle text-center">
-                                    <NavLink to="/mypage">My PHOENIX</NavLink>
+                                    <NavLink to="/mypage" className="dropdown-item">
+                                        <IoPersonOutline style={{fontSize:'50px'}}/>
+                                        <p>my phoenix</p>
+                                    </NavLink>
                                 </div>
                                 <div className="w-100 d-flex justify-content-middle text-center">
-                                    <NavLink onClick={logout}>로그아웃</NavLink>
+                                    <NavLink onClick={logout} className="dropdown-item">
+                                        <FiLogOut style={{fontSize:'50px'}} />
+                                        <p>로그아웃</p>
+                                    </NavLink>
                                 </div>
                             </>
                         ) : (
                             <>
                                 <div className="d-flex justify-content-middle w-100 text-center">
-                                    <NavLink to="/login">로그인</NavLink>
+                                    <NavLink to="/login" className="dropdown-item">
+                                        <LuLogIn style={{fontSize:'50px'}}/>
+                                        <p>로그인</p>
+                                    </NavLink>
                                 </div>
                                 <div className="w-100 d-flex justify-content-middle text-center">
-                                    <NavLink to="/join">회원가입</NavLink>
+                                    <NavLink to="/join" className="dropdown-item">
+                                        <FiUserPlus style={{fontSize:'50px'}}/>
+                                        <p>회원가입</p>
+                                    </NavLink>
                                 </div>
                             </>
                         )}
-
-                        <div className="w-100 d-flex justify-content-middle ms-4 text-center">
-                            <NavLink className="dropdown-item" to="/personal">고객센터</NavLink>
+                        <div className="w-100 d-flex justify-content-middle ms-1 text-center">
+                            <NavLink className="dropdown-item" to="/personal">
+                                <RiCustomerService2Line style={{fontSize:'50px'}}/>
+                                <p>고객센터</p>
+                            </NavLink>
                         </div>
                     </div>
                 </div>
@@ -95,22 +116,22 @@ function Htemplate() {
                                     <NavLink className="dropdown-item" to="/store/snack">스낵</NavLink>
                                 </div>
                             </li>
-                            {loginGrade === '관리자' && 
+                            {loginGrade === '관리자' &&
                                 <>
-                                <li className="nav-item dropdown">
-                                    <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">관리자</NavLink>
-                                    <div className="dropdown-menu">
-                                        <NavLink className="dropdown-item" to="/adminMovie">영화</NavLink>
-                                        <NavLink className="dropdown-item" to="/adminCinema">영화관</NavLink>
-                                        <NavLink className="dropdown-item" to="/adminTheater">상영관</NavLink>
-                                        <NavLink className="dropdown-item" to="/movieSchedule">상영일정</NavLink>
-                                        <NavLink className="dropdown-item" to="/adminStore">스토어</NavLink>
-                                        <NavLink className="dropdown-item" to="/movieRegister">회원관리</NavLink>
-                                    </div>
-                                </li>
-                                <li className='nav-item dropdown'>
-                                    <NavLink className="nav-link fs-5" to="/reserveStats">통계</NavLink>
-                                </li>
+                                    <li className="nav-item dropdown">
+                                        <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">관리자</NavLink>
+                                        <div className="dropdown-menu">
+                                            <NavLink className="dropdown-item" to="/adminMovie">영화</NavLink>
+                                            <NavLink className="dropdown-item" to="/adminCinema">영화관</NavLink>
+                                            <NavLink className="dropdown-item" to="/adminTheater">상영관</NavLink>
+                                            <NavLink className="dropdown-item" to="/movieSchedule">상영일정</NavLink>
+                                            <NavLink className="dropdown-item" to="/adminStore">스토어</NavLink>
+                                            <NavLink className="dropdown-item" to="/movieRegister">회원관리</NavLink>
+                                        </div>
+                                    </li>
+                                    <li className='nav-item dropdown'>
+                                        <NavLink className="nav-link fs-5" to="/reserveStats">통계</NavLink>
+                                    </li>
                                 </>
                             }
 
