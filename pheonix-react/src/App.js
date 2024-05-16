@@ -47,8 +47,9 @@ import ReviewList from './components/review/ReviewList';
 import Purchase from './components/store/purchase/Purchase';
 import ReserveStats from './components/admin/ReserveStats';
 import MyPersonal from './components/user/MyPersonal';
+import TheaterRegistrationComplete from './components/admin/TheaterRegistrationComplete';
+import BookingComplete from './components/booking/BookingComplete';
 import MyStore from './components/user/appliance/MyStore';
-
 
 
 function App() {
@@ -143,6 +144,13 @@ function App() {
           <Route path='/seatDetails' element={<SeatDetails/>} />
         </>
         }
+
+        <Route path='/addTheater' element={<AddTheater/>} />
+        <Route path='/seatStatus' element={<SeatStatus />} />
+        <Route path='/seatDetails' element={<SeatDetails/>} />
+        <Route path='/theaterRegistrationComplete' element={<TheaterRegistrationComplete/>}/>
+        <Route path='/bookingComplete' element={<BookingComplete/>}/>
+
 
         {/* 회원 */}
 

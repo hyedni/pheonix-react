@@ -5,16 +5,6 @@ import axios from '../../utils/CustomAxios';
 
 function SeatDetails() {
 
-    const postSeatsData = async () => {
-        try {
-            const response = await axios.post('http://localhost:8080/aaaa', seats);
-            console.log("전송완료");
-        } catch (error) {
-            console.error('에러임  data:', error);
-        }
-    };
-
-
     const [seats, setSeats] = useRecoilState(seatsState);
 
     useEffect(() => {
@@ -287,7 +277,7 @@ function SeatDetails() {
 
                     <hr></hr>
                     <div>
-                        <button onClick={postSeatsData} className="btn btn-primary">좌석 전송</button>
+                        
                         <button onClick={resetCheckedSeats} className="btn btn-secondary">좌석 체크 초기화</button>
                     </div>
 
