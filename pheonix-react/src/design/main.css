@@ -1,0 +1,14 @@
+.title-head{
+    font-size: 35px;
+    font-weight: bolder;
+}
+
+.box-wrapper {
+    height:500px;
+    border-radius: 10px;
+    padding: 0.5em;
+    margin-right: 100px;
+    border: 1px solid gray;
+    word-break: keep-all;
+    overflow: auto;
+}
