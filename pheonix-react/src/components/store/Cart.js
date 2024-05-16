@@ -503,7 +503,7 @@ const Cart = () => {
                                 <div className="col-lg-8 content-body">
                                     <div className='row'>
                                         <div className="col-6">
-                                            <Link to={`/gift/`} className='btn btn-dark w-100 btn-lg'>선물하기</Link>
+                                            <Link to={`/store/package`} className='btn btn-outline-dark w-100 btn-lg'><FaArrowAltCircleLeft /> 스토어로 돌아가기</Link>
                                         </div>
                                         <div className="col-6">
                                             {/* <Link to={`/purchase/`} className='btn btn-dark w-100 btn-lg'>구매하기</Link> */}
