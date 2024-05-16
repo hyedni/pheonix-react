@@ -9,7 +9,7 @@ import { useRecoilState, useRecoilValue } from "recoil";
 import { loginIdState, loginGradeState, isLoginState, isNonUserState } from "../utils/RecoilData";
 
 function NonUser() {
-    const [isNonUserEmail, setIsNonUserEmail] = useRecoilState(isNonUserState);
+    // const [isNonUserEmail, setIsNonUserEmail] = useRecoilState(isNonUserState);
 
     const [nonUser, setNonUser] = useState({
           "nonUserEmail": "",

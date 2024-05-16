@@ -95,20 +95,25 @@ function Htemplate() {
                                     <NavLink className="dropdown-item" to="/store/snack">스낵</NavLink>
                                 </div>
                             </li>
-                            <li className="nav-item dropdown">
-                                <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">관리자</NavLink>
-                                <div className="dropdown-menu">
-                                    <NavLink className="dropdown-item" to="/adminMovie">영화</NavLink>
-                                    <NavLink className="dropdown-item" to="/adminCinema">영화관</NavLink>
-                                    <NavLink className="dropdown-item" to="/adminTheater">상영관</NavLink>
-                                    <NavLink className="dropdown-item" to="/movieSchedule">상영일정</NavLink>
-                                    <NavLink className="dropdown-item" to="/adminStore">스토어</NavLink>
-                                    <NavLink className="dropdown-item" to="/movieRegister">회원관리</NavLink>
-                                </div>
-                            </li>
-                            <li className='nav-item dropdown'>
-                                <NavLink className="nav-link fs-5" to="/reserveStats">통계</NavLink>
-                            </li>
+                            {loginGrade === '관리자' && 
+                                <>
+                                <li className="nav-item dropdown">
+                                    <NavLink className="nav-link dropdown-toggle fs-5 me-5" data-bs-toggle="dropdown" href="#" role="button" aria-haspopup="true" aria-expanded="false">관리자</NavLink>
+                                    <div className="dropdown-menu">
+                                        <NavLink className="dropdown-item" to="/adminMovie">영화</NavLink>
+                                        <NavLink className="dropdown-item" to="/adminCinema">영화관</NavLink>
+                                        <NavLink className="dropdown-item" to="/adminTheater">상영관</NavLink>
+                                        <NavLink className="dropdown-item" to="/movieSchedule">상영일정</NavLink>
+                                        <NavLink className="dropdown-item" to="/adminStore">스토어</NavLink>
+                                        <NavLink className="dropdown-item" to="/movieRegister">회원관리</NavLink>
+                                    </div>
+                                </li>
+                                <li className='nav-item dropdown'>
+                                    <NavLink className="nav-link fs-5" to="/reserveStats">통계</NavLink>
+                                </li>
+                                </>
+                            }
+
                         </ul>
                         {/* <form className="d-flex">
                             <input className="form-control me-sm-2" type="search" placeholder="Search"/>
