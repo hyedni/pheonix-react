@@ -239,7 +239,7 @@ function NonUser() {
 
                 <button className='btn btn-success w-100 mt-4 mb-4'
                 onClick={() => {
-                  handleBookingAuthorize();
+                  // handleBookingAuthorize();
                   handleSubmit();
                 }}
                 >비회원 예매하기</button>

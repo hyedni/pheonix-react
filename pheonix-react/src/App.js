@@ -122,11 +122,10 @@ function App() {
     <>
       <Htemplate />
       <BookingButton />
-      <Main />
 
       <Routes>
         {/* 공용공간 에티켓을 만듭시다** 분리하여 route 작성해주세요 */}
-
+        <Route path='/' element={<Main/>}/>
         {/* 관리자 */}
         {loginGrade === '관리자' &&
         <>
