@@ -95,11 +95,16 @@ const seatsState = atom({
 //export default countState;
 
 //naming export는 여러 개 할 수 있다.
+<<<<<<< HEAD
+export {countState, loginIdState, loginGradeState, isLoginState , seatsState
+    , partnerOrderId, partnerUserId, tid, vo, pgToken, isNonUserState 
+=======
 
 
 export {countState, loginIdState, loginGradeState, isLoginState , seatsState, isNonLoginState, nonLoginIdState
     , partnerOrderId, partnerUserId, tid, vo, pgToken, 
 
+>>>>>>> origin/main
     //btnPurchase
 };
 

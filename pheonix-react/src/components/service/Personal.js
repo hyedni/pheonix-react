@@ -45,26 +45,23 @@ const Personal = () => {
     const currentPosts = personals.slice(indexOfFirstPost, indexOfLastPost);
 
     return (
-        <div className="container">
-            <div className="row justify-content-center">
-                <div className="col-lg-8">
-                    <div className="content-head">
-                        <div className="content-head-text">
-                            1:1 문의게시판
-                        </div>
+ <>
+          <div className="row justify-content-center">
+                <div className="col-lg-8  title-head">
+                    <div className="title-head-text">
+                        문의게시판입니다
                     </div>
                 </div>
             </div>
+            
             <div className="row justify-content-center">
-                <div className="col-lg-8">
-                    <div className="content-body">
-                        <div className="content-body-text">
-                            문의게시판이다람쥐
-                        </div>
+                <div className="col-lg-8 content-body">
+                    <div className="content-body-text">
+                        그렇습니다
                     </div>
                 </div>
             </div>
-
+            
             <div className="row justify-content-center">
                 <div className="col-lg-2 mb-3">
                     <NavLink to="/chatbot">
@@ -77,9 +74,17 @@ const Personal = () => {
                     </NavLink>
                 </div>
             </div>
+            
 
             <div className="row justify-content-center">
                 <div className="col-lg-8">
+                    <div className="row justify-content-end">
+                        <div className="col-lg-2">
+                            <NavLink to="/personalwrite">
+                                <button className="btn btn-success">글쓰기</button>
+                            </NavLink>
+                        </div>
+                    </div>
                     <table className="table text-center">
                         <thead>
                             <tr>
@@ -104,19 +109,10 @@ const Personal = () => {
                             ))}
                         </tbody>
                     </table>
-
-                    <div className="row justify-content-end">
-                        <div className="col-lg-2">
-                            <NavLink to="/personalwrite">
-                                <button className="btn btn-success">글쓰기</button>
-                            </NavLink>
-                        </div>
-                    </div>
                     <Pagination currentPage={currentPage} totalPages={Math.ceil(personals.length / postsPerPage)} paginate={paginate} />
                 </div>
-            </div>
-
-
+        </div>
+        
             {selectedPersonal && (
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
@@ -124,7 +120,8 @@ const Personal = () => {
                     </div>
                 </div>
             )}
-        </div>
+        
+    </>
     );
 };
 
