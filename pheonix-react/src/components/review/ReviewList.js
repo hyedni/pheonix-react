@@ -1,7 +1,7 @@
 import axios from "../utils/CustomAxios";
 import { useRecoilState } from "recoil";
 import { loginIdState } from "../utils/RecoilData";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 
 //이미지 임포트
@@ -27,9 +27,9 @@ const ReviewList = () => {
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
 
     const paginatedreviewList = useMemo(() => {
-        const lastIndex = currentPage * mystorePerPage;
-        const firstIndex = lastIndex - mystorePerPage;
-        return myPurchaseList.slice(firstIndex, lastIndex);
+        const lastIndex = currentPage * reviewPerPage;
+        const firstIndex = lastIndex - reviewPerPage;
+        return reviewLists.slice(firstIndex, lastIndex);
     }, [reviewLists, currentPage, reviewPerPage]);
 
     useEffect(() => {
