@@ -122,15 +122,32 @@ const Cart = () => {
             usedPoint: usagePoint,
             vo: purchaseList
         };
-        console.log(data);
+
+        //결제 금액이 0원인 경우
+        const zero = {
+            paymentTotal : 0,
+            paymentRemain : 0,
+            memberId : userId,
+            paymentTid : "pointPayment",
+            vo: purchaseList,
+            usedPoint : usagePoint
+        };
+
+        const totalPrice = getTotalPriceOfCheckedItems;
+        if(totalPrice == 0) {
+            const resp = await axios.post("/purchase/zeroList", zero);
+            navigate('/purchase/success-complete');
+        }
+        else {
         const resp = await axios.post("/purchase/", data);
-        //useState에 필요한 데이터 저장
-        setCartPartnerOrderId(resp.data.partnerOrderId);
-        setCartPartnerUserId(resp.data.partnerUserId);
-        setCartTid(resp.data.tid);
-        setCartVo(resp.data.vo);
-        //새 창을 열고 결제 프로세스 시작
-        window.open(resp.data.nextRedirectPcUrl, "_blank", "width=400px, height=800px");
+            //useState에 필요한 데이터 저장
+            setCartPartnerOrderId(resp.data.partnerOrderId);
+            setCartPartnerUserId(resp.data.partnerUserId);
+            setCartTid(resp.data.tid);
+            setCartVo(resp.data.vo);
+            //새 창을 열고 결제 프로세스 시작
+            window.open(resp.data.nextRedirectPcUrl, "_blank", "width=400px, height=800px");
+        }
     });
 
     const purchaseApprove = useCallback(async (pgToken) => {

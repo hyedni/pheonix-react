@@ -47,6 +47,7 @@ import ReviewList from './components/review/ReviewList';
 import Purchase from './components/store/purchase/Purchase';
 import ReserveStats from './components/admin/ReserveStats';
 import MyPersonal from './components/user/MyPersonal';
+import MyStore from './components/user/appliance/MyStore';
 
 
 
@@ -64,6 +65,7 @@ function App() {
   useEffect(() => {
     refreshLogin();
   }, []);//최초 1회
+
 
   //call back
   const refreshLogin = useCallback(async () => {
@@ -84,7 +86,7 @@ function App() {
       axios.defaults.headers.common["Authorization"] = resp.data.accessToken;
       window.localStorage.setItem("refreshToken", resp.data.refreshToken);
     }
-  }, []);
+  }, [loginId]);
   return (
 
     <>
@@ -121,11 +123,13 @@ function App() {
 
 
         <Route path='/nonUser' element={<NonUser />} />
-        <Route path='mypersonal' element={<MyPersonal/>}/>
+        {/* <Route path='mypersonal' element={<MyPersonal/>}/> */}
+
 
 
         {isLogin &&
-          <Route path='/mypage' element={<Mypage />} />
+          // <Route path='/mypage' element={<Mypage />} />
+          <Route path='/mypage/*' element={<Mypage />} />
         }
 
         {/* 스토어 */}
