@@ -37,6 +37,7 @@ function NewProduct() {
             productOrigin: '',
             productDiscount: '',
         });
+        navigate('/adminStore');
     }, [input]);
 
     //등록처리 (FormData에 객체에 파일과 input값을 함께 담아 전송)
@@ -52,10 +53,9 @@ function NewProduct() {
             formData.append("attach", file);
         }
         try {
-            await axios.post("/product/", formData);
+            await axios.post("/product/add", formData);
             cancelInput();  // 입력 필드 초기화
             clearImagePreview();
-            navigate('/adminStore');  // /adminMovie 페이지로 리다이렉트
         } catch (error) {
             console.error("Failed to submit the form!", error);
         }
@@ -101,7 +101,7 @@ function NewProduct() {
                                         <input type="file" onChange={handleImageChange} className="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
                                     </div>
                                     {imagePreview && (
-                                        <div className="img-preview img-thumbnail mt-3">
+                                        <div className="img-thumbnail mt-3">
                                             <img src={imagePreview} alt="Preview" style={{ width: "100%" }} />
                                         </div>
                                     )}
@@ -189,15 +189,15 @@ function NewProduct() {
                                 </div>
                             </div>
 
-                            <div className="row mt-3 mb-4">
+                            <div className="row mt-5 mb-5">
                                 <div className='col-md-6'>
-                                    <button className='btn btn-light' onClick={e => saveInput()} style={{ width: '100%' }}>
-                                        등록
+                                    <button className='btn btn-primary' onClick={e => cancelInput()} style={{ width: '100%', padding:'10px' }}>
+                                        취소
                                     </button>
                                 </div>
                                 <div className='col-md-6'>
-                                    <button className='btn btn-primary' onClick={e => cancelInput()} style={{ width: '100%' }}>
-                                        취소
+                                    <button className='btn btn-light' onClick={e => saveInput()} style={{ width: '100%', padding:'10px' }}>
+                                        등록
                                     </button>
                                 </div>
                             </div>
