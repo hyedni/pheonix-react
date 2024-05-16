@@ -3,9 +3,13 @@ import { useCallback, useEffect, useState } from "react";
 import { NavLink } from 'react-router-dom';
 import Pagination from './Pagination';
 import './Lost.css';
+import { useRecoilState } from "recoil";
+import { loginGradeState, loginIdState } from "../utils/RecoilData";
 
 const Lost = () => {
     const [losts, setLosts] = useState([]);
+    const [loginId, setLoginId] = useRecoilState(loginIdState);
+    const [loginGrade, setLogingrade ] =useRecoilState(loginGradeState);
     const [input, setInput] = useState({
         lostTitle: "",
         lostContent: "",
@@ -48,8 +52,13 @@ const Lost = () => {
         if (choice === false) return;
 
         try {
-            await axios.delete("/lost/" + target.lostNo);
-            loadList();
+            // 관리자인 경우에만 삭제 요청을 보냅니다.
+            if (loginGrade === "관리자") {
+                await axios.delete("/lost/" + target.lostNo);
+                loadList();
+            } else {
+                alert("관리자만 삭제할 수 있습니다.");
+            }
         } catch (error) {
             console.error("Failed to delete lost item!", error);
         }
@@ -104,14 +113,6 @@ const Lost = () => {
         }
     };
 
-    const cancelInput = () => {
-        if (!file && errorMessage) {
-            const choice = window.confirm("작성을 취소하시겠습니까?");
-            if (choice === false) return;
-        }
-        clearInput();
-    };
-
     // 현재 페이지에 해당하는 항목들을 가져오는 함수
     const indexOfLastPost = currentPage * postsPerPage;
     const indexOfFirstPost = indexOfLastPost - postsPerPage;
@@ -119,9 +120,10 @@ const Lost = () => {
 
     return (
         <>
+           
             <div className="row justify-content-center">
-                <div className="col-lg-8  content-head">
-                    <div className="content-head-text">
+                <div className="col-lg-8  title-head">
+                    <div className="title-head-text">
                         분실물 저장소예욤
                     </div>
                 </div>
@@ -151,8 +153,11 @@ const Lost = () => {
                                         <h5 className="card-title">{lost.lostTitle}</h5>
                                         <p className="card-text">{lost.lostContent}</p>
                                         {lost.lostImgLink && (
-                                            <div className="card-image">
-                                                <img src={lost.lostImgLink} alt="Lost Image" />
+                                            <div className="image-wrapper card-image">
+                                                <img src={lost.lostImgLink} style={{ width: '300px', height: '400px' }}  alt="Lost Image" />
+                                                <div className="edit-button">
+                                                    {/* Your edit button JSX here */}
+                                                </div>
                                             </div>
                                         )}
                                         <div className="d-grid gap-2 d-md-flex justify-content-md-end">

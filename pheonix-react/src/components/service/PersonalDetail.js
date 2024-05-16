@@ -1,9 +1,13 @@
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "../utils/CustomAxios";
 import { useParams, Link } from "react-router-dom";
+import { useRecoilState } from "recoil";
+import { loginIdState } from "../utils/RecoilData";
 
 export default function PersonalDetail() {
     const { personalNo } = useParams();
+    const [loginId, setLoginId] = useRecoilState(loginIdState);
+    const [user, setUser] = useState([]);
     const [personal, setPersonal] = useState({});
     const [comments, setComments] = useState([]);
     const [newComment, setNewComment] = useState("");
@@ -11,7 +15,7 @@ export default function PersonalDetail() {
 
     useEffect(() => {
         loadData();
-    }, [personalNo]);
+    }, [personalNo, loginId]);
 
     const loadData = useCallback(async () => {
         try {
@@ -34,7 +38,7 @@ export default function PersonalDetail() {
             const response = await axios.post("/comments/", {
                 personalNo: personalNo,
                 commentsContent: newComment,
-                commentsWriter: writerName
+                commentsWriter: loginId
             });
             console.log("새 댓글이 추가되었습니다:", response.data);
             setNewComment("");
@@ -63,62 +67,53 @@ export default function PersonalDetail() {
             console.error("댓글 목록을 불러오는 중 오류 발생:", error);
         }
     }
-    
+
     return (
-        <div className="container">
-            <div className="row justify-content-center">
-                <div className="col-lg-8">
-                    <div className="card mt-4 text-center">
-                        <div className="card-header">
-                            <h2 className="card-title">{personal.personalTitle}</h2>
-                            <p className="card-text text-muted">작성자: {personal.personalId}</p>
+        <div className="container mt-5">
+            <div className="row">
+                <div className="col-md-8 offset-md-2">
+                    <div className="card mb-4">
+                        <div className="card-header bg-gray">
+                            <h5 className="card-title">{personal.personalTitle}</h5>
+                            <p className="card-text">작성자: {personal.personalId}</p>
                         </div>
                         <div className="card-body">
-                            <p className="card-text" style={{ width: "100%" }}>{personal.personalContent}</p>
+                            <p className="card-text">{personal.personalContent}</p>
                         </div>
-                        <div className="card-footer">
-                            <Link to="/personal" className="btn btn-primary btn-sm">목록으로 돌아가기</Link>
+                        <div className="card-footer bg-transparent">
+                            <Link to="/personal" className="btn btn-outline-secondary">목록으로 돌아가기</Link>
                         </div>
                     </div>
-                </div>
-            </div>
 
-            <div className="row justify-content-center mt-4">
-                <div className="col-lg-8">
-                    <div className="input-group mb-3">
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="댓글을 입력하세요..."
-                            value={newComment}
-                            onChange={(e) => setNewComment(e.target.value)}
-                        />
-                        <input
-                            type="text"
-                            className="form-control"
-                            placeholder="작성자 이름을 입력하세요..."
-                            value={writerName}
-                            onChange={(e) => setWriterName(e.target.value)}
-                        />
-                        <button className="btn btn-outline-secondary" type="button" onClick={handleAddComment}>작성</button>
-                    </div>
-                </div>
-            </div>
-
-            <div className="row justify-content-center mt-4">
-                <div className="col-lg-8">
-                    <div className="comment-lists">
-                        {comments.map(comment => (
-                            <div key={comment.commentsId} className="card mb-3">
-                                <div className="card-body">
-                                    <p className="card-text">{comment.commentsContent}</p>
-                                </div>
-                                <div className="card-footer text-muted d-flex justify-content-between align-items-center">
-                                    <span>작성자: {comment.commentsWriter}</span>
-                                    <button className="btn btn-danger btn-sm" onClick={() => handleDeleteComment(comment.commentsId)}>삭제</button>
-                                </div>
+                    <div className="card mb-4">
+                        <div className="card-header bg-gray">
+                            <h5 className="card-title">댓글</h5>
+                        </div>
+                        <div className="card-body">
+                            <input
+                                type="text"
+                                className="form-control mb-2"
+                                placeholder="댓글을 입력하세요..."
+                                value={newComment}
+                                onChange={(e) => setNewComment(e.target.value)}
+                            />
+                            <div className="d-flex justify-content-end mb-3">
+                                <button className="btn btn-primary" onClick={handleAddComment}>댓글 작성</button>
                             </div>
-                        ))}
+                            {comments.map(comment => (
+                                <div key={comment.commentsId} className="card mb-3">
+                                    <div className="card-body">
+                                        <p className="card-text">{comment.commentsContent}</p>
+                                    </div>
+                                    <div className="card-footer bg-transparent">
+                                        <p className="card-text">작성자: {comment.commentsWriter}</p>
+                                        {comment.commentsWriter === loginId && (
+                                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteComment(comment.commentsId)}>삭제</button>
+                                        )}
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
                     </div>
                 </div>
             </div>
