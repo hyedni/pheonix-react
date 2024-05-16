@@ -1,11 +1,12 @@
 import { useLinkClickHandler } from "react-router-dom";
 import Pagination from "../service/Pagination";
 import axios from "../utils/CustomAxios";
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState, useRef, useMemo } from 'react';
 import { Modal } from "bootstrap";
 import { FaArrowRotateLeft } from "react-icons/fa6";
 import moment from 'moment';
 import DatePicker from 'react-datepicker';
+import { isValid } from "date-fns";
 
 
 function MovieSchedule() {
@@ -38,9 +39,9 @@ function MovieSchedule() {
 
     const cancelInput = useCallback(() => {
         setInput({
-            cinemaName: '',
-            movieTitle: '',
-            startDate: ''
+            cinemaName: null,
+            movieTitle: null,
+            startDate: null
         });
     }, [input]);
 
@@ -49,11 +50,21 @@ function MovieSchedule() {
             ...input,
             [e.target.name]: e.target.value
         });
+        setShowInput({
+            ...showInput,
+            [e.target.name]: e.target.value
+        });
     }, [input]);
 
+    const [showInput, setShowInput] = useState({});
     const search = useCallback(() => {
         loadList({ ...input });
         cancelInput();
+        setShowInput({
+            cinemaName: '',
+            movieTitle: '',
+            startDate: ''
+        });
     }, [input]);
 
     const [movies, setMovies] = useState([]);
@@ -134,17 +145,19 @@ function MovieSchedule() {
 
     const changeStartDate = (target) => {
         const startDate = moment(target).format("YYYY-MM-DD");
-        console.log("sd" + startDate);
         setInsertData({
             ...insertData,
             startDate: startDate
         })
+        const isValid = target.value !== null;
+        setResult({
+            ...result,
+            startDate:isValid
+        });
     };
 
     const changeEndDate = (target) => {
         const endDate = moment(target).format("YYYY-MM-DD");
-        console.log("ed" + endDate);
-        
         setInsertData({
             ...insertData,
             endDate: endDate
@@ -157,6 +170,11 @@ function MovieSchedule() {
         if (e.target.name === "theaterNo") {
             const no = e.target.value;
             getTotalSeats(no);
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                theaterNo:isValid
+            });
         }
         let resultTime = insertData.startTime;
         let endTimeValue = insertData.endTime;
@@ -176,9 +194,7 @@ function MovieSchedule() {
             [e.target.name]: e.target.value,
             endTime: endTimeValue === 'NaN:NaN' ? '' : endTimeValue,
             startTime: resultTime,
-            movieNo: movieNo,
-            startDate: moment(defaultDate).format("YYYY-MM-DD"),
-            endDate: moment(defaultDate).format("YYYY-MM-DD")
+            movieNo: movieNo
         });
     }, [insertData]);
 
@@ -192,6 +208,11 @@ function MovieSchedule() {
             movieNo: e.target.value,
             startTime: '',
             endTime:''
+        });
+        const isValid = e.target.value.length > 0;
+        setResult({
+            ...result,
+            movieNo:isValid
         });
     }, [insertData]);
 
@@ -263,8 +284,6 @@ function MovieSchedule() {
         await axios.delete(`/movieSchedule/${target}`);
         loadList();
     }, []);
-
-
 
     const bsModalEdit = useRef();
     const openModalEdit = useCallback((target) => {
@@ -352,6 +371,52 @@ function MovieSchedule() {
         closeModalEdit();
     }, [editData]);
 
+    //유효성검사
+    const changeResult = (e) => {
+        const name = e.target.name;
+        if (name === 'movieScheduleDateDisc') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                movieScheduleDateDisc: isValid
+            });
+        }else if (name === 'movieScheduleTimeDisc') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                movieScheduleTimeDisc: isValid
+            });
+        }else if (name === 'startTime') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                startTime: isValid
+            });
+        }else if (name === 'endTime') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                endTime: isValid
+            });
+        }
+
+        console.log(ok);
+    };
+
+    const [result, setResult] = useState({
+        movieNo: null,
+        theaterNo: null,
+        startTime: null,
+        endTime: null,
+        movieScheduleDateDisc: null,
+        movieScheduleTimeDisc: null
+    });
+
+    const ok = useMemo(() => {
+        return result.movieNo && result.theaterNo && result.startTime && result.endTime 
+            && result.movieScheduleDateDisc && result.movieScheduleTimeDisc;
+    }, [result]);
+
     return (
         <>
             <br />
@@ -375,15 +440,15 @@ function MovieSchedule() {
                     <div className="row mt-3 mb-5">
                         <div className="col">
                             <label>영화관</label>
-                            <input className="form-control" name='cinemaName' value={input.cinemaName} onChange={e => changeInput(e)} />
+                            <input className="form-control" name='cinemaName' value={showInput.cinemaName} onChange={e => changeInput(e)} />
                         </div>
                         <div className="col">
                             <label>영화</label>
-                            <input className="form-control" name='movieTitle' value={input.movieTitle} onChange={e => changeInput(e)} />
+                            <input className="form-control" name='movieTitle' value={showInput.movieTitle} onChange={e => changeInput(e)} />
                         </div>
                         <div className="col">
                             <label>상영일</label>
-                            <input className="form-control" name='startDate' value={input.startDate} onChange={e => changeInput(e)} />
+                            <input className="form-control" name='startDate' value={showInput.startDate} onChange={e => changeInput(e)} />
                         </div>
                         <div className="col">
                             <button className="mt-4 btn btn-dark w-100" onClick={e => search(e)}>검색하기</button>
@@ -448,8 +513,8 @@ function MovieSchedule() {
                                         {movies.map((movie, index) => (
                                             <div key={index} className="col-md-3"> {/* 각 라디오 버튼을 포함하는 열 */}
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="movieNo" value={movie.MOVIE_NO} onClick={e => saveMovieNo(e)} />
-                                                    <label class="form-check-label" style={{ fontSize: '14px' }}>
+                                                    <input class="form-check-input" type="radio" name="movieNo" id={movie.MOVIE_NO} value={movie.MOVIE_NO} onClick={e => saveMovieNo(e)} />
+                                                    <label class="form-check-label" style={{ fontSize: '14px' }} for={movie.MOVIE_NO}>
                                                         {movie.MOVIE_TITLE}
                                                     </label>
                                                 </div>
@@ -462,8 +527,8 @@ function MovieSchedule() {
                                         {cinemas.map((cinema, index) => (
                                             <div key={index} className="col-md-3">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="cinemaNo" value={cinema.CINEMA_NO} onClick={e => loadTheaterList(cinema.CINEMA_NO)} />
-                                                    <label class="form-check-label" style={{ fontSize: '14px' }}>
+                                                    <input class="form-check-input" type="radio" name="cinemaNo" id={cinema.CINEMA_NO} value={cinema.CINEMA_NO} onClick={e => loadTheaterList(cinema.CINEMA_NO)} />
+                                                    <label class="form-check-label" style={{ fontSize: '14px' }} for={cinema.CINEMA_NO}>
                                                         {cinema.CINEMA_NAME}
                                                     </label>
                                                 </div>
@@ -476,8 +541,8 @@ function MovieSchedule() {
                                         {theaters.map((theater, index) => (
                                             <div key={index} className="col-md-3">
                                                 <div class="form-check">
-                                                    <input class="form-check-input" type="radio" name="theaterNo" value={theater.THEATER_NO} onChange={e => saveData(e)} />
-                                                    <label class="form-check-label" style={{ fontSize: '14px' }}>
+                                                    <input class="form-check-input" type="radio" name="theaterNo" id={theater.THEATER_NO} value={theater.THEATER_NO} onChange={e => saveData(e)} />
+                                                    <label class="form-check-label" style={{ fontSize: '14px' }} for={theater.THEATER_NO}>
                                                         {theater.THEATER_NAME}
                                                     </label>
                                                 </div>
@@ -490,14 +555,14 @@ function MovieSchedule() {
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">상영일</label> <br/>
                                             <DatePicker
                                                         selected={defaultDate}
-                                                        value={insertData.startDate} onChange={e => changeStartDate(e)} className="form-control calendar-width"
+                                                        value={insertData.startDate} onChange={e => changeStartDate(e)} className="form-control calendar-width" 
                                                     />
                                         </div>
                                         <div className="col">
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">종료일</label><br/>
                                             <DatePicker
                                                         selected={defaultDate}
-                                                        value={insertData.endDate} onChange={e => changeEndDate(e)} className="form-control calendar-width"
+                                                        value={insertData.endDate} onChange={e => changeEndDate(e)} className="form-control calendar-width" onBlur={changeResult}
                                                     />
                                         </div>
                                     </div>
@@ -507,14 +572,14 @@ function MovieSchedule() {
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">상영시작 
                                                 <span style={{fontSize:'12px', fontWeight:'normal', color:'gray'}}> 24시 기준</span>
                                             </label>
-                                            <input type="text" name="startTime" value={insertData.startTime} className="form-control" onInput={e => saveData(e)} 
+                                            <input type="text" name="startTime" value={insertData.startTime} className="form-control" onInput={e => saveData(e)} onBlur={changeResult}
                                                  placeholder="ex) 2230" />
                                         </div>
                                         <div className="col">
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">상영종료
                                                 <span style={{fontSize:'12px', fontWeight:'normal', color:'gray'}}> 상영시작 입력시 러닝타임으로 자동계산</span>
                                             </label>
-                                            <input type="text" name="endTime" value={insertData.endTime} className="form-control" onChange={e => saveData(e)} readOnly />
+                                            <input type="text" name="endTime" value={insertData.endTime} className="form-control" onChange={e => saveData(e)} onBlur={changeResult} />
                                         </div>
                                     </div>
 
@@ -527,7 +592,7 @@ function MovieSchedule() {
                                         </div>
                                         <div className="col">
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">요일유형</label>
-                                            <select class="form-select" name="movieScheduleDateDisc" value={insertData.movieScheduleDateDisc} onChange={e => saveData(e)}>
+                                            <select class="form-select" name="movieScheduleDateDisc" value={insertData.movieScheduleDateDisc} onChange={e => saveData(e)} onBlur={changeResult}>
                                                 <option value="">선택하세요</option>
                                                 <option value="평일">평일</option>
                                                 <option value="주말">주말</option>
@@ -536,7 +601,7 @@ function MovieSchedule() {
                                         </div>
                                         <div className="col">
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">시간유형</label>
-                                            <select class="form-select" name="movieScheduleTimeDisc" value={insertData.movieScheduleTimeDisc} onChange={e => saveData(e)}>
+                                            <select class="form-select" name="movieScheduleTimeDisc" value={insertData.movieScheduleTimeDisc} onChange={e => saveData(e)} onBlur={changeResult}>
                                                 <option value="">선택하세요</option>
                                                 <option value="일반">일반</option>
                                                 <option value="조조">조조</option>
@@ -549,7 +614,7 @@ function MovieSchedule() {
 
                         </div>
                         <div className="modal-footer">
-                            <button className="btn btn-secondary" onClick={e => saveSchedule()}>등록</button>
+                            <button className="btn btn-secondary" onClick={e => saveSchedule()} disabled={ok !== true}>등록</button>
                             <button className="btn btn-dark" onClick={e => cancelScheduleInput()}>취소</button>
                         </div>
                     </div>

@@ -50,6 +50,7 @@ import MyPersonal from './components/user/MyPersonal';
 import TheaterRegistrationComplete from './components/admin/TheaterRegistrationComplete';
 import BookingComplete from './components/booking/BookingComplete';
 import MyStore from './components/user/appliance/MyStore';
+import Main from './design/main';
 
 
 function App() {
@@ -125,12 +126,11 @@ function App() {
 
       <Routes>
         {/* 공용공간 에티켓을 만듭시다** 분리하여 route 작성해주세요 */}
-
+        <Route path='/' element={<Main/>}/>
         {/* 관리자 */}
         {loginGrade === '관리자' &&
         <>
           <Route path='/adminMovie' element={<AdminMovie />} />
-          <Route path='/adminCinema' element={<AdminCinema />} />
           <Route path='/adminStore' element={<AdminStore />} />
           <Route path='/adminTheater' element={<AdminTheater />} />
           <Route path='/movieSchedule' element={<MovieSchedule/>}/>
@@ -144,6 +144,7 @@ function App() {
           <Route path='/seatDetails' element={<SeatDetails/>} />
         </>
         }
+        <Route path='/adminCinema' element={<AdminCinema />} />
 
         <Route path='/addTheater' element={<AddTheater/>} />
         <Route path='/seatStatus' element={<SeatStatus />} />
