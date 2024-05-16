@@ -2,14 +2,12 @@ import React, { useCallback, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import axios from "axios";
+import axios from "../utils/CustomAxios";
 import { useNavigate } from "react-router";
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loginIdState, loginGradeState, isLoginState, isNonUserState } from "../utils/RecoilData";
 
 function NonUser() {
-    const [isNonUserEmail, setIsNonUserEmail] = useRecoilState(isNonUserState);
 
     const [nonUser, setNonUser] = useState({
           "nonUserEmail": "",
@@ -157,8 +155,9 @@ function NonUser() {
 
     return (
         <>
-            <div className="container mt-4" style={{ maxWidth: "400px" }}>
+             <div className="container mt-4" style={{ maxWidth: "400px" }}>
                 <h1>회원가입 화면입니다</h1>
+
                 
                 <div className="mb-4">
                     <button className="btn btn-outline-secondary">
@@ -171,8 +170,81 @@ function NonUser() {
                         <NavLink to="/nonUserCheck">비회원 예매확인</NavLink>
                     </button>
                 </div>
-            </div>
 
+
+                <div className="form-group mb-4">
+                    <label htmlFor="nonUserBirth">생년월일 :</label>
+                    <input type="text" id="nonUserBirth" name="nonUserBirth" onBlur={handleInputBlur}
+                        className={`form-control ${nonUser.nonUserBirth && !isValid.nonUserBirth ? "is-invalid" : ""}`} />
+                    <div className="invalid-feedback">
+                        {nonUser.nonUserBirth && !isValid.nonUserBirth && '아이디가 유효하지 않습니다.'}
+                    </div>
+                </div>
+
+                <div className="form-group mb-4">
+                    <label htmlFor="nonUserEmail">이메일 * :</label>
+                    <div className="input-group">
+                        <input type="email" id="nonUserEmail" name="nonUserEmail"
+                            onBlur={handleInputBlur} className={`form-control ${nonUser.nonUserEmail && !isValid.nonUserEmail ? "is-invalid" : ""}`}
+                            aria-describedby="button-addon2" />
+                        <button type="button"
+                            onClick={sent ? undefined : handleSendCert} 
+                            className="btn btn-outline-secondary">
+                            {sending ? "전송 중..." : sent ? "전송 완료" : "전송"}
+                        </button>
+                    </div>
+                    <div id="emailFeedback" className="invalid-feedback d-block">
+                        {nonUser.nonUserEmail && !isValid.nonUserEmail && '이메일이 유효하지 않습니다.'}
+                    </div>
+                    <div id="emailCheckFeedback" className="invalid-feedback d-block" />
+                </div>
+
+
+                {/* 인증번호 입력 필드 */}
+                <div className="form-group mb-4">
+                    <label htmlFor="nonUserCertCode">인증번호 * :</label>
+                    <div className="input-group">
+                        <input type="text" id="nonUserCertCode" name="nonUserCertCode"
+                            onChange={handleInputBlur} className={`form-control ${nonUser.nonUserCertCode && !isValid.nonUserCertCode ? "is-invalid" : ""}`}
+                            aria-describedby="button-addon2" />
+                        <button type="button"
+                            onClick={isCertified ? undefined : handleCheckCert} 
+                            className="btn btn-outline-primary">
+                            {isCertified ? "인증완료" : "인증"}
+                        </button>
+                    </div>
+                    <div id="certFeedback" className="invalid-feedback d-block" />
+                </div>
+
+                <div className="form-group mt-4">
+                    <label htmlFor="nonUserPw">비밀번호 * :</label>
+                    <input type="password" id="nonUserPw" name="nonUserPw"
+                        onBlur={handleInputBlur} 
+                        className={`form-control ${nonUser.nonUserPw && !isValid.nonUserPw ? "is-invalid" : ""}`}/>
+                    <div className="invalid-feedback">
+                        {nonUser.nonUserPw && !isValid.nonUserPw && '비밀번호가 유효하지 않습니다.'}
+                    </div>
+                </div>
+
+                <div className="form-group mt-4">
+                    <label htmlFor="nonUserPwCheck">비밀번호 확인* :</label>
+                    <input type="password" id="nonUserPwCheck" name="nonUserPwCheck"
+                        onBlur={handleInputBlur} 
+                        className={`form-control ${nonUser.nonUserPwCheck && !isValid.nonUserPwCheck ? "is-invalid" : ""}`}
+                    />
+                    <div className="invalid-feedback">
+                        {nonUser.nonUserPwCheck && !isValid.nonUserPwCheck && '비밀번호가 유효하지 않습니다.'}
+                    </div>
+                </div>
+
+                <button className='btn btn-success w-100 mt-4 mb-4'
+                onClick={() => {
+                  // handleBookingAuthorize();
+                  handleSubmit();
+                }}
+                >비회원 예매하기</button>
+
+            </div>
         </>
     )
 }

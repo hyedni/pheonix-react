@@ -18,10 +18,15 @@ function BookingListPage() {
     const [scheduleNo, setScheduleNo] = useState(0);
 
     //일정 PK번호 넘기기
-    const moveToSeat = (scheduleNo) => {
-        console.log(scheduleNo);
-        navigate(`/주소/${scheduleNo}`)
-    };
+    // const moveToSeat = (scheduleNo) => {
+    //     console.log(scheduleNo);
+    //     navigate(`/주소/${scheduleNo}`)
+    // };
+
+    const moveToSeat = useCallback((scheduleNo)=>{
+        navigate('/bookingAdd' , {state : {scheduleNo}})
+    },[navigate]);
+    
 
     //전체데이터(Vo)담긴 state
     const [bookData, setBookData] = useState({

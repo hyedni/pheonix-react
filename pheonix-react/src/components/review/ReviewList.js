@@ -1,7 +1,7 @@
 import axios from "../utils/CustomAxios";
 import { useRecoilState } from "recoil";
 import { loginIdState } from "../utils/RecoilData";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { useParams } from "react-router";
 
 //이미지 임포트
@@ -25,6 +25,12 @@ const ReviewList = () => {
     const [currentPage, setCurrentPage] = useState(1);
     const [reviewPerPage] = useState(6);
     const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+    const paginatedreviewList = useMemo(() => {
+        const lastIndex = currentPage * reviewPerPage;
+        const firstIndex = lastIndex - reviewPerPage;
+        return reviewLists.slice(firstIndex, lastIndex);
+    }, [reviewLists, currentPage, reviewPerPage]);
 
     useEffect(() => {
         loadReviews();
@@ -89,7 +95,7 @@ const ReviewList = () => {
                 <div className='col-lg-8 content-body'>
                     <div className="row">
                         <div className="col-md-1"></div>
-                        {reviewLists.length === 0 ? ( //리뷰가 있/없 판단
+                        {paginatedreviewList.length === 0 ? ( //리뷰가 있/없 판단
                             <>
                                 <h1>리뷰가 아직 없어요</h1>
                             </>
@@ -116,7 +122,7 @@ const ReviewList = () => {
                                                                 )}
                                                                 {review.userNick === null ? review.userId : review.userNick}
                                                             </span>
-                                                            <p>{review.reviewContent}</p>
+                                                            <p className="reviewContent">{review.reviewContent}</p>
                                                         </div>
                                                     </div>
                                                     <div className="row">
@@ -138,6 +144,7 @@ const ReviewList = () => {
 
                                                     </div>
                                                 </div>
+                                                <Pagination currentPage={currentPage} totalPages={Math.ceil(reviewLists.length / reviewPerPage)} paginate={paginate} />
                                             </>
                                         ))
                                 ) : (
@@ -181,6 +188,7 @@ const ReviewList = () => {
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <Pagination currentPage={currentPage} totalPages={Math.ceil(reviewLists.length / reviewPerPage)} paginate={paginate} />
                                             </>
                                         ))
                                 )}
@@ -190,8 +198,6 @@ const ReviewList = () => {
 
                         )}
                     </div>
-
-                    <Pagination currentPage={currentPage} totalPages={Math.ceil(reviewLists.length / reviewPerPage)} paginate={paginate} />
                 </div>
             </div>
         </>

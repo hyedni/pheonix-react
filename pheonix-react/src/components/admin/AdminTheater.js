@@ -53,9 +53,9 @@ function AdminTheater() {
                     <div className="title-head-text">
                         상영관 관리
                     </div>
+                <hr />
                 </div>
             </div>
-            <hr />
 
             <div className="row">
                 <div className="offset-2 col-lg-8">
