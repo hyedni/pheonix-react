@@ -7,7 +7,7 @@ function PhoenixHome() {
 
     const [packageProducts, setPackageProducts] = useState([]);
     const loadPackage = useCallback(async ()=>{
-        const resp = await axios.get("/product/" + "패키지");
+        const resp = await axios.get("/home/" + "패키지");
         setPackageProducts(resp.data);
     },[]);
 
