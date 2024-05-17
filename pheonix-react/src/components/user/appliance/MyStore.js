@@ -77,15 +77,17 @@ const MyStore = () => {
 
                 {paginatedMyPurchaseList.length === 0 ? ( //구매내역이 없는 경우
                     <>
-                        <div className="phoenix-side-title" >
+                        <div className="phoenix-side-title center" >
                             상품 결제 내역
+                            <br/>...
                         </div>
 
-                        <h1>구매한 상품이 없어요</h1>
-                        <h4>구매하러 가시겠습니까?</h4>
-                        <div className='col-6 mt-4'>
-                            <Link to={`/store/package`} className='btn btn-dark w-100 btn-lg'>스토어 가기</Link>
+                        <div className='center mt-4'>
+                            <h1>구매한 상품이 없어요</h1>
+                            <h4>구매하러 가시겠습니까?</h4>
+                            <Link to={`/store/package`} className='btn btn-dark w-50 btn-lg mt-4'>스토어 가기</Link>
                         </div>
+
                     </>
                 ) : ( //구매내역이 있는데
                     btnPurchase === false ? ( //상세보기가 아닌경우
