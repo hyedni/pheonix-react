@@ -210,7 +210,7 @@ function AdminCinema() {
                     ) : (
                         <>
                             <div className="title-head-text">
-                                영화관 관리
+                                PHOENIX
                             </div>
                         </>
                     )}
