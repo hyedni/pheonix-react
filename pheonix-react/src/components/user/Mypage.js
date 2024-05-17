@@ -12,6 +12,7 @@ import MyStore from "./appliance/MyStore";
 import InfoPheonix from "./appliance/InfoPheonix";
 import InfoPoint from "./appliance/InfoPoint";
 import MyReservation from "./appliance/MyReservation";
+import Change from "./change";
 
 function Mypage() {
 
@@ -128,6 +129,7 @@ function Mypage() {
                                 <Route path="/infoPheonix" element={<InfoPheonix />}/>
                                 <Route path="/infoPoint" element={<InfoPoint />} />
                                 <Route path="/myReservation" element={<MyReservation />} />
+                                <Route path='/change' element={<Change/>} />
 
                             </Routes>
                         </div>
