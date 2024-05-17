@@ -61,14 +61,13 @@ function App() {
 
   const [nonLoginId, setNonLoginId] = useRecoilState(nonLoginIdState);
  
-
   const isLogin = useRecoilValue(isLoginState);
   const isNonLogin = useRecoilValue(isNonLoginState);
 
   //effect
   useEffect(() => {
     refreshLogin();
-    nonLogin();
+    // nonLogin();
   }, []);//최초 1회
 
 
@@ -94,28 +93,24 @@ function App() {
   }, [loginId]);
 
 
-  //비회원 토큰 확인
-  const nonLogin = useCallback(async () => {
-    try {
-      // 비회원 정보 가져오기
-      const token = window.localStorage.getItem("token");
-      console.log(token);
+  // //비회원 토큰 확인
+  // const nonLogin = useCallback(async () => {
+  //     // 비회원 정보 가져오기
+  //     const token = window.localStorage.getItem("token");
+  //     console.log(token);
   
-      if (token !== null) {
+  //     if (token !== null) {
 
-        axios.defaults.headers.common["NonUserAuth"] = token;
-        // 세션 스토리지에 비회원 정보 저장
-        const resp = await axios.post(`http://localhost:8080/user/token`); // 비회원 정보를 가져오는 비동기 함수
+  //       axios.defaults.headers.common["NonUserAuth"] = token;
+  //       // 세션 스토리지에 비회원 정보 저장
+  //       const resp = await axios.post(`http://localhost:8080/user/token`); // 비회원 정보를 가져오는 비동기 함수
 
-        setNonLoginId(resp.data.nonUserId);
-        axios.defaults.headers.common["NonUserAuth"] = resp.data.token;
-        window.sessionStorage.setItem("token", resp.data.token);
-        console.log("비회원 정보가 세션 스토리지에 저장되었습니다.");
-      }
-    } catch (error) {
-      console.error("비회원 정보를 가져오는 도중 오류가 발생했습니다:", error);
-    }
-  }, []);
+  //       setNonLoginId(resp.data.nonUserId);
+  //       axios.defaults.headers.common["NonUserAuth"] = resp.data.token;
+  //       window.sessionStorage.setItem("token", resp.data.token);
+  //       console.log("비회원 정보가 세션 스토리지에 저장되었습니다.");
+  //     }
+  // }, []);
 
 
   return (
@@ -208,10 +203,20 @@ function App() {
         {/* 로그인한 사용자만 접근할 수 있는 경로 */}
         {/* <Route path='/booking' element={(isLogin || isBookingAuthorized) ? <BookingListPage /> : <Navigate to="/login" />} /> */}
         {isLogin &&
-          <Route path='/booking' element={<BookingListPage />} />
+        <>
+          <Route path='/booking' element={<BookingListPage />}/>
+          <Route path='/bookingAdd' element={<BookingAdd />} />
+          </>
         }
-        <Route path='/bookingAdd' element={<BookingAdd />} />
-        <Route path='/booking' element={<BookingListPage />} />
+        {isNonLogin &&
+          <>
+          <Route path='/booking' element={<BookingListPage />}/>
+          <Route path='/bookingAdd' element={<BookingAdd />} />
+          </>
+        }
+
+        
+        {/* <Route path='/booking' element={<BookingListPage />} /> */}
         <Route path='/moviechart' element={<MovieChart />} />
 
 

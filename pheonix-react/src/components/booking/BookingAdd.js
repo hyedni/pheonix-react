@@ -7,6 +7,7 @@ import { loginIdState } from "../utils/RecoilData";
 
 function BookingAdd() {
 
+    const [checkedSeats, setCheckedSeats] = useState({});
     //로그인관련 데이터
     const [loginId, setLoginId] = useRecoilState(loginIdState);
     useEffect(() => {
@@ -21,6 +22,25 @@ function BookingAdd() {
             }));
         }
     }, [loginId]);
+
+    //선택된좌석들의 가격상태
+    const [price, setPrice] = useState(0);
+
+    //체크리스트 변할때마다 상태업데이트
+    useEffect(() => {
+        const aaa = async () => {
+            const bookingVo = {
+                bookingStatusVO: bookingStatus,
+                seatReservationDto: seatTypesReservation
+            };
+
+            const response = await axios.post('/booking/price', bookingVo);
+            console.log("체크리스트 가격체크");
+            setPrice(response.data);
+        };
+
+        aaa();
+    }, [checkedSeats]);
 
 
 
@@ -64,7 +84,7 @@ function BookingAdd() {
         } catch (error) {
             console.error('에러임임임 data:', error)
             const errorMessage = error.response?.data || 'An error occurred';
-            
+
             alert(errorMessage); // 사용자에게 에러 메시지 표시
             reloadPage();
         }
@@ -100,7 +120,7 @@ function BookingAdd() {
 
 
     //체크된 좌석을 나타내는상태 < 아마 좌석예약에 필요한상태 일거임 예) 좌석타입번호 : 3 , 회원타입 : 경로 >
-    const [checkedSeats, setCheckedSeats] = useState({});
+
 
 
     //체크된애들 확인위해 콘솔에 찍는코드
@@ -355,16 +375,32 @@ function BookingAdd() {
             <div className="row justify-content-center">
                 <div className="col-lg-8">
 
-                    <div><h3 className="text-center">선택가능좌석수 : {availableSeatCount}</h3></div>
-                    <div><h3 className="text-center">티켓타입 : {ticketType.ticketType}</h3></div>
+                    <div>
+                        <h3 className="text-left mb-2">
+                            선택가능좌석수: <span className="text-primary">{availableSeatCount}</span>
+                        </h3>
+                    </div>
+                    <div>
+                        <h3 className="text-left mb-2">
+                            티켓타입: <span className="text-success">{ticketType.ticketType}</span>
+                        </h3>
+                    </div>
 
 
                     <div className="row" id="targetCount">
-                        <div className="col-6" style={{ borderRight: '1px solid #ccc' }}>
+                        <div className="col-6 mt-4" style={{ borderRight: '1px solid #ccc' }}>
                             {renderDivs()}
                         </div>
 
                         <div className="col-6">
+
+                            <ul>
+                                <li><span style={{ display: 'inline-block', width: '15px', height: '15px', backgroundColor: 'lightgray', border: '1px solid black' }}></span> 기본 좌석</li>
+                                <li><span style={{ display: 'inline-block', width: '15px', height: '15px', backgroundColor: 'pink', border: '1px solid black' }}></span> 장애인 좌석</li>
+                                <li><span style={{ display: 'inline-block', width: '15px', height: '15px', backgroundColor: 'yellow', border: '1px solid black' }}></span> 스위트 좌석</li>
+                                <li><span style={{ display: 'inline-block', width: '15px', height: '15px', backgroundColor: 'white', border: '1px solid black' }}></span> 라이트 좌석</li>
+                                <li><span style={{ display: 'inline-block', width: '15px', height: '15px', backgroundColor: 'red', border: '1px solid black' }}></span> 예약 완료 좌석</li>
+                            </ul>
 
                         </div>
                     </div>
@@ -377,36 +413,54 @@ function BookingAdd() {
                     <hr></hr>
                 </div>
 
-                <div className="col-lg-8">
-                    <div className="form-group">
-                        <label htmlFor="paymentMethod">결제 수단 선택</label>
-                        <select value={bookingStatus.paymentMethod}
-                            onChange={handlePaymentMethodChange}>
-                            <option value="현장결제">현장결제</option>
-                            <option value="카카오페이결제">카카오페이결제</option>
-                            <option value="카드결제">카드결제</option>
-                        </select>
-                    </div>
+                <div className="col-lg-8 text-end pe-5">
+                    <label className="fs-4 fw-bold">가격 : </label> <label className="fs-4 fw-bold">{price} 원</label>
+                </div>
 
-                    <div>
-                        <button type="button"
-                            onClick={
-                                () => {
-                                    addBooking();
-                                }
-                            }>예매 임시버튼</button>
-                    </div>
-                    <div>
-                        <button type="button"
+                <div className="col-lg-8">
+                    <hr></hr>
+                </div>
+
+                <div className="col-lg-8 ">
+                    <div className="d-flex justify-content-between mb-3">
+                        <button type="button" className="btn btn-primary "
                             onClick={
                                 () => {
                                     reloadPage();
                                 }
-                            }>좌석 다시선택 , 새로고침</button>
+                            }>좌석 다시선택</button>
+                    </div>
+                    <div className="form-group text-end">
+                        <label htmlFor="paymentMethod">결제 수단 선택</label>
+                        <select value={bookingStatus.paymentMethod} className="form-select d-inline-block w-auto me-3"
+                            onChange={handlePaymentMethodChange}>
+                            <option value="현장결제">현장결제</option>
+                            <option value="카카오페이">카카오페이결제</option>
+                            <option value="카드결제">카드결제</option>
+                        </select>
+
+                        <button type="button" className="btn btn-dark"
+                            onClick={
+                                () => {
+                                    addBooking();
+                                }
+                            }>예매하기</button>
+
+                    </div>
+
+                    <div className="col-lg-8">
+
+                    </div>
+
+                    <div >
+
 
                     </div>
 
                 </div>
+
+
+
             </div>
         </>
     )
