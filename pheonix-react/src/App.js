@@ -73,13 +73,6 @@ function App() {
     nonLogin();
   }, []);//최초 1회
 
-   // Effect for periodically refreshing non-login state
-  //  useEffect(() => {
-  //   if (!nonLoginId) return;
-
-  //   const intervalId = setInterval(nonLogin, 10000);
-  //   return () => clearInterval(intervalId);
-  // }, []);
 
   //call back
   const refreshLogin = useCallback(async () => {
@@ -121,7 +114,9 @@ function App() {
       }
       catch{
         console.log('사용자에게 권한이 부여되지 않았습니다.');
-        setNonLoginId(false); // 언마운트될 때 nonLoginId 상태를 false로 변경합니다.
+        setNonLoginId('');
+        delete axios.defaults.headers.common['NonUserAuth'];
+        window.localStorage.removeItem("token");
       }
 
   }, []);
@@ -226,7 +221,6 @@ function App() {
         
         {isNonLogin &&
           <>
-            <Route path='/booking' element={<BookingListPage />} />
             <Route path='/bookingAdd' element={<BookingAdd />} />
           </>
         }

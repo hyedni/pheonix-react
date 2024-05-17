@@ -8,7 +8,7 @@ import { TbNumber19Small } from "react-icons/tb";
 import React, { Fragment } from 'react';
 import { Modal } from "bootstrap";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loginGradeState, loginIdState, isLoginState } from '../utils/RecoilData';
+import { loginGradeState, loginIdState, isLoginState, isNonLoginState } from '../utils/RecoilData';
 import { nonLoginIdState } from "../utils/RecoilData";
 
 
@@ -19,6 +19,7 @@ function BookingListPage() {
     const navigate = useNavigate();
     const [scheduleNo, setScheduleNo] = useState(0);
     const isLogin = useRecoilValue(isLoginState);
+    const isNonLogin = useRecoilValue(isNonLoginState);
 
 
     //일정 PK번호 넘기기
@@ -29,7 +30,7 @@ function BookingListPage() {
 
     
     const moveToSeat = useCallback((scheduleNo) => {
-        if (isLogin) {
+        if (isLogin || isNonLogin) {
             navigate('/bookingAdd', { state: { scheduleNo } });
         } else {
             const confirmed = window.confirm("로그인 후 예매 가능합니다. 로그인 화면으로 이동하시겠습니까?");
@@ -37,7 +38,7 @@ function BookingListPage() {
                 navigate('/login'); 
             }
         }
-    }, [navigate, isLogin]);
+    }, [navigate, isLogin, isNonLogin]);
 
 
     //전체데이터(Vo)담긴 state
