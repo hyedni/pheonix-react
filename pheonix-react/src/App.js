@@ -33,7 +33,9 @@ import SuccessComplete from './components/store/purchase/successComplete';
 import PersonalDetail from './components/service/PersonalDetail';
 import Pagination from './components/service/Pagination';
 import Bunsil from './components/service/Bunsil';
+
 import NonUser from './components/user/nonUser';
+
 import AddTheater from './components/admin/AddTheater';
 import BookingListPage from './components/booking/BookingListPage';
 import BookingAdd from './components/booking/BookingAdd';
@@ -51,6 +53,7 @@ import TheaterRegistrationComplete from './components/admin/TheaterRegistrationC
 import BookingComplete from './components/booking/BookingComplete';
 import MyStore from './components/user/appliance/MyStore';
 import PhoenixHome from './design/PhoenixHome';
+
 
 
 function App() {
