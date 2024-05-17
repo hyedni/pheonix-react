@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useState, useRef } from 'react';
+import { useCallback, useEffect, useState, useRef, useMemo } from 'react';
 import './AdminCinema.css';
 import axios from "../utils/CustomAxios";
 import { FaPhoneFlip } from "react-icons/fa6";
@@ -192,6 +192,76 @@ function AdminCinema() {
         });
     }, [cinemas]);
 
+    const [result, setResult] = useState({
+        cinemaName: null,
+        cinemaTotalTheater: null,
+        cinemaRegion: null,
+        cinemaPost: null,
+        cinemaAddress1: null,
+        cinemaAddress2: null,
+        cinemaManager: null,
+        cinemaCall: null
+    });
+
+    const changeResult = (e) => {
+        const name = e.target.name;
+        if (name === 'cinemaName') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                cinemaName: isValid
+            });
+        }else if (name === 'cinemaTotalTheater') {
+            const regex = /^[0-9]+$/;
+            setResult({
+                ...result,
+                cinemaTotalTheater: regex.test(input.cinemaTotalTheater)
+            });
+        }else if (name === 'cinemaRegion') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                cinemaRegion: isValid
+            });
+        }else if (name === 'cinemaPost') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                cinemaPost: isValid
+            });
+        }else if (name === 'cinemaAddress1') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                cinemaAddress1: isValid
+            });
+        }else if (name === 'cinemaAddress2') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                cinemaAddress2: isValid
+            });
+        }else if (name === 'cinemaManager') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                cinemaManager: isValid
+            });
+        }else if (name === 'cinemaCall') {
+            const isValid = e.target.value.length > 0;
+            setResult({
+                ...result,
+                cinemaCall: isValid
+            });
+        }
+    };
+
+    const ok = useMemo(() => {
+        return result.cinemaName && result.cinemaTotalTheater && result.cinemaRegion && result.cinemaPost 
+        && result.cinemaAddress1 && result.cinemaAddress2 && result.cinemaManager 
+        && result.cinemaCall;
+    }, [result]);
+
     return (
         <>
 
@@ -204,13 +274,15 @@ function AdminCinema() {
                         <>
                             <div className="title-head-text">
                                 영화관 관리
-                                <span className='ms-3' onClick={e => openModal()}><FaCirclePlus style={{ marginBottom: '10px', color: 'rgb(240, 86, 86)' }} /></span>
+                                <span className='ms-3' onClick={e => openModal()} style={{cursor:'pointer'}}>
+                                    <FaCirclePlus style={{ marginBottom: '10px', color: 'rgb(240, 86, 86)' }} />
+                                </span>
                             </div>
                         </>
                     ) : (
                         <>
                             <div className="title-head-text">
-                                영화관 관리
+                                PHOENIX
                             </div>
                         </>
                     )}
@@ -393,8 +465,10 @@ function AdminCinema() {
             <div ref={bsModal} className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                 <div className="modal-dialog">
                     <div className="modal-content">
-                        <div className="modal-header">
-                            <h1 className="modal-title fs-5" id="staticBackdropLabel" style={{ fontWeight: 'bold' }}>new 영화관 등록</h1>
+                        <div className="modal-header" style={{ backgroundColor:'rgb(56,52,54)', color:'white'}}>
+                            <h1 className="modal-title fs-5" id="staticBackdropLabel" style={{ fontWeight: 'bold'}}>
+                                new 영화관 등록
+                            </h1>
                             <button type="button" className="btn-close" aria-label="Close"
                                 onClick={e => cancelInput()}></button>
                         </div>
@@ -406,8 +480,11 @@ function AdminCinema() {
                                     <label>영화관 이름</label>
                                     <input type="text" name="cinemaName"
                                         value={input.cinemaName}
-                                        onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                        onChange={e => changeInput(e)} onBlur={changeResult}
+                                        className={`form-control 
+                                        ${result.cinemaName === true ? 'is-valid' : ''}
+                                        ${result.cinemaName === false ? 'is-invalid' : ''}
+                                        `} />
                                 </div>
                             </div>
                             <div className="row">
@@ -415,18 +492,27 @@ function AdminCinema() {
                                     <label>총 상영관 수</label>
                                     <input type="number" name="cinemaTotalTheater"
                                         value={input.cinemaTotalTheater}
-                                        onChange={e => changeInput(e)} placeholder='숫자로 입력하세요'
-                                        className="form-control" />
+                                        onChange={e => changeInput(e)} placeholder='숫자로 입력' onBlur={changeResult}
+                                        className={`form-control 
+                                        ${result.cinemaTotalTheater === true ? 'is-valid' : ''}
+                                        ${result.cinemaTotalTheater === false ? 'is-invalid' : ''}
+                                        `} />
                                 </div>
                             </div>
 
                             <div className="row">
                                 <div className="col">
                                     <label>지역</label>
-                                    <input type="text" name="cinemaRegion"
+                                    <select name="cinemaRegion"
                                         value={input.cinemaRegion}
-                                        onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                        onChange={e => changeInput(e)} onBlur={changeResult} 
+                                        className={`form-select  
+                                        ${result.cinemaRegion === true ? 'is-valid' : ''}
+                                        ${result.cinemaRegion === false ? 'is-invalid' : ''}
+                                        `} >
+                                        <option value="">선택하세요</option>
+                                        <option value="서울">서울</option>
+                                    </select>
                                 </div>
                             </div>
 
@@ -436,16 +522,25 @@ function AdminCinema() {
                                     <div><PostApi onAddressChange={handleAddressChange} /></div>
                                     <input type="text" name="cinemaPost"
                                         value={input.cinemaPost}
-                                        onChange={e => changeInput(e)}
-                                        className="form-control mb-1" />
+                                        onChange={e => changeInput(e)} onInput={changeResult}
+                                        className={`form-control mb-1 
+                                        ${result.cinemaPost === true ? 'is-valid' : ''}
+                                        ${result.cinemaPost === false ? 'is-invalid' : ''}
+                                        `} />
                                     <input type="text" name="cinemaAddress1"
                                         value={input.cinemaAddress1}
-                                        onChange={e => changeInput(e)}
-                                        className="form-control mb-1" />
+                                        onChange={e => changeInput(e)} onInput={changeResult}
+                                        className={`form-control mb-1 
+                                        ${result.cinemaAddress1 === true ? 'is-valid' : ''}
+                                        ${result.cinemaAddress1 === false ? 'is-invalid' : ''}
+                                        `} />
                                     <input type="text" name="cinemaAddress2"
                                         value={input.cinemaAddress2}
-                                        onChange={e => changeInput(e)}
-                                        className="form-control mb-1" />
+                                        onChange={e => changeInput(e)} onBlur={changeResult}
+                                        className={`form-control mb-1 
+                                        ${result.cinemaAddress2 === true ? 'is-valid' : ''}
+                                        ${result.cinemaAddress2 === false ? 'is-invalid' : ''}
+                                        `} />
                                 </div>
                             </div>
 
@@ -453,9 +548,12 @@ function AdminCinema() {
                                 <div className="col">
                                     <label>매니저</label>
                                     <input type="text" name="cinemaManager"
-                                        value={input.cinemaManager}
+                                        value={input.cinemaManager} onBlur={changeResult}
                                         onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                        className={`form-control  
+                                        ${result.cinemaManager === true ? 'is-valid' : ''}
+                                        ${result.cinemaManager === false ? 'is-invalid' : ''}
+                                        `} />
                                 </div>
                             </div>
 
@@ -472,15 +570,18 @@ function AdminCinema() {
                                 <div className="col">
                                     <label>상영관 연락처</label>
                                     <input type="text" name="cinemaCall"
-                                        value={input.cinemaCall}
+                                        value={input.cinemaCall} onBlur={changeResult}
                                         onChange={e => changeInput(e)}
-                                        className="form-control" />
+                                        className={`form-control  
+                                        ${result.cinemaCall === true ? 'is-valid' : ''}
+                                        ${result.cinemaCall === false ? 'is-invalid' : ''}
+                                        `} />
                                 </div>
                             </div>
 
                         </div>
                         <div className="modal-footer">
-                            <button className='btn btn-dark me-2' onClick={e => saveInput()}>
+                            <button className='btn btn-dark me-2' onClick={e => saveInput()} disabled={ok !== true}>
                                 등록
                             </button>
                             <button className='btn btn-primary' onClick={e => cancelInput()}>
