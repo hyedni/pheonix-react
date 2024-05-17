@@ -25,3 +25,88 @@
 .inner-font{
     font-size: 15px;
 }
+
+.movie-wrapper {
+    height: 480px;
+    width: 300px;
+    border-radius: 10px;
+    padding: 0.5em;
+    /* margin-right: 100px; */
+    /* box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1), 0 10px 20px rgba(0, 0, 0, 0.1); */
+    word-break: keep-all;
+    overflow: auto;
+    border: 1px solid rgb(212,211,201);
+}
+
+.movie-wrapper img {
+    max-width: 100%;  /* 너비를 부모 요소에 맞춤 */
+    max-height: 100%; /* 높이를 부모 요소에 맞춤 */
+    height: auto;     /* 비율 유지 */
+    object-fit: cover;  /* 이미지가 비율을 유지하며 컨테이너를 채우도록 조정 */
+}
+
+.movie-image-wrapper {
+    padding: 0.5em;
+    height: 280px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    position: relative;
+}
+
+/**/
+
+
+/*이미지 위 hover시 버튼 생성*/
+.movie-wrapper .edit-button {
+    position: absolute;
+    top: calc(50% - 20px); /* 버튼을 조금 위로 올림 */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 10;
+}
+
+.movie-wrapper .delete-button {
+    position: absolute;
+    top: calc(50% + 25px); /* 버튼을 조금 아래로 내림 */
+    left: 50%;
+    transform: translate(-50%, -50%);
+    opacity: 0;
+    transition: opacity 0.5s ease;
+    z-index: 10;
+}
+
+.movie-wrapper:hover::after {
+    opacity: 0.5; /* 이미지 불투명하게 */
+}
+
+/*이미지 위 hover시 버튼 생성*/
+.movie-wrapper:hover .edit-button,
+.movie-wrapper:hover .delete-button {
+    opacity: 1; /* 버튼 표시 */
+}
+
+.content-wrapper {
+    height: 70px;
+    max-width: 100%;  /* 너비를 부모 요소에 맞춤 */
+    max-height: 100%; /* 높이를 부모 요소에 맞춤 */
+}
+
+/*입력한 text가 div 정중앙에 오도록*/
+.input-content {
+    text-align: center;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    border-radius: 5px;
+   
+}
+
+.admin-flex-box {
+    display: flex;
+    justify-content: space-between; /* 번호와 버튼이 양쪽 끝으로 정렬되도록 함 */
+    align-items: center; /* 세로 중앙 정렬 */
+    width: 100%; /* 전체 너비 사용 */
+}
