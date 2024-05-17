@@ -46,7 +46,7 @@ function NonUser() {
             [name]: value
         });
     }, [nonUser]);
-
+ 
      // 폼 제출 함수
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -57,7 +57,7 @@ function NonUser() {
         const response = await axios.post('/user/nonUserJoin', nonUser);
         console.log("가입 성공:", response.data);
         setNonLoginId(response.data.nonUserEmail);
-        window.sessionStorage.setItem('token', response.data.token);
+        window.localStorage.setItem('token', response.data.token);
         console.log(response.data.token);
 
         // 추가 작업 수행 (예: 사용자에게 성공 메시지 표시)

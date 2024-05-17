@@ -2,7 +2,7 @@ import { useCallback, useState, useEffect } from "react";
 import axios from '../utils/CustomAxios';
 import { useLocation, useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
-import { loginIdState } from "../utils/RecoilData";
+import { loginIdState, nonLoginIdState } from "../utils/RecoilData";
 
 
 function BookingAdd() {
@@ -21,6 +21,21 @@ function BookingAdd() {
             }));
         }
     }, [loginId]);
+
+    //로그인관련 데이터
+    const [nonLoginId, setNonLoginId] = useRecoilState(nonLoginIdState);
+    useEffect(() => {
+        console.log('nonLoginId 상태 확인:', nonLoginId);
+    }, [nonLoginId]);
+
+    useEffect(() => {
+        if (nonLoginId) {
+            setBookingStatus(prevStatus => ({
+                ...prevStatus,
+                userId: nonLoginId
+            }));
+        }
+    }, [nonLoginId]);
 
 
 
