@@ -93,16 +93,24 @@ function PhoenixHome() {
         <>
             <Carousel fade>
                 <Carousel.Item>
-                    <img className="d-block w-100" src={"/image/main1.png"} alt="First slide" />
+                    <Link to="/movieEdit/209">
+                         <img className="d-block w-100" src={"/image/main1.png"} alt="First slide" />
+                    </Link>
                 </Carousel.Item>
                 <Carousel.Item>
-                    <img className="d-block w-100" src={"/image/main2.png"} alt="Second slide" />
+                    <Link to="/movieEdit/210">
+                        <img className="d-block w-100" src={"/image/main2.png"} alt="Second slide" />
+                    </Link>
                 </Carousel.Item>
                 <Carousel.Item>
-                    <img className="d-block w-100" src={"/image/main3.png"} alt="Third slide" />
+                    <Link to="/movieEdit/209">
+                        <img className="d-block w-100" src={"/image/main4.png"} alt="f slide" />
+                    </Link>
                 </Carousel.Item>
                 <Carousel.Item>
-                    <img className="d-block w-100" src={"/image/main4.png"} alt="f slide" />
+                    <Link to="/movieEdit/210">
+                        <img className="d-block w-100" src={"/image/main3.png"} alt="Third slide" />
+                    </Link>
                 </Carousel.Item>
             </Carousel>
 
@@ -151,7 +159,9 @@ function PhoenixHome() {
                                 </div>
                             </div>
                             <div className='d-flex justify-content-between mb-2'>
-                                <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 {movie.reserveStatsRate}%</span>
+                                <span style={{ fontWeight: 'bold', color: 'gray' }}>
+                                    예매율 {movie.reserveStatsRate > 0 ? movie.reserveStatsRate.toFixed(2) : 0}%
+                                </span>
                             </div>
                         </div>
                     </>
