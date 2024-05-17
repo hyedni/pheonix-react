@@ -124,7 +124,7 @@ function Mypage() {
                                 <Route path='/myStore' element={<MyStore/>} />
                                 <Route path="/infoPheonix" element={<InfoPheonix />}/>
                                 <Route path="/infoPoint" element={<InfoPoint />} />
-                                <Route path="/reservationHistory" element={<ReservationHistory/>} />
+                                {/* <Route path="/reservationHistory" element={<ReservationHistory/>} /> */}
 
                             </Routes>
                         </div>

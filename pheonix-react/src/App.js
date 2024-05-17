@@ -53,7 +53,7 @@ import TheaterRegistrationComplete from './components/admin/TheaterRegistrationC
 import BookingComplete from './components/booking/BookingComplete';
 import MyStore from './components/user/appliance/MyStore';
 import PhoenixHome from './design/PhoenixHome';
-import NonUser from './components/user/nonUser';
+
 
 
 function App() {
