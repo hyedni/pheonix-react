@@ -222,9 +222,11 @@ function MovieEdit() {
                                 )}
                                 <hr />
                                 <div className="mt-3" style={{ height: '450px' }}>
-                                    <div class="input-group mb-5">
-                                        <input type="file" onChange={handleImageChange} class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
-                                    </div>
+                                    {loginGrade === '관리자' &&
+                                        <div class="input-group mb-5">
+                                            <input type="file" onChange={handleImageChange} class="form-control" id="inputGroupFile04" aria-describedby="inputGroupFileAddon04" aria-label="Upload" />
+                                        </div>
+                                    }
                                     {!imagePreview && (
                                         <img src={movie.movieImgLink} className='img-preview-admin img-thumbnail' alt="Default Preview" />
                                     )}

@@ -264,21 +264,21 @@ function SeatDetails() {
                     <hr></hr>
                     <div>
                         <button onClick={activateSeat} className="btn btn-primary">좌석상태 활성화버튼</button>
-                        <button onClick={deactivateSeat} className="btn btn-primary">좌석상태 비활성화버튼</button>
+                        <button onClick={deactivateSeat} className="btn btn-dark">좌석상태 비활성화버튼</button>
                     </div>
 
                     <hr></hr>
                     <div>
-                        <button onClick={setSeatTypeStandard} className="btn btn-primary">좌석타입 일반</button>
-                        <button onClick={setSeatTypeLight} className="btn btn-primary">좌석타입 라이트</button>
+                        <button onClick={setSeatTypeStandard} className="btn btn-success">좌석타입 일반</button>
+                        <button onClick={setSeatTypeLight} className="btn btn-light">좌석타입 라이트</button>
                         <button onClick={setSeatTypeAccessible} className="btn btn-primary">좌석타입 장애인</button>
-                        <button onClick={setSeatTypeSuite} className="btn btn-primary">좌석타입 스위트</button>
+                        <button onClick={setSeatTypeSuite} className="btn btn-info">좌석타입 스위트</button>
                     </div>
 
                     <hr></hr>
                     <div>
                         
-                        <button onClick={resetCheckedSeats} className="btn btn-secondary">좌석 체크 초기화</button>
+                        <button onClick={resetCheckedSeats} className="btn btn-danger">좌석 체크 초기화</button>
                     </div>
 
                 </div>

@@ -6,12 +6,13 @@ import axios from "../utils/CustomAxios";
 import { useNavigate } from "react-router";
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
-import { isNonLoginState, nonLoginIdState } from "../utils/RecoilData";
+import { isNonLoginState, loginIdState, nonLoginIdState } from "../utils/RecoilData";
 
 function NonUser() {
     const isNonLogin = useRecoilValue(isNonLoginState);
     //recoil
     const [nonLoginId, setNonLoginId] = useRecoilState(nonLoginIdState);
+    const [loginId, setLoginId] = useRecoilState(loginIdState);
 
     const [nonUser, setNonUser] = useState({
           "nonUserEmail": "",
@@ -59,6 +60,7 @@ function NonUser() {
         setNonLoginId(response.data.nonUserEmail);
         window.localStorage.setItem('token', response.data.token);
         console.log(response.data.token);
+        console.log(setLoginId);
 
         // 추가 작업 수행 (예: 사용자에게 성공 메시지 표시)
 

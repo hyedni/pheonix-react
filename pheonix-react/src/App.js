@@ -33,7 +33,9 @@ import SuccessComplete from './components/store/purchase/successComplete';
 import PersonalDetail from './components/service/PersonalDetail';
 import Pagination from './components/service/Pagination';
 import Bunsil from './components/service/Bunsil';
-import NonUser from './components/user/nonUser'; 
+
+import NonUser from './components/user/nonUser';
+
 import AddTheater from './components/admin/AddTheater';
 import BookingListPage from './components/booking/BookingListPage';
 import BookingAdd from './components/booking/BookingAdd';
@@ -53,6 +55,7 @@ import MyStore from './components/user/appliance/MyStore';
 import PhoenixHome from './design/PhoenixHome';
 
 
+
 function App() {
 
   //recoil state
@@ -60,7 +63,7 @@ function App() {
   const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
 
   const [nonLoginId, setNonLoginId] = useRecoilState(nonLoginIdState);
- 
+
   const isLogin = useRecoilValue(isLoginState);
   const isNonLogin = useRecoilValue(isNonLoginState);
 
@@ -132,31 +135,32 @@ function App() {
 
       <Routes>
         {/* 공용공간 에티켓을 만듭시다** 분리하여 route 작성해주세요 */}
-        <Route path='/' element={<PhoenixHome/>}/>
+        <Route path='/' element={<PhoenixHome />} />
         {/* 관리자 */}
         {loginGrade === '관리자' &&
-        <>
-          <Route path='/adminMovie' element={<AdminMovie />} />
-          <Route path='/adminStore' element={<AdminStore />} />
-          <Route path='/adminTheater' element={<AdminTheater />} />
-          <Route path='/movieSchedule' element={<MovieSchedule/>}/>
-          <Route path='/reserveStats' element={<ReserveStats/>}/>
-          <Route path='/productEdit/:productNo' element={<ProductEdit />} />
-          <Route path='/newMovie' element={<NewMovie />} />
-          <Route path='/newProduct' element={<NewProduct />} />
-          <Route path='/addTheater' element={<AddTheater/>} />
-          <Route path='/seatStatus' element={<SeatStatus />} />
-          <Route path='/seatDetails' element={<SeatDetails/>} />
-        </>
+          <>
+            <Route path='/adminMovie' element={<AdminMovie />} />
+            <Route path='/adminStore' element={<AdminStore />} />
+            <Route path='/adminTheater' element={<AdminTheater />} />
+            <Route path='/movieSchedule' element={<MovieSchedule />} />
+            <Route path='/reserveStats' element={<ReserveStats />} />
+            <Route path='/productEdit/:productNo' element={<ProductEdit />} />
+            <Route path='/newMovie' element={<NewMovie />} />
+            <Route path='/newProduct' element={<NewProduct />} />
+            <Route path='/addTheater' element={<AddTheater />} />
+            <Route path='/seatStatus' element={<SeatStatus />} />
+            <Route path='/seatDetails' element={<SeatDetails />} />
+            <Route path='/bunsil' element={<Bunsil />} />
+          </>
         }
         <Route path='/movieEdit/:movieNo' element={<MovieEdit />} />
         <Route path='/adminCinema' element={<AdminCinema />} />
 
-        <Route path='/addTheater' element={<AddTheater/>} />
+        <Route path='/addTheater' element={<AddTheater />} />
         <Route path='/seatStatus' element={<SeatStatus />} />
-        <Route path='/seatDetails' element={<SeatDetails/>} />
-        <Route path='/theaterRegistrationComplete' element={<TheaterRegistrationComplete/>}/>
-        <Route path='/bookingComplete' element={<BookingComplete/>}/>
+        <Route path='/seatDetails' element={<SeatDetails />} />
+        <Route path='/theaterRegistrationComplete' element={<TheaterRegistrationComplete />} />
+        <Route path='/bookingComplete' element={<BookingComplete />} />
 
 
         {/* 회원 */}
@@ -189,9 +193,9 @@ function App() {
 
         {/* 결제 */}
         <Route path='/purchase/success' element={<Success />} />
-        <Route path='/purchase/fail' element={<Fail />}/>
-        <Route path='/purchase/cancel' element={<Cancel />}/>
-        <Route path='/purchase/success-complete' element={<SuccessComplete />}/>
+        <Route path='/purchase/fail' element={<Fail />} />
+        <Route path='/purchase/cancel' element={<Cancel />} />
+        <Route path='/purchase/success-complete' element={<SuccessComplete />} />
 
         {/* 리뷰 게시판 */}
         <Route path='/review/list' element={<ReviewList />} />
@@ -200,33 +204,34 @@ function App() {
         <Route path='/lost' element={<Lost />} />
         <Route path='/writepost' element={<WritePost />} />
         <Route path='/personal' element={<Personal />} />
-        <Route path='/chatbot' element={<Chatbot/>}/>
-        <Route path='/writepost' element={<WritePost/>}/>
-        <Route path='/personalDetail/:personalNo' element={<PersonalDetail/>}/>
-        <Route path='/pagination' element={<Pagination/>}/>
-        <Route path='/bunsil' element={<Bunsil/>}/>
-        <Route path='/replyform' element={<ReplyForm/>}/>
-        <Route path='/personalwrite' element={<PersonalWrite/>}/>
-        <Route path='/commentlists' element={<CommentLists/>}/>
-        <Route path='wrapcomments' element={<Comment/>}/>
+        <Route path='/chatbot' element={<Chatbot />} />
+        <Route path='/writepost' element={<WritePost />} />
+        <Route path='/personalDetail/:personalNo' element={<PersonalDetail />} />
+        <Route path='/pagination' element={<Pagination />} />
+        <Route path='/replyform' element={<ReplyForm />} />
+        <Route path='/personalwrite' element={<PersonalWrite />} />
+        <Route path='/commentlists' element={<CommentLists />} />
+        <Route path='wrapcomments' element={<Comment />} />
 
         {/* 예매 */}
         {/* 로그인한 사용자만 접근할 수 있는 경로 */}
         {/* <Route path='/booking' element={(isLogin || isBookingAuthorized) ? <BookingListPage /> : <Navigate to="/login" />} /> */}
         {isLogin &&
-        <>
-          <Route path='/booking' element={<BookingListPage />}/>
-          <Route path='/bookingAdd' element={<BookingAdd />} />
+          <>  
+            <Route path='/bookingAdd' element={<BookingAdd />} />
           </>
         }
+        {/* 모두 조회 가능하게 빼놈 */}
+        <Route path='/booking' element={<BookingListPage />}/>
+        
         {isNonLogin &&
           <>
-          <Route path='/booking' element={<BookingListPage />}/>
-          <Route path='/bookingAdd' element={<BookingAdd />} />
+            <Route path='/booking' element={<BookingListPage />} />
+            <Route path='/bookingAdd' element={<BookingAdd />} />
           </>
         }
 
-        
+
         {/* <Route path='/booking' element={<BookingListPage />} /> */}
         <Route path='/moviechart' element={<MovieChart />} />
 

@@ -45,47 +45,37 @@ const Personal = () => {
     const currentPosts = personals.slice(indexOfFirstPost, indexOfLastPost);
 
     return (
- <>
-          <div className="row justify-content-center">
-                <div className="col-lg-8  title-head">
+        <>
+            <br />
+            <br />
+            <div className="row justify-content-center">
+                <div className="col-lg-8 title-head d-flex align-items-center justify-content-between"> {/* d-flex, align-items-center 및 justify-content-between 추가 */}
                     <div className="title-head-text">
-                        문의게시판입니다
+                        1:1 문의게시판
+                        <NavLink to="/personalwrite">
+                            <button className="btn btn-outline-dark ms-4">글쓰기</button>
+                        </NavLink>
                     </div>
-                </div>
-            </div>
-            
-            <div className="row justify-content-center">
-                <div className="col-lg-8 content-body">
-                    <div className="content-body-text">
-                        그렇습니다
+                    <div>
+                        <NavLink to="/chatbot" className="me-4">
+                            <img src="/image/chatbot.png" alt="Chatbot" style={{ width: "105px" }} />
+                        </NavLink>
+
+                        <NavLink to="/lost">
+                            <img src="/image/bunsil.png" alt="분실물" style={{ width: "123px" }} />
+                        </NavLink>
                     </div>
+
                 </div>
             </div>
-            
-            <div className="row justify-content-center">
-                <div className="col-lg-2 mb-3">
-                    <NavLink to="/chatbot">
-                        <img src="/image/chatbot.png" alt="Chatbot" />
-                    </NavLink>
-                </div>
-                <div className="col-lg-2 mb-3">
-                    <NavLink to="/lost">
-                        <img src="/image/bunsil.png" alt="분실물" />
-                    </NavLink>
-                </div>
-            </div>
-            
+
+
+
 
             <div className="row justify-content-center">
-                <div className="col-lg-8">
-                    <div className="row justify-content-end">
-                        <div className="col-lg-2">
-                            <NavLink to="/personalwrite">
-                                <button className="btn btn-success">글쓰기</button>
-                            </NavLink>
-                        </div>
-                    </div>
-                    <table className="table text-center">
+                <div className="col-lg-8 mt-4 mb-4" style={{ height: '600px' }}>
+
+                    <table className="table text-center" style={{ height: '50px' }}>
                         <thead>
                             <tr>
                                 <th scope="col">번호</th>
@@ -99,29 +89,29 @@ const Personal = () => {
                                 <tr key={item.personalNo}>
                                     <td>{item.personalNo}</td>
                                     <td>
-                                        <NavLink to={`/personaldetail/${item.personalNo}`} style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => handleTitleClick(item)}>{item.personalTitle}</NavLink>
+                                        <NavLink to={`/personaldetail/${item.personalNo}`} style={{ textDecoration: 'none', color: 'inherit' }} onClick={() => handleTitleClick(item)}><b>{item.personalTitle}</b></NavLink>
                                     </td>
                                     <td>{item.personalId}</td>
                                     <td>
-                                        <button className="btn btn-danger" onClick={() => deletePersonal(item)}>삭제</button>
+                                        <button className="btn btn-outline-secondary" onClick={() => deletePersonal(item)}>삭제</button>
                                     </td>
                                 </tr>
                             ))}
                         </tbody>
                     </table>
-                    <Pagination currentPage={currentPage} totalPages={Math.ceil(personals.length / postsPerPage)} paginate={paginate} />
                 </div>
-        </div>
-        
-            {selectedPersonal && (
+            </div>
+            <Pagination currentPage={currentPage} totalPages={Math.ceil(personals.length / postsPerPage)} paginate={paginate} />
+
+            {/* {selectedPersonal && (
                 <div className="row justify-content-center">
                     <div className="col-lg-8">
                         <WrapComments comments={selectedPersonal.comments} />
                     </div>
                 </div>
-            )}
-        
-    </>
+            )} */}
+
+        </>
     );
 };
 

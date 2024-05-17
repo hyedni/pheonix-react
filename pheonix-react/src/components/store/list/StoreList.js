@@ -109,12 +109,12 @@ const StoreList = () => {
         <>
             <div className="row justify-content-center">
                 <div className="col-lg-8 content-body">
-                    <div className="row">
+                    <div className="row justify-content-center">
                         {products.map(product => (
-                            <div className="col-md-4 mb-4" key={product.productNo}>
+                            <div className="col-3 mb-4 item-wrapper" key={product.productNo}>
                                 <Link to={`/productDetail/${product.productNo}`} className="text-dark text-decoration-none">
                                 <div className='mt-2'>
-                                    <div className="img-thumbnail mt-3 image-wrapper list-img" style={{ height: "400px" }}>
+                                    <div className="img-thumbnail mt-3 image-wrapper" style={{ height: "400px" }}>
                                         {!imagePreview && (
                                             <img src={product.productImgLink} alt="상품이미지" />
                                         )}
@@ -122,8 +122,8 @@ const StoreList = () => {
                                             <img src={imagePreview} alt="Preview" />
                                         )}
 
-                                        <Link className='edit-button btn btn-secondary' onClick={e => (AddItemToCart(product.productNo))}><FaShoppingCart /></Link>
-                                        <Link to={`/purchase/${product.productNo}`} className='edit-button btn btn-secondary'><IoBagHandle /></Link>
+                                        <Link className='ms-1 edit-button btn btn-secondary' onClick={e => (AddItemToCart(product.productNo))}><FaShoppingCart /></Link>
+                                        <Link to={`/purchase/${product.productNo}`} className='delete-button btn btn-secondary'><IoBagHandle /></Link>
 
                                     </div>
 
