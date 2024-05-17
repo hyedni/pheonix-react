@@ -22,9 +22,7 @@ function Sidebar() {
                         이용내역
                     </Link>
                     <NavLink className="nav-link" to="/mypage/myReservation">나의 예매내역</NavLink>
-                    <NavLink className="nav-link" to="/mypage/myReservation">나의 예매내역</NavLink>
                     <NavLink className="nav-link" to="/mypage/myPersonal">나의 문의내역</NavLink>
-                    <NavLink className="nav-link" to="#">나의 리뷰내역</NavLink>
                     <NavLink className="nav-link" to="/mypage/myStore">나의 상품구매내역</NavLink>
                 </li>
 
