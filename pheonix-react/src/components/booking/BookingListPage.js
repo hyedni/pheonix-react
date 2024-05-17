@@ -18,6 +18,7 @@ function BookingListPage() {
     const [isScheduleShow, setIsScheduleShow] = useState(false);
     const navigate = useNavigate();
     const [scheduleNo, setScheduleNo] = useState(0);
+    const isLogin = useRecoilValue(isLoginState);
 
 
     //일정 PK번호 넘기기
