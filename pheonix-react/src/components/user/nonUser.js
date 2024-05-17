@@ -6,8 +6,12 @@ import axios from "../utils/CustomAxios";
 import { useNavigate } from "react-router";
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
+import { isNonLoginState, nonLoginIdState } from "../utils/RecoilData";
 
 function NonUser() {
+    const isNonLogin = useRecoilValue(isNonLoginState);
+    //recoil
+    const [nonLoginId, setNonLoginId] = useRecoilState(nonLoginIdState);
 
     const [nonUser, setNonUser] = useState({
           "nonUserEmail": "",
@@ -31,6 +35,8 @@ function NonUser() {
     //navigator
     const navigator = useNavigate();
 
+   
+    
     // 값 입력 함수
     const handleInputBlur = useCallback((e) => {
         const { name, value } = e.target;
@@ -50,8 +56,12 @@ function NonUser() {
         // 서버로 데이터 전송
         const response = await axios.post('/user/nonUserJoin', nonUser);
         console.log("가입 성공:", response.data);
+        setNonLoginId(response.data.nonUserEmail);
+        window.sessionStorage.setItem('token', response.data.token);
+        console.log(response.data.token);
+
         // 추가 작업 수행 (예: 사용자에게 성공 메시지 표시)
-        //setIsNonUserEmail(response.data.nonUser);
+
         //예매페이지로 이동
         navigator("/booking");
       } catch (error) {
@@ -62,6 +72,7 @@ function NonUser() {
       alert("' * '표시는 무조건 작성해야함");
     }
   };
+
 
   // 양식 유효성 확인 함수
   const validateForm = () => {
@@ -148,8 +159,9 @@ function NonUser() {
   // 사용자 입력 변경 시 양식 유효성 다시 확인
   useEffect(() => {
     setIsFormValid(validateForm());
-    sessionStorage.setItem("nonUser", JSON.stringify(nonUser));
+    
   }, [nonUser]);
+
 
 
 
@@ -237,12 +249,10 @@ function NonUser() {
                     </div>
                 </div>
 
-                <button className='btn btn-success w-100 mt-4 mb-4'
-                onClick={() => {
-                  // handleBookingAuthorize();
-                  handleSubmit();
-                }}
-                >비회원 예매하기</button>
+                <button 
+                className='btn btn-success w-100 mt-4 mb-4'
+                onClick={handleSubmit}>
+                  비회원 예매하기</button>
 
             </div>
         </>
