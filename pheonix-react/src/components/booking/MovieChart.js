@@ -152,7 +152,7 @@ function MovieChart() {
                                         </>
                                     ) : (
                                         <>
-                                            <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 {movie.rate.toFixed(2)}%</span>
+                                            <span style={{ fontWeight: 'bold', color: 'gray' }}>예매율 {movie.rate}%</span>
                                         </>
                                     )}
                                 </div>
