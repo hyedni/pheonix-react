@@ -33,7 +33,7 @@ function BookingListPage() {
 
         axios.defaults.headers.common["NonUserAuth"] = token;
         // 세션 스토리지에 비회원 정보 저장
-        const resp = await axios.post('/user/token'); //정보 확인
+        const resp = await axios.get('/user/token'); //정보 확인
 
         setNonLoginId(resp.data.nonUserId);
         axios.defaults.headers.common["NonUserAuth"] = resp.data.token;
@@ -51,13 +51,13 @@ function BookingListPage() {
         let intervalId;
 
         // nonLogin 상태가 아니면 타이머를 설정하지 않음
-        if (!nonLoginId) {
-          intervalId = setInterval(nonLogin, 10000); // 10초마다 실행
+        if (nonLoginId) {
+        intervalId = setInterval(nonLogin, 10000); // 10초마다 실행
         }
-    
+
         // 컴포넌트가 언마운트될 때 clearInterval을 통해 타이머를 정리합니다.
         return () => {
-          clearInterval(intervalId);
+        clearInterval(intervalId);
         };
     }, [nonLogin, setNonLoginId]);
 
