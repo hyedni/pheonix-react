@@ -65,7 +65,7 @@ function ReserveStats() {
                     </div>
                     <hr />
                     <div>
-                        <ul className='detail-wrapper'>
+                        <ul className='detail-wrapper' style={{fontWeight:'normal'}}>
                             <li>[예매율]은 매일 00시에 예매데이터를 집계하여 예매율 정보를 제공합니다.</li>
                             <li>예매율 산출기준 = A(예매관객수) / B(전체 예매관객수) * 100</li>
                             <li>예매관객수(A) : 매일 00시 기준 특정영화의 예매 건수</li>

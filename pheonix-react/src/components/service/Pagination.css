@@ -1,0 +1,43 @@
+.pagination-container {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+  }
+  
+  .pagination {
+    list-style: none;
+    padding: 0;
+    display: flex;
+  }
+  
+  .page-item {
+    display: inline;
+    margin: 0 2px; /* 항목 사이의 간격을 최소화 */
+  }
+  
+  .page-link {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 8px 12px;
+    color: #faa48e;
+    cursor: pointer;
+    text-decoration: none;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .page-link:hover {
+    background-color: #f0f0f0;
+  }
+  
+  .page-item.active .page-link {
+    background-color: salmon;
+    color: white;
+    border-color: salmon;
+  }
+  
+  .page-link:disabled {
+    color: #ccc;
+    cursor: not-allowed;
+    border-color: #ccc;
+  }
+  
