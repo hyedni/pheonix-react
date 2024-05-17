@@ -33,6 +33,7 @@ function Login() {
     //recoil
     const [loginId, setLoginId] = useRecoilState(loginIdState);
     const [loginGrade, setLoginGrade] = useRecoilState(loginGradeState);
+    const [nonLoginId, setNonLoginId] = useRecoilState(nonUser)
 
     //callback
     const changeUser = useCallback((e) => {
