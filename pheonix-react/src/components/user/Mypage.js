@@ -14,6 +14,7 @@ import InfoPoint from "./appliance/InfoPoint";
 import MyReservation from "./appliance/MyReservation";
 import Change from "./change";
 
+
 function Mypage() {
 
     const [user, setUser] = useState([]);

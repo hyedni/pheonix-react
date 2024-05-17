@@ -10,9 +10,13 @@ function BookingAdd() {
     const [checkedSeats, setCheckedSeats] = useState({});
     //로그인관련 데이터
     const [loginId, setLoginId] = useRecoilState(loginIdState);
+    
+
     useEffect(() => {
         console.log('loginId 상태 확인:', loginId);
     }, [loginId]);
+
+    
 
     useEffect(() => {
         if (loginId) {
