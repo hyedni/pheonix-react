@@ -85,6 +85,10 @@ function PhoenixHome() {
         navigate(`/store/point`);
     }, []);
 
+    const moveToMovieDetail = useCallback((target)=>{
+        navigate(`/movieEdit/${target}`)
+    },[]);
+
     return (
         <>
             <Carousel fade>
@@ -114,7 +118,7 @@ function PhoenixHome() {
                 </div>
             </div>
 
-            <div className='row justify-content-center mt-3'>
+            <div className='row justify-content-center mt-3 ms-3'>
                 {/* <div className='col-lg-8'> */}
                 {movies.map((movie, index) => (
                     <>
@@ -133,7 +137,7 @@ function PhoenixHome() {
                                 <Link to="/booking" className='edit-button btn btn-primary'>
                                     예매하기
                                 </Link>
-                                <button onClick={e => moveToDetail(movie.movieNo)} className='delete-button btn btn-secondary' style={{ margin: '0px' }}>
+                                <button onClick={e => moveToMovieDetail(movie.movieNo)} className='delete-button btn btn-secondary' style={{ margin: '0px' }}>
                                     상세정보
                                 </button>
                             </div>
@@ -156,12 +160,20 @@ function PhoenixHome() {
 
             </div>
 
-            <br />
-            <br />
-            <div className="row mb-5">
-                <div className="offset-2 col-lg-9">
+            {/* 페이지 제목 */}
+            <div className="row justify-content-center mt-5">
+                <div className="col-lg-9  title-head">
+                    <div className="title-head">
+                        스토어
+                    </div>
+                    <hr />
+                </div>
+            </div>
+
+            <div className="row justify-content-center mt-4 ms-3">
+                <div className="col-lg-9">
                     <div className="row">
-                        <div className='col-md-3 box-wrapper'>
+                        <div className='col-lg-3 box-wrapper ms-5 mb-5'>
                             <div className='d-flex p-2 mb-3 justify-content-between'>
                                 <span style={{ fontWeight: 'bold', fontSize: '20px' }}>패키지</span>
                                 <span onClick={e => moveToAll(e)} style={{ cursor: 'pointer', fontSize: '13px', borderRadius: '1em' }} className='btn btn-secondary btn-sm'>
@@ -189,7 +201,7 @@ function PhoenixHome() {
                             </div>
                         </div>
 
-                        <div className='col-md-3 box-wrapper'>
+                        <div className='col-md-3 box-wrapper mb-5'>
                             <div>
                                 <div className='d-flex p-2 mb-3 justify-content-between'>
                                     <span style={{ fontWeight: 'bold', fontSize: '20px' }}>콤보</span>
@@ -221,7 +233,7 @@ function PhoenixHome() {
                             </div>
                         </div>
 
-                        <div className='col-md-3 box-wrapper'>
+                        <div className='col-md-3 box-wrapper mb-5'>
                             <div>
                                 <div className='d-flex p-2 mb-3 justify-content-between'>
                                     <span style={{ fontWeight: 'bold', fontSize: '20px' }}>포인트</span>
