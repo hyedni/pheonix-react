@@ -7,9 +7,9 @@ import { TbNumber15Small } from "react-icons/tb";
 import { TbNumber19Small } from "react-icons/tb";
 import React, { Fragment } from 'react';
 import { Modal } from "bootstrap";
+import { useRecoilState, useRecoilValue } from "recoil";
+import { loginGradeState, loginIdState, isLoginState } from '../utils/RecoilData';
 import { nonLoginIdState } from "../utils/RecoilData";
-import { useRecoilState } from "recoil";
-
 
 
 function BookingListPage() {
@@ -18,6 +18,9 @@ function BookingListPage() {
     const [isScheduleShow, setIsScheduleShow] = useState(false);
     const navigate = useNavigate();
     const [scheduleNo, setScheduleNo] = useState(0);
+
+    //recoil state
+    const isLogin = useRecoilValue(isLoginState);
 
     const [nonLoginId, setNonLoginId] = useRecoilState(nonLoginIdState);
 
@@ -65,10 +68,18 @@ function BookingListPage() {
     //     navigate(`/주소/${scheduleNo}`)
     // };
 
-    const moveToSeat = useCallback((scheduleNo)=>{
-        navigate('/bookingAdd' , {state : {scheduleNo}})
-    },[navigate]);
     
+    const moveToSeat = useCallback((scheduleNo) => {
+        if (isLogin) {
+            navigate('/bookingAdd', { state: { scheduleNo } });
+        } else {
+            const confirmed = window.confirm("로그인 후 예매 가능합니다. 로그인 화면으로 이동하시겠습니까?");
+            if(confirmed){
+                navigate('/login'); 
+            }
+        }
+    }, [navigate, isLogin]);
+
 
     //전체데이터(Vo)담긴 state
     const [bookData, setBookData] = useState({
@@ -312,8 +323,9 @@ function BookingListPage() {
                                         <>
                                             <tr style={{ height: '50px' }}>
                                                 <td onClick={e => loadTheaterList(data.movieNo, data.movieAge)}
-                                                    style={{ padding: '0.5em', fontSize: '15px', verticalAlign: 'middle', fontWeight: isSelectedMovie === data.movieNo ? 'bolder' : '', cursor: 'pointer' }}>
+                                                    style={{ padding: '0.5em', fontSize: '14px', verticalAlign: 'middle', fontWeight: isSelectedMovie === data.movieNo ? 'bolder' : '', cursor: 'pointer' }}>
                                                     {getAgeIcon(data.movieAge)}  &nbsp; {data.movieTitle}
+                                                    <span style={{ color: 'gray', fontSize: '13px' }}> {data.movieScreenType}</span>
                                                 </td>
                                             </tr>
                                         </>
@@ -366,40 +378,55 @@ function BookingListPage() {
                                                 <tr style={{ borderBottom: '0.5px solid rgb(212,211,201)' }}>
                                                     <td style={{ fontSize: '13px', fontWeight: 'bold', height: '30px' }}>{data.theaterName}</td>
                                                 </tr>
-                                                {uniqueResults.filter(result => result.theaterName === data.theaterName).map((filteredResult) => {
-                                                    const key = `${filteredResult.movieScheduleNo}-${filteredResult.startTime}`;
-                                                    const isAvailable = timeOptions[key] ?? false; // 기본값을 false로 설정하여 예매불가 처리
-
-                                                    return (
-                                                        <tr key={key} style={{ height: '40px' }}>
-                                                            <td>
-                                                                <>
-                                                                    <button
-                                                                        onClick={e => selectedSchedule(filteredResult.movieScheduleNo)}
-                                                                        className="btn btn-secondary btn-sm"
-                                                                        disabled={!isAvailable || filteredResult.remainingSeats === 0}
-                                                                    >
-                                                                        {filteredResult.startTime}
-                                                                    </button>
-                                                                    <span style={{ fontSize: '11px', color: 'green' }}> {filteredResult.remainingSeats} /</span>
-                                                                    <span style={{ fontSize: '11px', color: 'gray' }}> {filteredResult.theaterTotalSeats}석</span>
-                                                                    <span style={{ fontSize: '11px', color: 'gray' }}>
-                                                                        {filteredResult.movieScheduleTimeDisc === '조조' ? ' 조조' : ''}
-                                                                        {filteredResult.movieScheduleTimeDisc === '심야' ? ' 심야' : ''}
-                                                                    </span>
-                                                                    <span
-                                                                        style={{ color: isAvailable ? '' : 'rgb(121,120,114)', fontSize: '11px' }}>
-                                                                        {isAvailable ? '' : ' 마감'}
-                                                                    </span>
-                                                                    <span style={{ color: filteredResult.remainingSeats === 0 ? 'rgb(173,39,39)' : '', fontSize: '11px' }}>
-                                                                        {filteredResult.remainingSeats === 0 ? ' 매진' : ''}
-                                                                    </span>
-                                                                </>
-                                                            </td>
+                                                {uniqueResults.filter(result => result.theaterName === data.theaterName).length === 0 ? (
+                                                    <>
+                                                        <tr>
+                                                            <td style={{ fontSize: '11px', color: 'gray' }}>상영중인 영화가 없습니다.</td>
                                                         </tr>
-                                                    );
+                                                    </>
+                                                ) : (
+                                                    <>
+                                                        {uniqueResults.filter(result => result.theaterName === data.theaterName).map((filteredResult) => {
+                                                            const key = `${filteredResult.movieScheduleNo}-${filteredResult.startTime}`;
+                                                            const isAvailable = timeOptions[key] ?? false; // 기본값을 false로 설정하여 예매불가 처리
 
-                                                })}
+                                                            return (
+                                                                <tr key={key} style={{ height: '40px' }}>
+                                                                    <td>
+                                                                        <>
+                                                                            <button
+                                                                                onClick={e => selectedSchedule(filteredResult.movieScheduleNo)}
+                                                                                className="btn btn-secondary btn-sm"
+                                                                                disabled={!isAvailable || filteredResult.remainingSeats === 0}
+                                                                            >
+                                                                                {filteredResult.startTime}
+                                                                            </button>
+                                                                            <span style={{ fontSize: '11px', color: 'green' }}> {filteredResult.remainingSeats} /</span>
+                                                                            <span style={{ fontSize: '11px', color: 'gray' }}> {filteredResult.theaterTotalSeats}석</span>
+                                                                            <span style={{ fontSize: '11px', color: 'gray' }}>
+                                                                                {filteredResult.movieScheduleTimeDisc === '조조' ? ' 조조' : ''}
+                                                                                {filteredResult.movieScheduleTimeDisc === '심야' ? ' 심야' : ''}
+                                                                            </span>
+                                                                            <span
+                                                                                style={{ color: isAvailable ? '' : 'rgb(121,120,114)', fontSize: '11px' }}>
+                                                                                {isAvailable ? '' : ' 마감'}
+                                                                            </span>
+                                                                            <span style={{ color: filteredResult.remainingSeats === 0 ? 'rgb(173,39,39)' : '', fontSize: '11px' }}>
+                                                                                {filteredResult.remainingSeats === 0 ? ' 매진' : ''}
+                                                                            </span>
+                                                                        </>
+                                                                    </td>
+                                                                </tr>
+                                                            );
+
+                                                        })}
+
+                                                    </>
+                                                )}
+
+
+
+
 
                                             </tbody>
                                         ))}
@@ -413,7 +440,9 @@ function BookingListPage() {
                             <div className="row" style={{ padding: '1em' }}>
                                 <div className="col">
                                     <div className="row">
-                                        <div className="col" style={{ fontWeight: 'bolder' }}> {scheduleDetail.movieTitle} </div>
+                                        <div className="col" style={{ fontWeight: 'bolder', fontSize:`${scheduleDetail && scheduleDetail.movieTitle && scheduleDetail.movieTitle.length > 6 ? '13px' : '16px'}` }}>
+                                            {scheduleDetail.movieTitle} <span style={{ fontSize: '13px', color: 'gray' }}>{scheduleDetail.movieScreentType}</span>
+                                        </div>
                                         <div className="col"> {scheduleDetail.cinemaName}  </div>
                                         <div className="col"> {scheduleDetail.theaterName} </div>
                                         <div className="col"> {scheduleDetail.startDate}  </div>
@@ -428,24 +457,24 @@ function BookingListPage() {
 
 
                         {/* Modal */}
-                        <div ref={bsModal} 
-                        style={{top: '30%' }}
-                        className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+                        <div ref={bsModal}
+                            style={{ top: '30%' }}
+                            className="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabIndex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
                             <div className="modal-dialog odal-dialog-centered">
                                 <div className="modal-content">
                                     <div className="modal-header" style={{ backgroundColor: 'red', color: 'white' }}>
-                                        <h1 className="modal-title fs-5" id="staticBackdropLabel" style={{ fontWeight: 'bold', color:'black'}}>잠깐!</h1>
+                                        <h1 className="modal-title fs-5" id="staticBackdropLabel" style={{ fontWeight: 'bold', color: 'black' }}>잠깐!</h1>
                                         <button type="button" className="btn-close" aria-label="Close"
                                             onClick={e => closeModal()}></button>
                                     </div>
 
                                     <div className="modal-body">
                                         <div>
-                                            관람등급이 <span style={{fontWeight:'bold'}}>'청소년관람불가'</span>인 영화를 선택하셨습니다. <br/>
+                                            관람등급이 <span style={{ fontWeight: 'bold' }}>'청소년관람불가'</span>인 영화를 선택하셨습니다. <br />
                                             상영관 입장시 신분증을 준비 해 주세요.
                                         </div>
                                     </div>
-                                    
+
                                 </div>
                             </div>
 

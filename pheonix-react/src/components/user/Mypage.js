@@ -11,7 +11,7 @@ import MyPersonal from "./MyPersonal";
 import MyStore from "./appliance/MyStore";
 import InfoPheonix from "./appliance/InfoPheonix";
 import InfoPoint from "./appliance/InfoPoint";
-
+import MyReservation from "./appliance/MyReservation";
 import Change from "./change";
 
 
@@ -70,6 +70,9 @@ function Mypage() {
         else if(location.pathname === "/mypage/infoPoint") {
             return "포인트이용안내";
         }
+        else if(location.pathname === "/mypage/myReservation") {
+            return "예매";
+        }
     }, [location]);
 
     return (
@@ -126,7 +129,7 @@ function Mypage() {
                                 <Route path='/myStore' element={<MyStore/>} />
                                 <Route path="/infoPheonix" element={<InfoPheonix />}/>
                                 <Route path="/infoPoint" element={<InfoPoint />} />
-
+                                <Route path="/myReservation" element={<MyReservation />} />
                                 <Route path='/change' element={<Change/>} />
 
                             </Routes>

@@ -206,11 +206,13 @@ function App() {
         {/* 로그인한 사용자만 접근할 수 있는 경로 */}
         {/* <Route path='/booking' element={(isLogin || isBookingAuthorized) ? <BookingListPage /> : <Navigate to="/login" />} /> */}
         {isLogin &&
-          <>
-            <Route path='/booking' element={<BookingListPage />} />
+          <>  
             <Route path='/bookingAdd' element={<BookingAdd />} />
           </>
         }
+        {/* 모두 조회 가능하게 빼놈 */}
+        <Route path='/booking' element={<BookingListPage />}/>
+        
         {isNonLogin &&
           <>
             <Route path='/booking' element={<BookingListPage />} />

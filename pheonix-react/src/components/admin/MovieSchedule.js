@@ -392,28 +392,26 @@ function MovieSchedule() {
                 ...result,
                 startTime: isValid
             });
-        }else if (name === 'endTime') {
-            const isValid = e.target.value.length > 0;
-            setResult({
-                ...result,
-                endTime: isValid
-            });
         }
-
-        console.log(ok);
+        // else if (name === 'endTime') {
+        //     const isValid = e.target.value.length > 0;
+        //     setResult({
+        //         ...result,
+        //         endTime: isValid
+        //     });
+        // }
     };
 
     const [result, setResult] = useState({
         movieNo: null,
         theaterNo: null,
         startTime: null,
-        endTime: null,
         movieScheduleDateDisc: null,
         movieScheduleTimeDisc: null
     });
 
     const ok = useMemo(() => {
-        return result.movieNo && result.theaterNo && result.startTime && result.endTime 
+        return result.movieNo && result.theaterNo && result.startTime 
             && result.movieScheduleDateDisc && result.movieScheduleTimeDisc;
     }, [result]);
 
@@ -579,7 +577,7 @@ function MovieSchedule() {
                                             <label style={{ fontWeight: 'bold', fontSize: '20px' }} className="mt-3">상영종료
                                                 <span style={{fontSize:'12px', fontWeight:'normal', color:'gray'}}> 상영시작 입력시 러닝타임으로 자동계산</span>
                                             </label>
-                                            <input type="text" name="endTime" value={insertData.endTime} className="form-control" onChange={e => saveData(e)} onBlur={changeResult} />
+                                            <input type="text" name="endTime" value={insertData.endTime} className="form-control" onChange={e => saveData(e)} />
                                         </div>
                                     </div>
 
