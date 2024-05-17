@@ -102,9 +102,7 @@ function SeatStatus() {
                 </table>
             </div>
 
-            <div>
-                <button><NavLink to='/SeatDetails'>버튼버튼</NavLink></button>
-            </div>
+        
 
             </div>
         </>
