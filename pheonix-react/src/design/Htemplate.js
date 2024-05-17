@@ -1,4 +1,4 @@
-import { NavLink } from 'react-router-dom';
+import { NavLink, useNavigate } from 'react-router-dom';
 import axios from "../components/utils/CustomAxios";
 import { useRecoilState, useRecoilValue } from "recoil";
 import { isLoginState, loginIdState, loginGradeState } from "../components/utils/RecoilData";
@@ -20,6 +20,9 @@ function Htemplate() {
     //recoil value
     const isLogin = useRecoilValue(isLoginState);
 
+    //navigator
+    const navigator = useNavigate();
+
     //callback
     const logout = useCallback(() => {
         //recoil 저장소에 대한 정리 + axios의 헤더 제거 + localStorage 청소
@@ -27,6 +30,9 @@ function Htemplate() {
         setLoginGrade('');
         delete axios.defaults.headers.common['Authorization'];
         window.localStorage.removeItem("refreshToken");
+
+        navigator('/');
+
     }, [loginId, loginGrade]);
 
 

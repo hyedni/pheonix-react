@@ -113,7 +113,7 @@ function Join() {
     setIsValid(prevState => ({ ...prevState, userNick: isNickValid }));
 
     // 이름 유효성 검사
-    const namePattern = /^[가-힣a-zA-Z0-9]{2,10}$/;
+    const namePattern = /^[가-힣a-zA-Z]{2,10}$/;
     const isNameValid = namePattern.test(user.userName);
     setIsValid(prevState => ({ ...prevState, userName: isNameValid }));
 
