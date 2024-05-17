@@ -1,7 +1,7 @@
 /* Chatbot.css */
 
 .chatbot-container {
-  max-width: 600px;
+  max-width: 1000px;
   margin: 0 auto; /* 좌우 가운데 정렬을 위한 margin 설정 */
   padding: 20px;
   border: 1px solid #ccc;
