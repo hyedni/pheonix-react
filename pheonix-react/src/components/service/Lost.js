@@ -81,6 +81,11 @@ const Lost = () => {
     };
 
     const saveInput = useCallback(async () => {
+        if (loginGrade !== '관리자') {
+            alert('관리자만 분실물을 등록할 수 있습니다.');
+            return;
+        }
+
         const formData = new FormData();
         for (const key in input) {
             formData.append(key, input[key]);
@@ -88,18 +93,19 @@ const Lost = () => {
 
         if (file) {
             formData.append('attach', file);
-            try {
-                const response = await axios.post('/lost/', formData);
-                const newLost = response.data;
-                setLosts((prevLosts) => [newLost, ...prevLosts]);
-                clearInput();
-                setErrorMessage(null);
-            } catch (error) {
-                console.error('Failed to submit the form!', error);
-                setErrorMessage('Failed to submit the form!');
-            }
         }
-    }, [input, file]);
+
+        try {
+            const response = await axios.post('/lost/', formData);
+            const newLost = response.data;
+            setLosts((prevLosts) => [newLost, ...prevLosts]);
+            clearInput();
+            setErrorMessage(null);
+        } catch (error) {
+            console.error('Failed to submit the form!', error);
+            setErrorMessage('Failed to submit the form!');
+        }
+    }, [input, file, loginGrade]);
 
     const handleImageChange = (e) => {
         const file = e.target.files[0];
@@ -125,6 +131,7 @@ const Lost = () => {
             <div className="row justify-content-center">
                 <div className="col-lg-8 title-head d-flex justify-content-between align-items-center"> {/* d-flex, justify-content-between 및 align-items-center 추가 */}
                     <div className="title-head-text">분실물 저장소</div>
+
                     <div>
                         <NavLink to="/personal" className="btn btn-secondary me-4"> {/* btn-sm 클래스 추가 */}
                             문의게시판으로 돌아가기
@@ -136,6 +143,48 @@ const Lost = () => {
                 </div>
             </div>
 
+            
+
+            <div className="row justify-content-center">
+                <div className="col-lg-8 content-center text-center">
+                    <NavLink to="/bunsil" className="btn btn-primary mt-3 mb-3">
+                        분실물 등록하기
+                    </NavLink>
+                </div>
+            </div>
+
+            <div className="row justify-content-center">
+                <div className="col-lg-8 content-head">
+                    <div className="row">
+                        {currentPosts.map((lost) => (
+                            <div key={lost.lostNo} className="col-lg-4 mb-3">
+                                <div className="card">
+                                    <div className="card-body">
+                                        <h5 className="card-title">{lost.lostTitle}</h5>
+                                        <p className="card-text">{lost.lostContent}</p>
+                                        {lost.lostImgLink && (
+                                            <div className="image-wrapper lost-image">
+                                                <img
+                                                    src={lost.lostImgLink}
+                                                    alt="Lost Image"
+                                                />
+                                                <div className="edit-button">
+                                                    {/* Your edit button JSX here */}
+                                                </div>
+                                            </div>
+                                        )}
+                                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button className="btn btn-outline-danger" onClick={() => deleteLost(lost)}>
+                                                삭제
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </div>
 
             <div className="row justify-content-center">
                 <div className="col-lg-8 content-head">
