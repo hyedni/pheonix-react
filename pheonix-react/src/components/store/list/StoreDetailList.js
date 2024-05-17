@@ -117,17 +117,19 @@ const StoreDetailList = () => {
             <StoreMenu />
 
             {/* 제품명 */}
-            <div className="row justify-content-center">
+            <div className="row justify-content-center mt-4">
                 <div className="col-lg-8 content-body">
-                    <span style={{ fontSize: '25px' }} className='ms-2'>{products.productName}</span>
+                    <span style={{ fontSize: '25px' }} className='ms-2 mt-4'>
+                        <b>{products.productName}</b>
+                    </span>
                     <hr></hr>
                 </div>
             </div>
             <div className="row justify-content-center">
                 <div className="col-lg-8 content-body">
-                    <div className="row">
+                    <div className="row justify-content-center">
                         <div className="col-4">   
-                        <div className="img-thumbnail mt-3 image-wrapper list-img" style={{ height: "400px" }}>
+                        <div className="img-thumbnail image-wrapper" style={{ height: "400px" }}>
                             {!imagePreview && (
                                 <img src={products.productImgLink}  alt="상품이미지" />
                             )}
