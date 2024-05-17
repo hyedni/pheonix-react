@@ -58,6 +58,7 @@ function NonUser() {
         const response = await axios.post('/user/nonUserJoin', nonUser);
         console.log("가입 성공:", response.data);
         setNonLoginId(response.data.nonUserEmail);
+        setLoginId(response.data.nonUserEmail);
         window.localStorage.setItem('token', response.data.token);
         console.log(response.data.token);
         console.log(setLoginId);
