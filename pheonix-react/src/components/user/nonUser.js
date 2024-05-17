@@ -47,7 +47,7 @@ function NonUser() {
             [name]: value
         });
     }, [nonUser]);
-
+ 
      // 폼 제출 함수
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -59,7 +59,7 @@ function NonUser() {
         console.log("가입 성공:", response.data);
         setNonLoginId(response.data.nonUserEmail);
         setLoginId(response.data.nonUserEmail);
-        window.sessionStorage.setItem('token', response.data.token);
+        window.localStorage.setItem('token', response.data.token);
         console.log(response.data.token);
         console.log(setLoginId);
 

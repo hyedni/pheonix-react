@@ -8,7 +8,7 @@ import { TbNumber19Small } from "react-icons/tb";
 import React, { Fragment } from 'react';
 import { Modal } from "bootstrap";
 import { useRecoilState, useRecoilValue } from "recoil";
-import { loginGradeState, loginIdState, isLoginState } from '../utils/RecoilData';
+import { loginGradeState, loginIdState, isLoginState, isNonLoginState } from '../utils/RecoilData';
 import { nonLoginIdState } from "../utils/RecoilData";
 
 
@@ -18,48 +18,8 @@ function BookingListPage() {
     const [isScheduleShow, setIsScheduleShow] = useState(false);
     const navigate = useNavigate();
     const [scheduleNo, setScheduleNo] = useState(0);
-
-    //recoil state
     const isLogin = useRecoilValue(isLoginState);
-
-    const [nonLoginId, setNonLoginId] = useRecoilState(nonLoginIdState);
-
-    //비회원 토큰 확인
-  const nonLogin = useCallback(async () => {
-      try {
-        // 비회원 정보 가져오기
-        const token = window.sessionStorage.getItem("token");
-        console.log(token);
-
-        axios.defaults.headers.common["NonUserAuth"] = token;
-        // 세션 스토리지에 비회원 정보 저장
-        const resp = await axios.get('/user/token'); //정보 확인
-
-        setNonLoginId(resp.data.nonUserId);
-        axios.defaults.headers.common["NonUserAuth"] = resp.data.token;
-        window.sessionStorage.setItem("token", resp.data.token);
-        console.log("비회원 정보가 세션 스토리지에 저장되었습니다.");
-      }
-      catch{
-        console.log('사용자에게 권한이 부여되지 않았습니다.');
-        setNonLoginId(false); // 언마운트될 때 nonLoginId 상태를 false로 변경합니다.
-      }
-
-  }, []);
-
-    useEffect(() => {
-        let intervalId;
-
-        // nonLogin 상태가 아니면 타이머를 설정하지 않음
-        if (nonLoginId) {
-        intervalId = setInterval(nonLogin, 10000); // 10초마다 실행
-        }
-
-        // 컴포넌트가 언마운트될 때 clearInterval을 통해 타이머를 정리합니다.
-        return () => {
-        clearInterval(intervalId);
-        };
-    }, [nonLogin, setNonLoginId]);
+    const isNonLogin = useRecoilValue(isNonLoginState);
 
 
     //일정 PK번호 넘기기
@@ -70,7 +30,7 @@ function BookingListPage() {
 
     
     const moveToSeat = useCallback((scheduleNo) => {
-        if (isLogin) {
+        if (isLogin || isNonLogin) {
             navigate('/bookingAdd', { state: { scheduleNo } });
         } else {
             const confirmed = window.confirm("로그인 후 예매 가능합니다. 로그인 화면으로 이동하시겠습니까?");
@@ -78,7 +38,7 @@ function BookingListPage() {
                 navigate('/login'); 
             }
         }
-    }, [navigate, isLogin]);
+    }, [navigate, isLogin, isNonLogin]);
 
 
     //전체데이터(Vo)담긴 state

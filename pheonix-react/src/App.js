@@ -70,7 +70,7 @@ function App() {
   //effect
   useEffect(() => {
     refreshLogin();
-    // nonLogin();
+    nonLogin();
   }, []);//최초 1회
 
 
@@ -96,24 +96,30 @@ function App() {
   }, [loginId]);
 
 
-  // //비회원 토큰 확인
-  // const nonLogin = useCallback(async () => {
-  //     // 비회원 정보 가져오기
-  //     const token = window.localStorage.getItem("token");
-  //     console.log(token);
+    //비회원 토큰 확인
+    const nonLogin = useCallback(async () => {
+      try{
+         // 비회원 정보 가져오기
+        const token = window.localStorage.getItem("token");
+        console.log(token);
 
-  //     if (token !== null) {
+        axios.defaults.headers.common["NonUserAuth"] = token;
+        // 세션 스토리지에 비회원 정보 저장
+        const resp = await axios.get(`http://localhost:8080/user/token`); //정보 확인
 
-  //       axios.defaults.headers.common["NonUserAuth"] = token;
-  //       // 세션 스토리지에 비회원 정보 저장
-  //       const resp = await axios.post(`http://localhost:8080/user/token`); // 비회원 정보를 가져오는 비동기 함수
+        setNonLoginId(resp.data.nonUserId);
+        axios.defaults.headers.common["NonUserAuth"] = resp.data.token;
+        window.localStorage.setItem("token", resp.data.token);
+        console.log("비회원 정보가 세션 스토리지에 저장되었습니다.");
+      }
+      catch{
+        console.log('사용자에게 권한이 부여되지 않았습니다.');
+        setNonLoginId('');
+        delete axios.defaults.headers.common['NonUserAuth'];
+        window.localStorage.removeItem("token");
+      }
 
-  //       setNonLoginId(resp.data.nonUserId);
-  //       axios.defaults.headers.common["NonUserAuth"] = resp.data.token;
-  //       window.sessionStorage.setItem("token", resp.data.token);
-  //       console.log("비회원 정보가 세션 스토리지에 저장되었습니다.");
-  //     }
-  // }, []);
+  }, []);
 
 
   return (
@@ -215,7 +221,6 @@ function App() {
         
         {isNonLogin &&
           <>
-            <Route path='/booking' element={<BookingListPage />} />
             <Route path='/bookingAdd' element={<BookingAdd />} />
           </>
         }

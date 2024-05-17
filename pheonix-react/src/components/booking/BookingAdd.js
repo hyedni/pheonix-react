@@ -2,7 +2,7 @@ import { useCallback, useState, useEffect } from "react";
 import axios from '../utils/CustomAxios';
 import { useLocation, useNavigate } from "react-router";
 import { useRecoilState } from "recoil";
-import { loginIdState } from "../utils/RecoilData";
+import { loginIdState, nonLoginIdState } from "../utils/RecoilData";
 
 
 function BookingAdd() {
@@ -26,6 +26,7 @@ function BookingAdd() {
             }));
         }
     }, [loginId]);
+
 
     //선택된좌석들의 가격상태
     const [price, setPrice] = useState(0);
