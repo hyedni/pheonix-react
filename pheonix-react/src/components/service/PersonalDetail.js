@@ -69,54 +69,67 @@ export default function PersonalDetail() {
     }
 
     return (
-        <div className="container mt-5">
-            <div className="row">
-                <div className="col-md-8 offset-md-2">
-                    <div className="card mb-4">
-                        <div className="card-header bg-gray">
-                            <h5 className="card-title">{personal.personalTitle}</h5>
-                            <p className="card-text">작성자: {personal.personalId}</p>
-                        </div>
-                        <div className="card-body">
-                            <p className="card-text">{personal.personalContent}</p>
-                        </div>
-                        <div className="card-footer bg-transparent">
-                            <Link to="/personal" className="btn btn-outline-secondary">목록으로 돌아가기</Link>
-                        </div>
-                    </div>
-
-                    <div className="card mb-4">
-                        <div className="card-header bg-gray">
-                            <h5 className="card-title">댓글</h5>
-                        </div>
-                        <div className="card-body">
-                            <input
-                                type="text"
-                                className="form-control mb-2"
-                                placeholder="댓글을 입력하세요..."
-                                value={newComment}
-                                onChange={(e) => setNewComment(e.target.value)}
-                            />
-                            <div className="d-flex justify-content-end mb-3">
-                                <button className="btn btn-primary" onClick={handleAddComment}>댓글 작성</button>
+        <>
+            <div className="container mt-5">
+                <div className="row">
+                    <div className="col-md-8 offset-md-2">
+                        <div className="card mb-4">
+                            <div className="card-header bg-gray d-flex justify-content-between align-items-center">
+                                <div>
+                                    <h5 className="card-title"><b>{personal.personalTitle}</b></h5>
+                                    <p className="card-text">작성자: {personal.personalId}</p>
+                                </div>
+                                <Link to="/personal" className="btn btn-outline-secondary">목록으로 돌아가기</Link>
                             </div>
-                            {comments.map(comment => (
-                                <div key={comment.commentsId} className="card mb-3">
-                                    <div className="card-body">
-                                        <p className="card-text">{comment.commentsContent}</p>
+                            <div className="card-body" style={{ height: '400px', maxHeight: '400px', overflowY: 'auto' }}>
+                                {personal.personalContent}
+                            </div>
+
+                        </div>
+
+                        <div className="card mb-4">
+                            <div className="card-header bg-gray">
+                                <h5 className="card-title"><b>댓글</b></h5>
+                            </div>
+                            <div className="card-body ">
+                                <div className="row">
+                                    <div className="col mb-4">
+                                        <input
+                                            type="text"
+                                            className="form-control"
+                                            placeholder="댓글을 입력하세요..."
+                                            value={newComment}
+                                            onChange={(e) => setNewComment(e.target.value)}
+                                        />
                                     </div>
-                                    <div className="card-footer bg-transparent">
-                                        <p className="card-text">작성자: {comment.commentsWriter}</p>
-                                        {comment.commentsWriter === loginId && (
-                                            <button className="btn btn-danger btn-sm" onClick={() => handleDeleteComment(comment.commentsId)}>삭제</button>
-                                        )}
+                                    <div className="col-auto">
+                                        <button className="btn btn-dark" onClick={handleAddComment}>댓글 쓰기</button>
                                     </div>
                                 </div>
-                            ))}
+
+                                {comments.map(comment => (
+                                    <div key={comment.commentsId} className="card mb-3">
+                                        <div className="card-body d-flex justify-content-between row"> {/* 우측 정렬을 위한 d-flex 및 justify-content-between 추가 */}
+                                            <div className="col-10">
+                                                <p className="card-text"><strong>{comment.commentsContent}</strong></p> {/* 내용을 진하게 표시 */}
+                                                <p className="card-text"><span className="text-secondary">작성자: {comment.commentsWriter}</span></p> {/* 작성자 텍스트 색상을 회색으로 변경 */}
+                                            </div>
+                                            <div className="col-2 d-flex justify-content-end align-items-start">
+                                                {comment.commentsWriter === loginId && (
+                                                    <button className="btn btn-outline-secondary btn-sm" onClick={() => handleDeleteComment(comment.commentsId)}>삭제</button>
+                                                )}
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                ))}
+                            </div>
                         </div>
+                        
                     </div>
                 </div>
             </div>
-        </div>
+
+        </>
     );
 }

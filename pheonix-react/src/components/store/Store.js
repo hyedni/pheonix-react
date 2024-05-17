@@ -1,4 +1,4 @@
-import './Store.css';
+import './list/Store.css';
 import { Route, Routes } from 'react-router';
 
 import StorePopcorn from './list/StorePopcorn';
