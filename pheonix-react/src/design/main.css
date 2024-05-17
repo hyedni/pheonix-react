@@ -8,7 +8,20 @@
     border-radius: 10px;
     padding: 0.5em;
     margin-right: 100px;
-    border: 1px solid gray;
+    border: 1px solid rgb(212,211,201);
     word-break: keep-all;
     overflow: auto;
+}
+
+.list-img {
+    width:80px;
+    height:80px;
+}
+
+.inner-td {
+    padding: 10px;
+}
+
+.inner-font{
+    font-size: 15px;
 }

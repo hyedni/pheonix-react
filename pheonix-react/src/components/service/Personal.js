@@ -49,19 +49,12 @@ const Personal = () => {
           <div className="row justify-content-center">
                 <div className="col-lg-8  title-head">
                     <div className="title-head-text">
-                        문의게시판입니다
+                        1:1 문의게시판
                     </div>
                 </div>
             </div>
             
-            <div className="row justify-content-center">
-                <div className="col-lg-8 content-body">
-                    <div className="content-body-text">
-                        그렇습니다
-                    </div>
-                </div>
-            </div>
-            
+          
             <div className="row justify-content-center">
                 <div className="col-lg-2 mb-3">
                     <NavLink to="/chatbot">

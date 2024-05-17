@@ -49,12 +49,12 @@ const MyPersonal = () => {
     const currentPosts = mypersonals.slice(indexOfFirstPost, indexOfLastPost); // Changed to mypersonals
 
     return (
-        <div className="container">
-            <div className="row justify-content-center">
-                <div className="col-lg-8">
-                    <h2 className="mt-5 mb-4">나의 문의내역</h2>
-                    <div className="table-responsive">
-                        <table className="table table-bordered table-hover">
+  <>
+              <div className="row justify-content-center">
+                <div className="col-lg-8  title-head">
+                    <div className="title-head-text">나의 문의내역</div>
+                    <div className="table">
+                        <table className="table center">
                             <thead className="thead-dark">
                                 <tr>
                                     <th scope="col">번호</th>
@@ -92,7 +92,7 @@ const MyPersonal = () => {
                     paginate={setCurrentPage}
                 />
             </div>
-        </div>
+        </>
     );
 }
 
