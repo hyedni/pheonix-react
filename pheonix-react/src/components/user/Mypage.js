@@ -11,7 +11,7 @@ import MyPersonal from "./MyPersonal";
 import MyStore from "./appliance/MyStore";
 import InfoPheonix from "./appliance/InfoPheonix";
 import InfoPoint from "./appliance/InfoPoint";
-import ReservationHistory from "./appliance/ReservationHistory";
+// import ReservationHistory from "./appliance/ReservationHistory";
 
 function Mypage() {
 

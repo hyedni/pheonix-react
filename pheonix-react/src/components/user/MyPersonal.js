@@ -32,16 +32,16 @@ const MyPersonal = () => {
 
     const deleteMypersonal = (target) => {
         const choice = window.confirm("정말 삭제하시겠습니까?");
-        if(choice === false) return;
+        if (choice === false) return;
 
-        axios.delete("/personal/"+target.personalNo)
-        .then(()=> {
-            const updatedPersonals = personals.filter(item=>item.personalNo!==target.personalNo);
-            setPersonals(updatedPersonals);
-        })
-        .catch(error=> {
-            console.error("Failed to delete personal item!", error);
-        });
+        axios.delete("/personal/" + target.personalNo)
+            .then(() => {
+                const updatedPersonals = personals.filter(item => item.personalNo !== target.personalNo);
+                setPersonals(updatedPersonals);
+            })
+            .catch(error => {
+                console.error("Failed to delete personal item!", error);
+            });
     }
 
     const indexOfLastPost = currentPage * postsPerPage;
@@ -49,12 +49,30 @@ const MyPersonal = () => {
     const currentPosts = mypersonals.slice(indexOfFirstPost, indexOfLastPost); // Changed to mypersonals
 
     return (
-  <>
-              <div className="row justify-content-center">
-                <div className="col-lg-8  title-head">
-                    <div className="title-head-text">나의 문의내역</div>
-                    <div className="table">
-                        <table className="table center">
+        <>
+            <div className="row">
+                {currentPosts.length === 0 ? (
+                    <>
+                        <div className="phoenix-side-title center" >
+                            나의 문의내역
+                            <br />...
+                        </div>
+
+                        <div className='center mt-4'>
+                            <h1>문의내역이 없어요</h1>
+                            <h4>문의하러 가시겠습니까?</h4>
+                            <Link to={`/personal`} className='btn btn-dark w-50 btn-lg mt-4'>문의 게시판 가기</Link>
+                        </div>
+                    </>
+                ) : (
+                    <>
+                        <div className="phoenix-side-title mb-4" >
+                            나의 문의내역
+                        </div>
+
+
+
+                        <table className="table table-hover center">
                             <thead className="thead-dark">
                                 <tr>
                                     <th scope="col">번호</th>
@@ -68,30 +86,33 @@ const MyPersonal = () => {
                                     <tr key={personal.personalNo}>
                                         <td>{personal.personalNo}</td>
                                         <td>
-                                            <Link to={`/personalDetail/${personal.personalNo}`}>
-                                                {personal.personalTitle}
+                                            <Link to={`/personalDetail/${personal.personalNo}`} className="btn">
+                                                <b>{personal.personalTitle}</b>
                                             </Link>
                                         </td>
                                         <td>{personal.personalContent}</td>
-                                   
-                                    <td>
-                                        <button className="btn btn-danger" onClick={() => deleteMypersonal(personal)}>삭제</button>
-                                    </td>
+
+                                        <td>
+                                            <button className="btn btn-outline-secondary" onClick={() => deleteMypersonal(personal)}>삭제</button>
+                                        </td>
                                     </tr>
                                 ))}
                             </tbody>
                         </table>
-                    </div>
-                </div>
+
+
+
+                        <Pagination
+                            currentPage={currentPage}
+                            totalPages={Math.ceil(mypersonals.length / postsPerPage)}
+                            paginate={setCurrentPage}
+                        />
+
+                    </>
+                )}
+
             </div>
 
-            <div className="row justify-content-center">
-                <Pagination
-                    currentPage={currentPage}
-                    totalPages={Math.ceil(mypersonals.length / postsPerPage)}
-                    paginate={setCurrentPage}
-                />
-            </div>
         </>
     );
 }
