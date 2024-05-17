@@ -7,14 +7,9 @@ import { TbNumber15Small } from "react-icons/tb";
 import { TbNumber19Small } from "react-icons/tb";
 import React, { Fragment } from 'react';
 import { Modal } from "bootstrap";
-
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loginGradeState, loginIdState, isLoginState } from '../utils/RecoilData';
-
 import { nonLoginIdState } from "../utils/RecoilData";
-import { useRecoilState } from "recoil";
-
-
 
 
 function BookingListPage() {
