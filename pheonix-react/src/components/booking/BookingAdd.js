@@ -376,7 +376,8 @@ function BookingAdd() {
 
     return (
         <>
-
+            <br/>
+            <br/>
             <div className="row justify-content-center">
                 <div className="col-lg-8">
 
@@ -435,7 +436,7 @@ function BookingAdd() {
                                 }
                             }>좌석 다시선택</button>
                     </div>
-                    <div className="form-group text-end">
+                    <div className="form-group text-end mb-5">
                         <label htmlFor="paymentMethod">결제 수단 선택</label>
                         <select value={bookingStatus.paymentMethod} className="form-select d-inline-block w-auto me-3"
                             onChange={handlePaymentMethodChange}>

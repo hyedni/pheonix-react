@@ -89,7 +89,8 @@ const MyReservation = () => {
         const isPassed = currentDateString >= reserve.startDate;
         //영화 상영일이 오늘보다 미래이면..
         if(!isPassed) {
-            window.alert("후기는 상영종료 후 작성 가능합니다.");
+            window.alert(
+            `후기는 상영종료 후 작성 가능합니다. ${reserve.startDate} ${reserve.endTime} 종료`);
             return;
         }
         //영화 상영일이 오늘인 경우에만 시간이 지났는지 검사 
@@ -100,7 +101,7 @@ const MyReservation = () => {
             const currentMinute = currentDate.getMinutes();
     
             if (endHour > currentHour || (endHour === currentHour && endMinute > currentMinute)) {
-                window.alert("후기는 상영종료 후 작성 가능합니다.");
+                window.alert(`후기는 상영종료 후 작성 가능합니다. 종료시간은 ${reserve.endTime}입니다.`);
             } else {
                 openModal();
             }

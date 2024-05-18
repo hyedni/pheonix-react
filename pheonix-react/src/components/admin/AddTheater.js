@@ -62,10 +62,13 @@ function AddTheater() {
 
             <br />
             <br />
+
             {/* 페이지 제목 */}
             <div className="row justify-content-center">
                 <div className="col-lg-8">
-
+                    <div className="mt-3 mb-5" style={{ fontWeight: 'bold', fontSize: '25px' }}>
+                        <span style={{ color: 'rgb(240, 86, 86)' }}>3단계</span> 상영관 등록 / 좌석 배치 설정
+                    </div>
                     <div className="row">
                         <div className="col">
                             <label>상영관 이름</label>
@@ -77,24 +80,24 @@ function AddTheater() {
                     </div>
 
                     <hr />
-                    <div className="h2">
-                        좌석 모양설정
-                    </div>
+                    {/* <div className="h4">
+                        좌석 배치 설정
+                    </div> */}
 
                     {showDetails ? <SeatDetails /> : <SeatStatus />}
 
                     <br></br>
                     <br></br>
                     {showDetails ?
-                    <div className="text-end">
-                        <button onClick={addTheater} className="btn btn-success">
-                            상영관등록
-                        </button>
+                        <div className="text-end">
+                            <button onClick={addTheater} className="btn btn-success">
+                                상영관등록
+                            </button>
                         </div> :
-                        <div>
-                        <button onClick={showSeatDetails} className="btn btn-warning">
-                            좌석세부설정 (임시)
-                        </button>
+                        <div className="mb-5">
+                            <button onClick={showSeatDetails} className="btn btn-warning">
+                                좌석세부설정 (임시)
+                            </button>
                         </div>
                     }
 
