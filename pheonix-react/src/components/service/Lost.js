@@ -185,7 +185,7 @@ const Lost = () => {
                     </div>
                 </div>
             </div>
-
+{/* 
             <div className="row justify-content-center">
                 <div className="col-lg-8 content-head">
                     <hr></hr>
@@ -204,7 +204,7 @@ const Lost = () => {
                                                 />
                                                 <div className="edit-button">
                                                     {/* Your edit button JSX here */}
-                                                </div>
+                                                {/* </div>
                                             </div>
                                         )}
                                         <div className="d-grid gap-2 d-md-flex justify-content-md-end">
@@ -219,7 +219,7 @@ const Lost = () => {
                         ))}
                     </div>
                 </div>
-            </div>
+            </div> */} */
 
             <Pagination
                 currentPage={currentPage}

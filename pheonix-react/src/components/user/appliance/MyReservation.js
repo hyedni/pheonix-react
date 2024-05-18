@@ -3,7 +3,7 @@ import { loginIdState } from '../../utils/RecoilData';
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import axios from '../../utils/CustomAxios';
 import Pagination from '../../service/Pagination';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { Modal } from 'bootstrap';
 
 //아이콘
@@ -129,7 +129,7 @@ const MyReservation = () => {
             })
         }
     };
-
+    const navigate = useNavigate();
     //후기등록
     const saveInput = useCallback(async ()=>{
         const resp = await axios.post("/review/", input);
