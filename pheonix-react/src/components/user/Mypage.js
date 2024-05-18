@@ -123,6 +123,8 @@ function Mypage() {
                     <div className="row">
                         <Sidebar />
                         <div className="col-9">
+                            {/* 화면처음로드시 나의예매내역 떠있도록 수정 : 혜진 */}
+                            <MyReservation/>
                             {/* 마이페이지에서 이동할 페이지 담기 (원래는 App.js에 담는 애들) */}
                             <Routes>
                                 <Route path='/myPersonal' element={<MyPersonal/>} />
