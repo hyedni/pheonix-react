@@ -197,7 +197,7 @@ function Join() {
     <>
 
       <div className="join-container">
-        <h1>회원가입 화면입니다</h1>
+      <span style={{fontSize:'30px', fontWeight:'bolder'}}>회원가입 화면입니다.</span>
         <div className="join-form">
 
           {/* 입력 폼 */}

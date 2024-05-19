@@ -110,18 +110,18 @@ function Login() {
         <>
 
             <div className="container mt-4" style={{ maxWidth: "400px" }}>
-                <h1>회원가입 화면입니다</h1>
+                <span style={{fontSize:'30px', fontWeight:'bolder'}}>로그인</span>
 
                 <div className="mb-4">
-                    <button className="btn btn-outline-secondary">
+                    {/* <button className="btn btn-outline-secondary">
                         <NavLink to="/login">로그인</NavLink>
-                    </button>
-                    <button className="btn btn-outline-secondary">
+                    </button> */}
+                    {/* <button className="btn btn-outline-secondary">
                         <NavLink to="/nonUser">비회원 예매</NavLink>
-                    </button>
-                    <button className="btn btn-outline-secondary">
+                    </button> */}
+                    {/* <button className="btn btn-outline-secondary">
                         <NavLink to="/nonUserCheck">비회원 예매확인</NavLink>
-                    </button>
+                    </button> */}
                 </div>
 
 
@@ -147,9 +147,17 @@ function Login() {
                     </div>
                 </div>
 
-                <div className="row mt-4">
+                <div className="row mt-2">
                     <div className="col">
-                        <button onClick={handleGoogleLogin}>구글 아이디로 로그인</button>
+                        <button className="btn btn-success w-100" onClick={handleGoogleLogin}>구글 아이디로 로그인</button>
+                    </div>
+                </div>
+
+                <div className="row mt-2 mb-5">
+                    <div className="col">
+                        <NavLink to="/nonUser" style={{textDecoration: 'none', color: 'inherit'}}>
+                            <button className="btn btn-secondary w-100" style={{}}>비회원 예매</button>
+                        </NavLink>
                     </div>
                 </div>
 

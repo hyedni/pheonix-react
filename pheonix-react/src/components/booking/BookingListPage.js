@@ -20,15 +20,7 @@ function BookingListPage() {
     const [scheduleNo, setScheduleNo] = useState(0);
     const isLogin = useRecoilValue(isLoginState);
     const isNonLogin = useRecoilValue(isNonLoginState);
-
-
-    //일정 PK번호 넘기기
-    // const moveToSeat = (scheduleNo) => {
-    //     console.log(scheduleNo);
-    //     navigate(`/주소/${scheduleNo}`)
-    // };
-
-    
+   
     const moveToSeat = useCallback((scheduleNo) => {
         if (isLogin || isNonLogin) {
             navigate('/bookingAdd', { state: { scheduleNo } });
@@ -114,7 +106,6 @@ function BookingListPage() {
         });
         setIsSelectedMovie(movieNo);
         setisSelectedSchedule(false);
-        console.log(movieAge);
         if (movieAge === '청소년관람불가') {
             openModal();
         }
