@@ -96,7 +96,7 @@ function AddTheater() {
                         </div> :
                         <div className="mb-5">
                             <button onClick={showSeatDetails} className="btn btn-warning">
-                                좌석세부설정 (임시)
+                                좌석세부설정
                             </button>
                         </div>
                     }
