@@ -192,7 +192,7 @@ function NonUser() {
           <input type="text" id="nonUserBirth" name="nonUserBirth" onBlur={handleInputBlur}
             className={`form-control ${nonUser.nonUserBirth && !isValid.nonUserBirth ? "is-invalid" : ""}`} />
           <div className="invalid-feedback">
-            {nonUser.nonUserBirth && !isValid.nonUserBirth && '아이디가 유효하지 않습니다.'}
+            {nonUser.nonUserBirth && !isValid.nonUserBirth && '숫자 6자로 입력하세요.'}
           </div>
         </div>
 
