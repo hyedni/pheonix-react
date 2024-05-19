@@ -121,10 +121,8 @@ const StoreList = () => {
                                         {imagePreview && (
                                             <img src={imagePreview} alt="Preview" />
                                         )}
-
                                         <Link className='ms-1 edit-button btn btn-secondary' onClick={e => (AddItemToCart(product.productNo))}><FaShoppingCart /></Link>
                                         <Link to={`/purchase/${product.productNo}`} className='delete-button btn btn-secondary'><IoBagHandle /></Link>
-
                                     </div>
 
                                 </div><br />
