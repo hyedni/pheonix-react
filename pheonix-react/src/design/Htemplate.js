@@ -132,7 +132,6 @@ function Htemplate() {
                                             <NavLink className="dropdown-item" to="/adminTheater">상영관</NavLink>
                                             <NavLink className="dropdown-item" to="/movieSchedule">상영일정</NavLink>
                                             <NavLink className="dropdown-item" to="/adminStore">스토어</NavLink>
-                                            <NavLink className="dropdown-item" to="/movieRegister">회원관리</NavLink>
                                         </div>
                                     </li>
                                     <li className='nav-item dropdown'>

@@ -88,7 +88,7 @@ function AdminTheater() {
             <div className="row mb-5" style={{ display: isListVisible ? 'block' : 'none' }}>
                 <div className="offset-2 col-lg-8">
                     <div className="mb-3" style={{fontWeight:'bold', fontSize:'25px'}}>
-                        <span style={{color:'rgb(240, 86, 86)'}}>2단계</span> 상영관 조회
+                        <span style={{color:'rgb(240, 86, 86)'}}>2단계</span> 상영관 조회/등록
                         <button className="btn btn-secondary ms-4" style={{fontWeight:'bold'}} onClick={e => addTheater(cinemaNo)}>신규등록</button>
 
                     </div>
