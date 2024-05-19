@@ -38,7 +38,6 @@ function Sidebar() {
                         내 정보 관리
                     </Link>
                     <NavLink className="nav-link" to="/mypage/change">개인정보 변경</NavLink>
-                    <NavLink className="nav-link" href="#">회원 탈퇴</NavLink>
                 </li>
                 
             </ul>
