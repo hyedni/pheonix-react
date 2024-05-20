@@ -235,18 +235,17 @@ function NonUser() {
       </div>
       )}
           </div>
-
-
-          {/* 인증번호 입력 필드 */}
+          
+          {/* 인증번호 입력 필드  */}
           <div className="form-group mb-4">
-            <label htmlFor="nonUserCert">인증번호 * :</label>
+            <label htmlFor="nonUserCertCode">인증번호 :</label>
             <div className="input-group">
-              <input type="text" id="nonUserCert" name="nonUserCert" onChange={handleInputBlur}
-                className={`form-control ${nonUser.nonUserCert && !isValid.nonUserCert ? "is-invalid" : ""}`}
+              <input type="text" id="nonUserCertCode" name="nonUserCertCode" onChange={handleInputBlur}
+                className={`form-control ${nonUser.nonUserCertCode && !isValid.nonUserCertCode ? "is-invalid" : ""}`}
                 aria-describedby="button-addon2" />
                {sent &&(
-          <div className="target__time">
-          <span className="remaining__min">{minutes}</span> :
+          <div className="targettime">
+          <span className="remainingmin">{minutes}</span> :
           <span className="remaining__sec">{seconds.toString().padStart(2, '0')}</span>
         </div>
       )}
