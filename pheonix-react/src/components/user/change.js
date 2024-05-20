@@ -108,7 +108,7 @@ function Change() {
         } else {
             console.log("실패");
         }
-        console.log("변경된 개인정보:", user);
+        //console.log("변경된 개인정보:", user);
     };
 
     // 양식 유효성 확인 함수

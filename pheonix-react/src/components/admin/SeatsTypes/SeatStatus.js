@@ -21,10 +21,6 @@ function SeatStatus() {
         setColCheckStatus(Array(cellCols).fill(false));
     }, [cellRows, cellCols]);
 
-    useEffect(() => {
-        console.log('seats 상태가 변경되었습니다.', seats);
-    }, [seats]);
-
     const updateCellRows = (e) => {
         setCellRows(Number(e.target.value));
     };

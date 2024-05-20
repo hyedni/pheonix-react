@@ -66,7 +66,6 @@ function PhoenixHome() {
         loadComboPackage();
         loadPointProduct();
         loadMovies();
-        console.log(movies);
     }, []);
 
     const navigate = useNavigate();

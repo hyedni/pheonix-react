@@ -150,7 +150,6 @@ function AdminCinema() {
 
     //수정처리
     const saveEditCinema = useCallback(async (detailCinema) => {
-        console.log(detailCinema);
         const resp = await axios.patch("/cinema/", detailCinema);
         setIsEdit({ edit: false });
         loadList();
@@ -165,7 +164,6 @@ function AdminCinema() {
 
     //삭제
     const deleteCinema = useCallback(async (target) => {
-        console.log(target.cinemaNo);
         const resp1 = await axios.get(`/cinema/theaterCnt/${target.cinemaNo}`);
 
         const choice = window.confirm("삭제하려는 영화관이 맞으신가요? 정말 삭제하시겠습니까?");

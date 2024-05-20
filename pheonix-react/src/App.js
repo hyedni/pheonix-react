@@ -78,7 +78,6 @@ function App() {
   const refreshLogin = useCallback(async () => {
     //로그인 정보 가져오기
     const refreshToken = window.localStorage.getItem("refreshToken");
-    console.log(refreshToken);
 
     if (refreshToken !== null) {//refreshToken 항목이 존재한다면
       //리프레시 토큰으로 Authorization을 변경하고
@@ -101,8 +100,7 @@ function App() {
       try{
          // 비회원 정보 가져오기
         const token = window.localStorage.getItem("token");
-        console.log(token);
-
+        
         axios.defaults.headers.common["NonUserAuth"] = token;
         // 세션 스토리지에 비회원 정보 저장
         const resp = await axios.get(`http://192.168.30.37:8080/user/token`); //정보 확인
@@ -110,10 +108,8 @@ function App() {
         setNonLoginId(resp.data.nonUserId);
         axios.defaults.headers.common["NonUserAuth"] = resp.data.token;
         window.localStorage.setItem("token", resp.data.token);
-        console.log("비회원 정보가 세션 스토리지에 저장되었습니다.");
       }
       catch{
-        console.log('사용자에게 권한이 부여되지 않았습니다.');
         setNonLoginId('');
         delete axios.defaults.headers.common['NonUserAuth'];
         window.localStorage.removeItem("token");

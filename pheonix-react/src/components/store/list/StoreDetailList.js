@@ -80,7 +80,7 @@ const StoreDetailList = () => {
                 navigate('/login'); //로그인 페이지로 리다이렉트
             }
         }
-        console.log("하는 중");
+
         axios({
             url: "/cart/add/",
             method: "post",

@@ -22,7 +22,7 @@ function WritePost() {
         e.preventDefault();
         axios.post("/personal/", input)
             .then(resp => {
-                console.log("Post created:", resp.data);
+               // console.log("Post created:", resp.data);
                 // 글쓰기가 완료되면 personal 게시판으로 이동
             })
             .catch(error => {

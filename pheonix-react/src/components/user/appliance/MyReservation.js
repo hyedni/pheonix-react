@@ -84,8 +84,6 @@ const MyReservation = () => {
             
         const currentDate = new Date();
         const currentDateString = currentDate.toISOString().split('T')[0]; 
-        console.log(currentDateString);
-        console.log(reserve.startDate);
         const isPassed = currentDateString >= reserve.startDate;
         //영화 상영일이 오늘보다 미래이면..
         if(!isPassed) {

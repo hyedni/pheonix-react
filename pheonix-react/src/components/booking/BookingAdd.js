@@ -12,9 +12,9 @@ function BookingAdd() {
     const [loginId, setLoginId] = useRecoilState(loginIdState);
     
 
-    useEffect(() => {
-        console.log('loginId 상태 확인:', loginId);
-    }, [loginId]);
+    // useEffect(() => {
+    //     console.log('loginId 상태 확인:', loginId);
+    // }, [loginId]);
 
     
 
@@ -40,7 +40,6 @@ function BookingAdd() {
             };
 
             const response = await axios.post('/booking/price', bookingVo);
-            console.log("체크리스트 가격체크");
             setPrice(response.data);
         };
 
@@ -81,8 +80,6 @@ function BookingAdd() {
             };
 
             const response = await axios.post('/booking/bookingAdd', bookingVo);
-            console.log("보내기성공 ");
-            console.log(response.data);
             navigate('/bookingComplete');
 
 
@@ -129,9 +126,9 @@ function BookingAdd() {
 
 
     //체크된애들 확인위해 콘솔에 찍는코드
-    useEffect(() => {
-        console.log('checkedSeats 상태가 변경되었습니다:', checkedSeats);
-    }, [checkedSeats]);
+    // useEffect(() => {
+    //     console.log('checkedSeats 상태가 변경되었습니다:', checkedSeats);
+    // }, [checkedSeats]);
 
 
     //총 좌석고를수잇는 카운트 수
@@ -146,9 +143,9 @@ function BookingAdd() {
     }, [checkedSeats, buttonCount]);
 
     //총카운트 확인하기위한 콘솔창
-    useEffect(() => {
-        console.log(' 체크가능수 :::::', availableSeatCount);
-    }, [availableSeatCount]);
+    // useEffect(() => {
+    //     console.log(' 체크가능수 :::::', availableSeatCount);
+    // }, [availableSeatCount]);
 
     //  셀스타일
     const getCellStyleNone = () => ({
@@ -353,9 +350,7 @@ function BookingAdd() {
 
     //화면에 보일 회원유형 업데이트하는 코드
     const updateTicketType = (category) => {
-        console.log(`Updating ticket type to: ${category}`);
         setTicketType({ ticketType: category });
-        console.log('Current state:', { ticketType: category });
     };
 
     //버튼생성코드3

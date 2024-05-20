@@ -73,18 +73,15 @@ function Join() {
       const formData = new FormData();
       for(const key in user){
         formData.append(key, user[key]);
-        console.log(user);
       }
 
       if (file) {
         formData.append('attach', file); // 파일 추가
       }
       
-      console.log(formData);
       try {
         // 서버로 데이터 전송
         const response = await axios.post('/user/join', formData);
-        console.log("가입 성공:", response.data);
         // 추가 작업 수행 (예: 사용자에게 성공 메시지 표시)
         navigator("/");
       } catch (error) {
@@ -158,7 +155,6 @@ function Join() {
           }
         });
 
-        console.log('이메일이 성공적으로 전송되었습니다.');
         setSending(false); // 전송 완료 후 sending 상태를 false로 설정
         setSent(true);
         setTimer(180); // 타이머 초기화
@@ -184,11 +180,8 @@ function Join() {
   };
 
   const handleCheckCert = async () => {
-    console.log(user);
     try {
       const response = await axios.post('/user/checkCert', { certEmail: user.userEmail, certCode: user.userCert });
-
-      console.log('응답 데이터:', response.data);
 
       // 여기서 인증에 성공했을 때 setIsCertified 상태를 true로 설정합니다.
       setIsCertified(true);
