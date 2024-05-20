@@ -48,6 +48,10 @@ const ReviewList = () => {
 
     useEffect(() => {
         loadReviews();
+    }, []);
+
+    useEffect(() => {
+        loadReviews();
     }, [userId]);
 
     //리뷰 글 불러오기

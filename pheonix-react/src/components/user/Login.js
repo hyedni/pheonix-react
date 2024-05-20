@@ -8,7 +8,6 @@ import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loginIdState, loginGradeState, isLoginState } from "../utils/RecoilData";
 import { createUserWithEmailAndPassword } from 'firebase/auth'
-import './btn.css';
 
 
 const firebaseConfig = {
@@ -76,6 +75,7 @@ function Login() {
         } catch (error) {
             // 로그인 과정에서 오류가 발생한 경우 오류를 콘솔에 기록합니다.
             console.error("로그인 오류:", error.message);
+            alert("틀렸습니다 다시해주세요");
         }
     }, [user]);
 

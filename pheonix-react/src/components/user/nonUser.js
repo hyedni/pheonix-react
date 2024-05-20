@@ -280,14 +280,6 @@ function NonUser() {
                     </div>
                 </div>
 
-                <button 
-                className='btn btn-success w-100 mb-4'
-                onClick={handleSubmit}>
-                  비회원 예매하기</button>
-                  
-
-        
-
         <button
           className='btn btn-success w-100 mt-4'
           onClick={handleSubmit}>
