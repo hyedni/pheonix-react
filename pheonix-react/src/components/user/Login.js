@@ -78,11 +78,30 @@ function Login() {
             console.error("로그인 오류:", error.message);
         }
     }, [user]);
-    const [activeButton, setActiveButton] = useState(null);
 
-    const handleButtonClick = (buttonName) => {
-        setActiveButton(buttonName);
-    };
+    const handleGoogleLogin = () => {
+        const app = initializeApp(firebaseConfig);
+        const analytics = getAnalytics(app);
+        const provider = new GoogleAuthProvider();
+        const auth = getAuth(app);
+        auth.languageCode = "ko";
+        signInWithPopup(auth, provider)
+            .then((result) => { 
+                const credential = GoogleAuthProvider.credentialFromResult(result);
+                const token = credential.accessToken;
+                const user = result.user;
+                setUserData(user); // 사용자 정보 설정
+                //console.log(user); // 사용자 정보 출력
+                console.log(result, '합격');
+            })
+            .catch((error) => {
+                const errorCode = error.code;
+                const errorMessage = error.message;
+                const email = error.customData.email;
+                const credential = GoogleAuthProvider.credentialFromError(error);
+                console.error(error);
+            });
+    }; 
 
 
     return (
@@ -120,6 +139,12 @@ function Login() {
                 <div className="row mt-4 mb-4">
                     <div className="col">
                         <button className="btn btn-success w-100" onClick={login}>로그인</button>
+                    </div>
+                </div>
+
+                <div className="row mt-2">
+                    <div className="col">
+                        <button className="btn btn-success w-100" onClick={handleGoogleLogin}>구글 아이디로 로그인</button>
                     </div>
                 </div>
 
