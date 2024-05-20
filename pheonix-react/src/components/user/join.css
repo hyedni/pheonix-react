@@ -72,3 +72,30 @@
   margin-top: 5px;
   margin-left: 10px; /* 원하는 만큼의 간격 설정 */
 }
+.alert {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.alert .btn-link {
+  color: #007bff;
+  text-decoration: underline;
+}
+
+.alert .btn-link:hover {
+  color: #0056b3;
+  text-decoration: none;
+}
+.target__time {
+  display: flex;
+  align-items: center;
+  margin-left: 5px;
+  /* font-weight: bold; */
+  font-size: 1em;
+  color: #e47777;
+}
+
+.remaining__min, .remaining__sec {
+  padding: 0 2px;
+}
