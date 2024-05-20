@@ -125,7 +125,8 @@ const MyStore = () => {
                                             <td>{(purchase.paymentTotal).toLocaleString()}원</td>
                                             <td>{purchase.paymentTime}</td>
                                             <td>
-                                                {purchase.paymentRemain === 0 ? "결제완료" : "환불"}
+                                                {/* {purchase.paymentRemain === 0 ? "결제완료" : "환불"} */}
+                                                결제완료
                                             </td>
                                             <td>
                                                 <button className="btn btn-dark btn-sm" onClick={() => moveToDetailPage(purchase.paymentNo)}><FaMagnifyingGlass /></button>

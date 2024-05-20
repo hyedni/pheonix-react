@@ -180,6 +180,42 @@ const Lost = () => {
                 </div>
             </div>
 
+{/* 
+            <div className="row justify-content-center">
+                <div className="col-lg-8 content-head">
+                    <hr></hr>
+                    <div className="row mt-4">
+                        {currentPosts.map((lost) => (
+                            <div key={lost.lostNo} className="col-lg-4 mb-3">
+                                <div className="card">
+                                    <div className="card-body">
+                                        <h5 className="card-title">{lost.lostTitle}</h5>
+                                        <p className="card-text">{lost.lostContent}</p>
+                                        {lost.lostImgLink && (
+                                            <div className="image-wrapper lost-image">
+                                                <img
+                                                    src={lost.lostImgLink}
+                                                    alt="Lost Image"
+                                                />
+                                                <div className="edit-button">
+                                                    {/* Your edit button JSX here */}
+                                                {/* </div>
+                                            </div>
+                                        )}
+                                        <div className="d-grid gap-2 d-md-flex justify-content-md-end">
+                                            <button className="btn btn-outline-dark" onClick={() => deleteLost(lost)}>
+                                                삭제
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                        ))}
+                    </div>
+                </div>
+            </div> */} 
+
             <Pagination
                 currentPage={currentPage}
                 totalPages={Math.ceil(losts.length / postsPerPage)}

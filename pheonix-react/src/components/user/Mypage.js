@@ -124,7 +124,9 @@ function Mypage() {
                         <Sidebar />
                         <div className="col-9">
                             {/* 마이페이지에서 이동할 페이지 담기 (원래는 App.js에 담는 애들) */}
+                            {/* 화면처음로드시 나의예매내역 떠있도록 수정 : 혜진 */}
                             <Routes>
+                                <Route path="/" element={<MyReservation />} />
                                 <Route path='/myPersonal' element={<MyPersonal/>} />
                                 <Route path='/myStore' element={<MyStore/>} />
                                 <Route path="/infoPheonix" element={<InfoPheonix />}/>

@@ -7,7 +7,7 @@ import { Link } from 'react-router-dom';
 import { loginIdState } from '../../utils/RecoilData';
 
 //디자인 임포트
-import './Store.css';
+//import './Store.css';
 
 //아이콘 임포트
 import { FaShoppingCart } from "react-icons/fa";
@@ -18,6 +18,7 @@ import { Modal } from "bootstrap";
 //이미지 임포트
 import nutritionFacts from "../image/bg_nutritionFacts.png";
 import { useRecoilState } from "recoil";
+import '../list/Store.css';
 
 
 const StoreDetailList = () => {
@@ -128,13 +129,15 @@ const StoreDetailList = () => {
             <div className="row justify-content-center">
                 <div className="col-lg-8 content-body">
                     <div className="row justify-content-center">
-                        <div className="col-4">   
-                        <div className="img-thumbnail image-wrapper" style={{ height: "400px" }}>
+                          
+                        <div className='col-4 mb-4'>
+                            <div className="img-thumbnail img-preview-store mt-3" style={{ height: "400px" }}>
+
                             {!imagePreview && (
-                                <img src={products.productImgLink}  alt="상품이미지" />
+                                <img src={products.productImgLink}  alt="상품이미지" style={{ width: "300px", marginTop: "100px", marginLeft : "2px" }}/>
                             )}
                             {imagePreview && (
-                                <img src={imagePreview} alt="Preview"  />
+                                <img src={imagePreview} alt="Preview"   style={{ width: "300px", marginTop: "100px", marginLeft : "2px" }}/>
                             )}
                         </div>
                         </div>
@@ -233,34 +236,19 @@ const StoreDetailList = () => {
                                 <div class="col-md-8">
                                     <ul class="list-unstyled">
                                         <li>CGV강남</li>
-                                        <li>CGV강변</li>
                                         <li>CGV건대입구</li>
-                                        <li>CGV구로</li>
+                                        <li>CGV노원</li>
                                         <li>CGV대학로</li>
+                                        <li>CGV더현대</li>
                                         <li>CGV동대문</li>
-                                        <li>CGV등촌</li>
-                                        <li>CGV명동</li>
-                                        <li>CGV명동역 씨네라이브러리</li>
-                                        <li>CGV미아</li>
                                         <li>CGV방학</li>
-                                        <li>CGV본사</li>
-                                        <li>CGV불광</li>
-                                        <li>CGV상봉</li>
-                                        <li>CGV성신여대입구</li>
-                                        <li>CGV송파</li>
-                                        <li>CGV수유</li>
-                                        <li>CGV신촌아트레온</li>
-                                        <li>CGV압구정</li>
-                                        <li>CGV여의도</li>
+                                        <li>CGV서울숲</li>
+                                        <li>CGV서초</li>
+                                        <li>CGV신촌</li>
                                         <li>CGV연남</li>
-                                        <li>CGV영등포</li>
-                                        <li>CGV왕십리</li>
-                                        <li>CGV용산아이파크몰</li>
-                                        <li>CGV중계</li>
+                                        <li>CGV용산</li>
+                                        <li>CGV잠실</li>
                                         <li>CGV천호</li>
-                                        <li>CGV청담씨네시티</li>
-                                        <li>CGV피카디리1958</li>
-                                        <li>CGV하계</li>
                                         <li>CGV홍대</li>
                                     </ul>
                                 </div>
