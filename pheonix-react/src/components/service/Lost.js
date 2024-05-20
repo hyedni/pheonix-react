@@ -219,7 +219,7 @@ const Lost = () => {
                         ))}
                     </div>
                 </div>
-            </div> */} */
+            </div> */} 
 
             <Pagination
                 currentPage={currentPage}
