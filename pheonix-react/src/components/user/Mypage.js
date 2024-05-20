@@ -28,7 +28,7 @@ function Mypage() {
     //값 출력
     const loadData = useCallback(async () => {
         try {
-            const resp = await axios.get(`http://localhost:8080/user/mypage`, {
+            const resp = await axios.get(`http://192.168.30.37:8080/user/mypage`, {
                 params: {
                     userId: loginId
                 }

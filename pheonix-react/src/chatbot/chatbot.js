@@ -13,7 +13,7 @@ function Chatbot() {
   }, []);
 
   const openChatbot = () => {
-    const newSocket = new SockJS("http://localhost:8080/ws/chatbot", { questions, answer });
+    const newSocket = new SockJS("http://192.168.30.37:8080/ws/chatbot", { questions, answer });
     newSocket.onmessage = handleMessage;
     setSocket(newSocket);
   };

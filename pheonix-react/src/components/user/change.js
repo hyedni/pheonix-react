@@ -45,7 +45,7 @@ function Change() {
     //수정처리
     const saveEditUser = useCallback(async (user) => {
         if (isFormValid) {
-            const resp = await axios.patch(`http://localhost:8080/user/edit`, user);
+            const resp = await axios.patch(`http://192.168.30.37:8080/user/edit`, user);
             setIsEdit({ edit: false });
             loadData();
         } else {
@@ -75,7 +75,7 @@ function Change() {
             formData.append("attach", file);
         }
         try {
-            await axios.post(`/http://localhost:8080/user/editFile`, formData);
+            await axios.post(`/http://192.168.30.37:8080/user/editFile`, formData);
             clearImagePreview();
             loadData();
         } catch (error) {
@@ -163,7 +163,7 @@ function Change() {
     //값 출력
     const loadData = useCallback(async () => {
         try {
-            const resp = await axios.get(`http://localhost:8080/user/mypage`, {
+            const resp = await axios.get(`http://192.168.30.37:8080/user/mypage`, {
                 params: {
                     userId: loginId
                 }
