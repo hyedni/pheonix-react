@@ -10,6 +10,7 @@ function Change() {
     const [file, setFile] = useState(null);
     const [imagePreview, setImagePreview] = useState(null);
     const navigate = useNavigate();
+    
 
     const [user, setUser] = useState({
         userName: "",
@@ -286,7 +287,6 @@ function Change() {
                                             onChange={handleChange}
                                         />
                                     </div>
-                                    <button className='btn btn-primary ms-3' type="button" onClick={cancelEditUser} style={{ fontWeight: 'bold' }}>되돌리기</button>
                                     <button className='btn btn-dark ms-3' type="submit" style={{ fontWeight: 'bold' }} disabled={!isFormValid}>수정완료</button>
                                 </form>
                             </div>

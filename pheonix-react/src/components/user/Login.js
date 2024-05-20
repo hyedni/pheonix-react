@@ -8,6 +8,7 @@ import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
 import { loginIdState, loginGradeState, isLoginState } from "../utils/RecoilData";
 import { createUserWithEmailAndPassword } from 'firebase/auth'
+import './btn.css';
 
 
 const firebaseConfig = {
@@ -77,50 +78,25 @@ function Login() {
             console.error("로그인 오류:", error.message);
         }
     }, [user]);
+    const [activeButton, setActiveButton] = useState(null);
 
-    const handleGoogleLogin = () => {
-        const app = initializeApp(firebaseConfig);
-        const analytics = getAnalytics(app);
-        const provider = new GoogleAuthProvider();
-        const auth = getAuth(app);
-        auth.languageCode = "ko";
-
-        signInWithPopup(auth, provider)
-            .then((result) => { 
-                const credential = GoogleAuthProvider.credentialFromResult(result);
-                const token = credential.accessToken;
-                const user = result.user;
-                setUserData(user); // 사용자 정보 설정
-
-                //console.log(user); // 사용자 정보 출력
-                console.log(result, '합격');
-            })
-            .catch((error) => {
-                const errorCode = error.code;
-                const errorMessage = error.message;
-                const email = error.customData.email;
-                const credential = GoogleAuthProvider.credentialFromError(error);
-                console.error(error);
-            });
-    }; 
-
+    const handleButtonClick = (buttonName) => {
+        setActiveButton(buttonName);
+    };
 
 
     return (
         <>
 
             <div className="container mt-4" style={{ maxWidth: "400px" }}>
-                <h1>회원가입 화면입니다</h1>
+            <img src={"/image/phoenixLogo.png"} style={{ width: '300px', maxWidth: '100%', height: '150px' }}></img>
 
-                <div className="mb-4">
+            <div className="mb-4">
                     <button className="btn btn-outline-secondary">
                         <NavLink to="/login">로그인</NavLink>
                     </button>
                     <button className="btn btn-outline-secondary">
                         <NavLink to="/nonUser">비회원 예매</NavLink>
-                    </button>
-                    <button className="btn btn-outline-secondary">
-                        <NavLink to="/nonUserCheck">비회원 예매확인</NavLink>
                     </button>
                 </div>
 
@@ -141,15 +117,9 @@ function Login() {
                     </div>
                 </div>
 
-                <div className="row mt-4">
+                <div className="row mt-4 mb-4">
                     <div className="col">
                         <button className="btn btn-success w-100" onClick={login}>로그인</button>
-                    </div>
-                </div>
-
-                <div className="row mt-4">
-                    <div className="col">
-                        <button onClick={handleGoogleLogin}>구글 아이디로 로그인</button>
                     </div>
                 </div>
 
