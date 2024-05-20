@@ -59,7 +59,7 @@ function Login() {
             if (user.userId.length === 0) throw new Error("사용자 ID를 입력하세요.");
             if (user.userPw.length === 0) throw new Error("비밀번호를 입력하세요.");
 
-            const resp = await axios.post(`http://localhost:8080/user/login`, user);
+            const resp = await axios.post(`http://192.168.30.37:8080/user/login`, user);
             console.log(resp.data);
             setLoginId(resp.data.userId);
             setLoginGrade(resp.data.userGrade);
@@ -89,15 +89,15 @@ function Login() {
         <>
 
             <div className="container mt-4" style={{ maxWidth: "400px" }}>
+
             <img src={"/image/phoenixLogo.png"} style={{ width: '300px', maxWidth: '100%', height: '150px' }}></img>
 
             <div className="mb-4">
-                    <button className="btn btn-outline-secondary">
-                        <NavLink to="/login">로그인</NavLink>
-                    </button>
-                    <button className="btn btn-outline-secondary">
-                        <NavLink to="/nonUser">비회원 예매</NavLink>
-                    </button>
+               
+
+
+     
+ 
                 </div>
 
 
@@ -120,6 +120,14 @@ function Login() {
                 <div className="row mt-4 mb-4">
                     <div className="col">
                         <button className="btn btn-success w-100" onClick={login}>로그인</button>
+                    </div>
+                </div>
+
+                <div className="row mt-2 mb-5">
+                    <div className="col">
+                        <NavLink to="/nonUser" style={{textDecoration: 'none', color: 'inherit'}}>
+                            <button className="btn btn-secondary w-100" style={{}}>비회원 예매</button>
+                        </NavLink>
                     </div>
                 </div>
 

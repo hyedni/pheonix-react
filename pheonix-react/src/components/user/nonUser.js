@@ -16,41 +16,42 @@ function NonUser() {
     const [loginId, setLoginId] = useRecoilState(loginIdState);
     const [timer, setTimer] = useState(180); // 3분 = 180초
 
-    const [nonUser, setNonUser] = useState({
-          "nonUserEmail": "",
-          "nonUserBirth": "",
-          "nonUserPw": "",
-          "nonUserPwCheck":"",
-          "nonUserCertCode": ""
+
+  const [nonUser, setNonUser] = useState({
+    "nonUserEmail": "",
+    "nonUserBirth": "",
+    "nonUserPw": "",
+    "nonUserPwCheck": "",
+    "nonUserCertCode": ""
   });
-    const [isValid, setIsValid] = useState({
-        nonUserEmail: true,
-        nonUserBirth: true,
-        nonUserPw: true,
-        nonUserPwCheck: true
+  const [isValid, setIsValid] = useState({
+    nonUserEmail: true,
+    nonUserBirth: true,
+    nonUserPw: true,
+    nonUserPwCheck: true
+  });
+
+  const [isFormValid, setIsFormValid] = useState(false);
+  const [isCertified, setIsCertified] = useState(false); // 추가: 인증번호 확인 상태
+  const [sending, setSending] = useState(false);//전송중 상태
+  const [sent, setSent] = useState(false);//전송완료
+
+  //navigator
+  const navigator = useNavigate();
+
+
+
+  // 값 입력 함수
+  const handleInputBlur = useCallback((e) => {
+    const { name, value } = e.target;
+
+    setNonUser({
+      ...nonUser,
+      [name]: value
     });
+  }, [nonUser]);
 
-    const [isFormValid, setIsFormValid] = useState(false);
-    const [isCertified, setIsCertified] = useState(false); // 추가: 인증번호 확인 상태
-    const [sending, setSending] = useState(false);//전송중 상태
-    const [sent, setSent] = useState(false);//전송완료
-
-    //navigator
-    const navigator = useNavigate();
-
-   
-    
-    // 값 입력 함수
-    const handleInputBlur = useCallback((e) => {
-        const { name, value } = e.target;
-
-        setNonUser({
-            ...nonUser,
-            [name]: value
-        });
-    }, [nonUser]);
- 
-     // 폼 제출 함수
+  // 폼 제출 함수
   const handleSubmit = async (e) => {
     e.preventDefault();
     // 양식 유효성 확인
@@ -85,7 +86,7 @@ function NonUser() {
     const birthPattern = /^([0-9]{2})(0[1-9]|1[0-2])(0[1-9]|[12][0-9]|3[01])$/;
     const isBirthValid = birthPattern.test(nonUser.nonUserBirth);
     setIsValid(prevState => ({ ...prevState, nonUserBirth: isBirthValid }));
-    
+
     // 이메일 유효성 검사
     const emailPattern = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
     const isEmailValid = emailPattern.test(nonUser.nonUserEmail);
@@ -104,7 +105,7 @@ function NonUser() {
     const isValid =
 
       isBirthValid &&
-      isEmailValid&&
+      isEmailValid &&
       isPwValid &&
       isConfirmPwValid;
 
@@ -150,8 +151,8 @@ function NonUser() {
     console.log(nonUser);
     try {
       const response = await axios.post('/user/nonUserCheck',
-       { nonUserCertEmail: nonUser.nonUserEmail, nonUserCertCode: nonUser.nonUserCertCode });
-      
+        { nonUserCertEmail: nonUser.nonUserEmail, nonUserCertCode: nonUser.nonUserCertCode });
+
       console.log('응답 데이터:', response.data);
 
       // 여기서 인증에 성공했을 때 setIsCertified 상태를 true로 설정합니다.
@@ -165,7 +166,7 @@ function NonUser() {
   // 사용자 입력 변경 시 양식 유효성 다시 확인
   useEffect(() => {
     setIsFormValid(validateForm());
-    
+
   }, [nonUser]);
   useEffect(() => {
     let countdown;
@@ -195,20 +196,11 @@ function NonUser() {
 
 
 
-    return (
-        <>
-             <div className="container mt-4" style={{ maxWidth: "400px" }}>
-                <img src={"/image/phoenixLogo.png"} style={{ width: '300px', maxWidth: '100%', height: '150px' }}></img>
+  return (
+    <>
+      <div className="container mt-4" style={{ maxWidth: "400px" }}>
+        <span style={{ fontSize: '30px', fontWeight: 'bolder' }}>비회원 예매</span>
 
-                
-                <div className="mb-4">
-                    <button className="btn btn-outline-secondary">
-                        <NavLink to="/login">로그인</NavLink>
-                    </button>
-                    <button className="btn btn-outline-secondary">
-                        <NavLink to="/nonUser">비회원 예매</NavLink>
-                    </button>
-                </div>
 
 
                 <div className="form-group mb-4">
@@ -294,9 +286,23 @@ function NonUser() {
                   비회원 예매하기</button>
                   
 
-            </div>
-        </>
-    )
+        
+
+        <button
+          className='btn btn-success w-100 mt-4'
+          onClick={handleSubmit}>
+          비회원 예매하기</button>
+        <NavLink to="/login">                  
+          <button className="btn btn-secondary w-100 mt-3 mb-5">
+            로그인
+          </button>
+        </NavLink>
+
+
+
+      </div>
+    </>
+  )
 }
 
 export default NonUser;

@@ -234,7 +234,11 @@ function Join() {
     <>
 
       <div className="join-container">
-      <img src={"/image/phoenixLogo.png"} style={{ width: '300px', maxWidth: '100%', height: '150px' }}></img>
+
+      {/* <img src={"/image/phoenixLogo.png"} style={{ width: '300px', maxWidth: '100%', height: '150px' }}></img> */}
+
+      <span style={{fontSize:'30px', fontWeight:'bolder'}}>회원가입 화면입니다.</span>
+
         <div className="join-form">
 
           {/* 입력 폼 */}

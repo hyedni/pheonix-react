@@ -66,6 +66,7 @@ function PhoenixHome() {
         loadComboPackage();
         loadPointProduct();
         loadMovies();
+        console.log(movies);
     }, []);
 
     const navigate = useNavigate();
@@ -180,8 +181,8 @@ function PhoenixHome() {
                 </div>
             </div>
 
-            <div className="row justify-content-center mt-4 ms-3">
-                <div className="col-lg-9">
+            <div className="row justify-content-center mt-4 ms-4">
+                <div className="col-lg-10">
                     <div className="row">
                         <div className='col-lg-3 box-wrapper ms-5 mb-5'>
                             <div className='d-flex p-2 mb-3 justify-content-between'>
