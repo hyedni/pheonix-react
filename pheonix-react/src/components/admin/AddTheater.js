@@ -50,7 +50,6 @@ function AddTheater() {
                 theater: theater
             };
             const response = await axios.post('/theater/', payload);
-            console.log("전송완료 제발제발");
             navigate('/theaterRegistrationComplete');
         } catch (error) {
             console.error('에러임  data:', error);

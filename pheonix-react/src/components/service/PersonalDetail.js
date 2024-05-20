@@ -40,7 +40,6 @@ export default function PersonalDetail() {
                 commentsContent: newComment,
                 commentsWriter: loginId
             });
-            console.log("새 댓글이 추가되었습니다:", response.data);
             setNewComment("");
             loadData();
         } catch (error) {
@@ -51,7 +50,6 @@ export default function PersonalDetail() {
     const handleDeleteComment = async (commentId) => {
         try {
             const response = await axios.delete(`/comments/${commentId}`);
-            console.log("댓글이 삭제되었습니다:", response.data);
             loadData();
         } catch (error) {
             console.error("댓글 삭제 중 오류 발생:", error);
@@ -61,7 +59,6 @@ export default function PersonalDetail() {
     const listComments = async () => {
         try {
             const response = await axios.get(`/comments/?personalNo=${personalNo}`);
-            console.log("댓글 목록:", response.data);
             setComments(response.data);
         } catch (error) {
             console.error("댓글 목록을 불러오는 중 오류 발생:", error);

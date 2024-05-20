@@ -51,10 +51,6 @@ function SeatDetails() {
     }, []);
 
 
-    useEffect(() => {
-        console.log('seats 상태 확인:', seats);
-    }, [seats]);
-
     const maxRow = Math.max(...seats.map(seat => seat.cellX));
     const maxCol = Math.max(...seats.map(seat => seat.cellY));
 

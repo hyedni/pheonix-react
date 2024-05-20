@@ -26,7 +26,6 @@ function AdminTheater() {
     const selectCinema = useCallback(async (target) => {
         setCinemaNo(target.cinemaNo);  
         const resp = await axios.get(`/theater/${target.cinemaNo}`);
-        console.log(resp);
         setTheaters(resp.data);
         showListDiv();       
     }, [cinemas]);

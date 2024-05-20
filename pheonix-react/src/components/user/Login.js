@@ -59,7 +59,6 @@ function Login() {
             if (user.userPw.length === 0) throw new Error("비밀번호를 입력하세요.");
 
             const resp = await axios.post(`http://192.168.30.37:8080/user/login`, user);
-            console.log(resp.data);
             setLoginId(resp.data.userId);
             setLoginGrade(resp.data.userGrade);
 
@@ -92,7 +91,6 @@ function Login() {
                 const user = result.user;
                 setUserData(user); // 사용자 정보 설정
                 //console.log(user); // 사용자 정보 출력
-                console.log(result, '합격');
             })
             .catch((error) => {
                 const errorCode = error.code;

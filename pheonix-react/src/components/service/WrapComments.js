@@ -11,7 +11,6 @@ export default function WrapComments({ comments, addComment }) {
                 commentsContent: newComment,
                 commentsWriter: "작성자 이름"
             });
-            console.log("New comment added:", response.data);
             addComment(response.data);
             setNewComment("");
         } catch (error) {
