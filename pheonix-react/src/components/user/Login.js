@@ -2,7 +2,7 @@ import React, { useCallback, useEffect, useState } from "react";
 import { initializeApp } from "firebase/app";
 import { getAnalytics } from "firebase/analytics";
 import { getAuth, signInWithPopup, GoogleAuthProvider } from "firebase/auth";
-import axios from "axios";
+import axios from "../utils/CustomAxios";
 import { useNavigate } from "react-router";
 import { NavLink } from 'react-router-dom';
 import { useRecoilState, useRecoilValue } from "recoil";
@@ -58,7 +58,7 @@ function Login() {
             if (user.userId.length === 0) throw new Error("사용자 ID를 입력하세요.");
             if (user.userPw.length === 0) throw new Error("비밀번호를 입력하세요.");
 
-            const resp = await axios.post(`http://192.168.30.37:8080/user/login`, user);
+            const resp = await axios.post(`/user/login`, user);
             setLoginId(resp.data.userId);
             setLoginGrade(resp.data.userGrade);
 

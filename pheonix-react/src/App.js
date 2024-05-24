@@ -83,7 +83,7 @@ function App() {
       //리프레시 토큰으로 Authorization을 변경하고
       axios.defaults.headers.common["Authorization"] = refreshToken;
       //재로그인 요청을 보낸다
-      const resp = await axios.post(`http://192.168.30.37:8080/user/refresh`);
+      const resp = await axios.post(`/user/refresh`);
 
       //8번 - MemberLoginVO 발급 작업
       //결과를 적절한 위치에 설정한다
@@ -103,7 +103,7 @@ function App() {
         
         axios.defaults.headers.common["NonUserAuth"] = token;
         // 세션 스토리지에 비회원 정보 저장
-        const resp = await axios.get(`http://192.168.30.37:8080/user/token`); //정보 확인
+        const resp = await axios.get(`/user/token`); //정보 확인
 
         setNonLoginId(resp.data.nonUserId);
         axios.defaults.headers.common["NonUserAuth"] = resp.data.token;
