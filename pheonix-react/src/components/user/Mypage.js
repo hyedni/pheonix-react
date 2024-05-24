@@ -1,6 +1,6 @@
 import { useRecoilState } from "recoil";
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import axios from "axios";
+import axios from "../utils/CustomAxios";
 import { loginIdState } from "../utils/RecoilData";
 import './join.css';
 import Sidebar from "./Sidebar";
@@ -28,7 +28,7 @@ function Mypage() {
     //값 출력
     const loadData = useCallback(async () => {
         try {
-            const resp = await axios.get(`http://192.168.30.37:8080/user/mypage`, {
+            const resp = await axios.get(`/user/mypage`, {
                 params: {
                     userId: loginId
                 }
